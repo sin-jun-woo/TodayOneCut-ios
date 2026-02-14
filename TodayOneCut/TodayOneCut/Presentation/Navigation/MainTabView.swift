@@ -49,7 +49,7 @@ struct MainTabView: View {
                         )
                     )
                 ))
-            .navigationDestination(for: AppRoute.self) { route in
+                    .navigationDestination(for: AppRoute.self) { route in
                 switch route {
                 case .create:
                     CreateRecordView(viewModel: CreateRecordViewModel(
@@ -121,6 +121,7 @@ struct MainTabView: View {
                 default:
                     EmptyView()
                 }
+                    }
             }
             .tabItem {
                 Label(TabItem.home.rawValue, systemImage: TabItem.home.icon)
@@ -185,9 +186,10 @@ struct MainTabView: View {
                             )
                         )
                     ))
-                default:
-                    EmptyView()
-                }
+                        default:
+                            EmptyView()
+                        }
+                    }
             }
             .tabItem {
                 Label(TabItem.list.rawValue, systemImage: TabItem.list.icon)
@@ -262,9 +264,10 @@ struct MainTabView: View {
                             )
                         )
                     ))
-                default:
-                    EmptyView()
-                }
+                        default:
+                            EmptyView()
+                        }
+                    }
             }
             .tabItem {
                 Label(TabItem.calendar.rawValue, systemImage: TabItem.calendar.icon)
