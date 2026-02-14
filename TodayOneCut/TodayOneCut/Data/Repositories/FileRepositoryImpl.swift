@@ -7,6 +7,8 @@
 
 import Foundation
 import UIKit
+import ImageIO
+import UniformTypeIdentifiers
 
 /// FileRepository 구현체
 class FileRepositoryImpl: FileRepository {
@@ -31,7 +33,7 @@ class FileRepositoryImpl: FileRepository {
         }
         
         // 기존 파일 삭제 (같은 날짜)
-        let fileName = date.toLocalDateString() + ".jpg"
+        let fileName = date.toLocalDateString() + ".webp"
         let fileURL = photosURL.appendingPathComponent(fileName)
         
         if fileManager.fileExists(atPath: fileURL.path) {
@@ -70,12 +72,12 @@ class FileRepositoryImpl: FileRepository {
         // 리사이징
         let resizedImage = image.resized(to: CGSize(width: maxSize, height: maxSize))
         
-        // 압축
-        guard let compressedData = resizedImage.jpegData(compressionQuality: quality) else {
-            throw TodayOneCutError.fileSaveError(message: "이미지 압축에 실패했습니다")
+        // WebP로 변환
+        guard let webpData = resizedImage.webpData(quality: quality) else {
+            throw TodayOneCutError.fileSaveError(message: "WebP 변환에 실패했습니다")
         }
         
-        return compressedData
+        return webpData
     }
     
     // MARK: - Data Export/Import
@@ -128,6 +130,34 @@ extension UIImage {
         return renderer.image { _ in
             self.draw(in: CGRect(origin: .zero, size: size))
         }
+    }
+    
+    /// WebP 형식으로 변환
+    func webpData(quality: CGFloat) -> Data? {
+        guard let cgImage = self.cgImage else { return nil }
+        
+        let mutableData = NSMutableData()
+        guard let destination = CGImageDestinationCreateWithData(
+            mutableData,
+            UTType.webP.identifier as CFString,
+            1,
+            nil
+        ) else {
+            return nil
+        }
+        
+        // WebP 옵션 설정
+        let options: [CFString: Any] = [
+            kCGImageDestinationLossyCompressionQuality: quality
+        ]
+        
+        CGImageDestinationAddImage(destination, cgImage, options as CFDictionary)
+        
+        guard CGImageDestinationFinalize(destination) else {
+            return nil
+        }
+        
+        return mutableData as Data
     }
 }
 

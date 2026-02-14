@@ -142,7 +142,8 @@ struct EditRecordView: View {
         .photosPicker(
             isPresented: $showImagePicker,
             selection: $selectedPhotoItem,
-            matching: .images
+            matching: .images,
+            photoLibrary: .shared()
         )
         .onChange(of: selectedPhotoItem) { newItem in
             Task {
@@ -152,7 +153,7 @@ struct EditRecordView: View {
                 }
             }
         }
-        .sheet(isPresented: $showCamera) {
+        .fullScreenCover(isPresented: $showCamera) {
             CameraView { image in
                 viewModel.setImage(image)
             }
