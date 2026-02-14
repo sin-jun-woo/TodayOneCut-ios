@@ -137,7 +137,7 @@ struct CreateRecordView: View {
     }
 }
 
-/// 카메라 뷰 (임시 - UIImagePickerController 래퍼 필요)
+/// 카메라 뷰
 struct CameraView: UIViewControllerRepresentable {
     let onImageSelected: (UIImage) -> Void
     @Environment(\.dismiss) private var dismiss
@@ -145,6 +145,8 @@ struct CameraView: UIViewControllerRepresentable {
     func makeUIViewController(context: Context) -> UIImagePickerController {
         let picker = UIImagePickerController()
         picker.sourceType = .camera
+        picker.cameraCaptureMode = .photo
+        picker.allowsEditing = false
         picker.delegate = context.coordinator
         return picker
     }

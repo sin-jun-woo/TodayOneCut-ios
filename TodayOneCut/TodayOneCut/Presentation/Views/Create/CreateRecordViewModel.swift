@@ -73,7 +73,8 @@ class CreateRecordViewModel: ObservableObject {
     /// 이미지 선택
     func setImage(_ image: UIImage) {
         selectedImage = image
-        imageData = image.jpegData(compressionQuality: 1.0)
+        // WebP로 변환 (나중에 compressPhoto에서 처리되므로 여기서는 원본 데이터 저장)
+        imageData = image.jpegData(compressionQuality: 1.0) // 임시로 JPEG, compressPhoto에서 WebP로 변환
         if imageData != nil {
             recordType = .photo
         }
