@@ -113,8 +113,7 @@ struct CreateRecordView: View {
         .photosPicker(
             isPresented: $showImagePicker,
             selection: $selectedPhotoItem,
-            matching: .images,
-            photoLibrary: .shared()
+            matching: .images
         )
         .onChange(of: selectedPhotoItem) { newItem in
             Task {
