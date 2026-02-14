@@ -32,7 +32,7 @@ struct HomeView: View {
                         message: "아직 오늘의 장면을 남기지 않았어요",
                         actionText: "오늘의 장면 남기기",
                         action: {
-                            // TODO: 작성 화면으로 이동
+                            // TODO: NavigationLink로 연결
                         }
                     )
                     .padding(.horizontal)
@@ -52,9 +52,7 @@ struct HomeView: View {
         .navigationBarTitleDisplayMode(.large)
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
-                Button {
-                    // TODO: 설정 화면으로 이동
-                } label: {
+                NavigationLink(value: AppRoute.settings) {
                     Image(systemName: "gearshape")
                 }
             }
