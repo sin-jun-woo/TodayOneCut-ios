@@ -49,79 +49,79 @@ struct MainTabView: View {
                         )
                     )
                 ))
-                    .navigationDestination(for: AppRoute.self) { route in
-                switch route {
-                case .create:
-                    CreateRecordView(viewModel: CreateRecordViewModel(
-                        createRecordUseCase: CreateRecordUseCase(
-                            recordRepository: RecordRepositoryImpl(
-                                coreDataStack: CoreDataStack.shared,
-                                recordMapper: RecordMapper()
+                .navigationDestination(for: AppRoute.self) { route in
+                    switch route {
+                    case .create:
+                        CreateRecordView(viewModel: CreateRecordViewModel(
+                            createRecordUseCase: CreateRecordUseCase(
+                                recordRepository: RecordRepositoryImpl(
+                                    coreDataStack: CoreDataStack.shared,
+                                    recordMapper: RecordMapper()
+                                ),
+                                fileRepository: FileRepositoryImpl(),
+                                validateDailyLimit: ValidateDailyLimitUseCase(
+                                    recordRepository: RecordRepositoryImpl(
+                                        coreDataStack: CoreDataStack.shared,
+                                        recordMapper: RecordMapper()
+                                    )
+                                ),
+                                validateDate: ValidateDateUseCase(),
+                                validateContent: ValidateRecordContentUseCase()
                             ),
-                            fileRepository: FileRepositoryImpl(),
-                            validateDailyLimit: ValidateDailyLimitUseCase(
+                            getCurrentLocationUseCase: GetCurrentLocationUseCase(),
+                            reverseGeocodeUseCase: ReverseGeocodeUseCase(),
+                            getSettingsUseCase: GetSettingsUseCase(
+                                settingsRepository: SettingsRepositoryImpl(
+                                    coreDataStack: CoreDataStack.shared,
+                                    settingsMapper: SettingsMapper()
+                                )
+                            )
+                        ))
+                    case .detail(let id):
+                        RecordDetailView(recordId: id, viewModel: RecordDetailViewModel(
+                            recordId: id,
+                            getRecordByIdUseCase: GetRecordByIdUseCase(
                                 recordRepository: RecordRepositoryImpl(
                                     coreDataStack: CoreDataStack.shared,
                                     recordMapper: RecordMapper()
                                 )
                             ),
-                            validateDate: ValidateDateUseCase(),
-                            validateContent: ValidateRecordContentUseCase()
-                        ),
-                        getCurrentLocationUseCase: GetCurrentLocationUseCase(),
-                        reverseGeocodeUseCase: ReverseGeocodeUseCase(),
-                        getSettingsUseCase: GetSettingsUseCase(
-                            settingsRepository: SettingsRepositoryImpl(
-                                coreDataStack: CoreDataStack.shared,
-                                settingsMapper: SettingsMapper()
+                            deleteRecordUseCase: DeleteRecordUseCase(
+                                recordRepository: RecordRepositoryImpl(
+                                    coreDataStack: CoreDataStack.shared,
+                                    recordMapper: RecordMapper()
+                                ),
+                                fileRepository: FileRepositoryImpl()
                             )
-                        )
-                    ))
-                case .detail(let id):
-                    RecordDetailView(recordId: id, viewModel: RecordDetailViewModel(
-                        recordId: id,
-                        getRecordByIdUseCase: GetRecordByIdUseCase(
-                            recordRepository: RecordRepositoryImpl(
-                                coreDataStack: CoreDataStack.shared,
-                                recordMapper: RecordMapper()
-                            )
-                        ),
-                        deleteRecordUseCase: DeleteRecordUseCase(
-                            recordRepository: RecordRepositoryImpl(
-                                coreDataStack: CoreDataStack.shared,
-                                recordMapper: RecordMapper()
+                        ))
+                    case .edit(let id):
+                        EditRecordView(recordId: id, viewModel: EditRecordViewModel(
+                            recordId: id,
+                            getRecordByIdUseCase: GetRecordByIdUseCase(
+                                recordRepository: RecordRepositoryImpl(
+                                    coreDataStack: CoreDataStack.shared,
+                                    recordMapper: RecordMapper()
+                                )
                             ),
-                            fileRepository: FileRepositoryImpl()
-                        )
-                    ))
-                case .edit(let id):
-                    EditRecordView(recordId: id, viewModel: EditRecordViewModel(
-                        recordId: id,
-                        getRecordByIdUseCase: GetRecordByIdUseCase(
-                            recordRepository: RecordRepositoryImpl(
-                                coreDataStack: CoreDataStack.shared,
-                                recordMapper: RecordMapper()
-                            )
-                        ),
-                        updateRecordUseCase: UpdateRecordUseCase(
-                            recordRepository: RecordRepositoryImpl(
-                                coreDataStack: CoreDataStack.shared,
-                                recordMapper: RecordMapper()
+                            updateRecordUseCase: UpdateRecordUseCase(
+                                recordRepository: RecordRepositoryImpl(
+                                    coreDataStack: CoreDataStack.shared,
+                                    recordMapper: RecordMapper()
+                                ),
+                                fileRepository: FileRepositoryImpl(),
+                                validateUpdateLimit: ValidateUpdateLimitUseCase()
                             ),
-                            fileRepository: FileRepositoryImpl(),
-                            validateUpdateLimit: ValidateUpdateLimitUseCase()
-                        ),
-                        getSettingsUseCase: GetSettingsUseCase(
-                            settingsRepository: SettingsRepositoryImpl(
-                                coreDataStack: CoreDataStack.shared,
-                                settingsMapper: SettingsMapper()
+                            getSettingsUseCase: GetSettingsUseCase(
+                                settingsRepository: SettingsRepositoryImpl(
+                                    coreDataStack: CoreDataStack.shared,
+                                    settingsMapper: SettingsMapper()
+                                )
                             )
-                        )
-                    ))
-                default:
-                    EmptyView()
-                }
+                        ))
+                    default:
+                        EmptyView()
                     }
+                }
             }
             .tabItem {
                 Label(TabItem.home.rawValue, systemImage: TabItem.home.icon)
@@ -143,53 +143,53 @@ struct MainTabView: View {
                         )
                     )
                 ))
-            .navigationDestination(for: AppRoute.self) { route in
-                switch route {
-                case .detail(let id):
-                    RecordDetailView(recordId: id, viewModel: RecordDetailViewModel(
-                        recordId: id,
-                        getRecordByIdUseCase: GetRecordByIdUseCase(
-                            recordRepository: RecordRepositoryImpl(
-                                coreDataStack: CoreDataStack.shared,
-                                recordMapper: RecordMapper()
-                            )
-                        ),
-                        deleteRecordUseCase: DeleteRecordUseCase(
-                            recordRepository: RecordRepositoryImpl(
-                                coreDataStack: CoreDataStack.shared,
-                                recordMapper: RecordMapper()
+                .navigationDestination(for: AppRoute.self) { route in
+                    switch route {
+                    case .detail(let id):
+                        RecordDetailView(recordId: id, viewModel: RecordDetailViewModel(
+                            recordId: id,
+                            getRecordByIdUseCase: GetRecordByIdUseCase(
+                                recordRepository: RecordRepositoryImpl(
+                                    coreDataStack: CoreDataStack.shared,
+                                    recordMapper: RecordMapper()
+                                )
                             ),
-                            fileRepository: FileRepositoryImpl()
-                        )
-                    ))
-                case .edit(let id):
-                    EditRecordView(recordId: id, viewModel: EditRecordViewModel(
-                        recordId: id,
-                        getRecordByIdUseCase: GetRecordByIdUseCase(
-                            recordRepository: RecordRepositoryImpl(
-                                coreDataStack: CoreDataStack.shared,
-                                recordMapper: RecordMapper()
+                            deleteRecordUseCase: DeleteRecordUseCase(
+                                recordRepository: RecordRepositoryImpl(
+                                    coreDataStack: CoreDataStack.shared,
+                                    recordMapper: RecordMapper()
+                                ),
+                                fileRepository: FileRepositoryImpl()
                             )
-                        ),
-                        updateRecordUseCase: UpdateRecordUseCase(
-                            recordRepository: RecordRepositoryImpl(
-                                coreDataStack: CoreDataStack.shared,
-                                recordMapper: RecordMapper()
+                        ))
+                    case .edit(let id):
+                        EditRecordView(recordId: id, viewModel: EditRecordViewModel(
+                            recordId: id,
+                            getRecordByIdUseCase: GetRecordByIdUseCase(
+                                recordRepository: RecordRepositoryImpl(
+                                    coreDataStack: CoreDataStack.shared,
+                                    recordMapper: RecordMapper()
+                                )
                             ),
-                            fileRepository: FileRepositoryImpl(),
-                            validateUpdateLimit: ValidateUpdateLimitUseCase()
-                        ),
-                        getSettingsUseCase: GetSettingsUseCase(
-                            settingsRepository: SettingsRepositoryImpl(
-                                coreDataStack: CoreDataStack.shared,
-                                settingsMapper: SettingsMapper()
+                            updateRecordUseCase: UpdateRecordUseCase(
+                                recordRepository: RecordRepositoryImpl(
+                                    coreDataStack: CoreDataStack.shared,
+                                    recordMapper: RecordMapper()
+                                ),
+                                fileRepository: FileRepositoryImpl(),
+                                validateUpdateLimit: ValidateUpdateLimitUseCase()
+                            ),
+                            getSettingsUseCase: GetSettingsUseCase(
+                                settingsRepository: SettingsRepositoryImpl(
+                                    coreDataStack: CoreDataStack.shared,
+                                    settingsMapper: SettingsMapper()
+                                )
                             )
-                        )
-                    ))
-                        default:
-                            EmptyView()
-                        }
+                        ))
+                    default:
+                        EmptyView()
                     }
+                }
             }
             .tabItem {
                 Label(TabItem.list.rawValue, systemImage: TabItem.list.icon)
@@ -221,53 +221,53 @@ struct MainTabView: View {
                         recordMapper: RecordMapper()
                     )
                 ))
-            .navigationDestination(for: AppRoute.self) { route in
-                switch route {
-                case .detail(let id):
-                    RecordDetailView(recordId: id, viewModel: RecordDetailViewModel(
-                        recordId: id,
-                        getRecordByIdUseCase: GetRecordByIdUseCase(
-                            recordRepository: RecordRepositoryImpl(
-                                coreDataStack: CoreDataStack.shared,
-                                recordMapper: RecordMapper()
-                            )
-                        ),
-                        deleteRecordUseCase: DeleteRecordUseCase(
-                            recordRepository: RecordRepositoryImpl(
-                                coreDataStack: CoreDataStack.shared,
-                                recordMapper: RecordMapper()
+                .navigationDestination(for: AppRoute.self) { route in
+                    switch route {
+                    case .detail(let id):
+                        RecordDetailView(recordId: id, viewModel: RecordDetailViewModel(
+                            recordId: id,
+                            getRecordByIdUseCase: GetRecordByIdUseCase(
+                                recordRepository: RecordRepositoryImpl(
+                                    coreDataStack: CoreDataStack.shared,
+                                    recordMapper: RecordMapper()
+                                )
                             ),
-                            fileRepository: FileRepositoryImpl()
-                        )
-                    ))
-                case .edit(let id):
-                    EditRecordView(recordId: id, viewModel: EditRecordViewModel(
-                        recordId: id,
-                        getRecordByIdUseCase: GetRecordByIdUseCase(
-                            recordRepository: RecordRepositoryImpl(
-                                coreDataStack: CoreDataStack.shared,
-                                recordMapper: RecordMapper()
+                            deleteRecordUseCase: DeleteRecordUseCase(
+                                recordRepository: RecordRepositoryImpl(
+                                    coreDataStack: CoreDataStack.shared,
+                                    recordMapper: RecordMapper()
+                                ),
+                                fileRepository: FileRepositoryImpl()
                             )
-                        ),
-                        updateRecordUseCase: UpdateRecordUseCase(
-                            recordRepository: RecordRepositoryImpl(
-                                coreDataStack: CoreDataStack.shared,
-                                recordMapper: RecordMapper()
+                        ))
+                    case .edit(let id):
+                        EditRecordView(recordId: id, viewModel: EditRecordViewModel(
+                            recordId: id,
+                            getRecordByIdUseCase: GetRecordByIdUseCase(
+                                recordRepository: RecordRepositoryImpl(
+                                    coreDataStack: CoreDataStack.shared,
+                                    recordMapper: RecordMapper()
+                                )
                             ),
-                            fileRepository: FileRepositoryImpl(),
-                            validateUpdateLimit: ValidateUpdateLimitUseCase()
-                        ),
-                        getSettingsUseCase: GetSettingsUseCase(
-                            settingsRepository: SettingsRepositoryImpl(
-                                coreDataStack: CoreDataStack.shared,
-                                settingsMapper: SettingsMapper()
+                            updateRecordUseCase: UpdateRecordUseCase(
+                                recordRepository: RecordRepositoryImpl(
+                                    coreDataStack: CoreDataStack.shared,
+                                    recordMapper: RecordMapper()
+                                ),
+                                fileRepository: FileRepositoryImpl(),
+                                validateUpdateLimit: ValidateUpdateLimitUseCase()
+                            ),
+                            getSettingsUseCase: GetSettingsUseCase(
+                                settingsRepository: SettingsRepositoryImpl(
+                                    coreDataStack: CoreDataStack.shared,
+                                    settingsMapper: SettingsMapper()
+                                )
                             )
-                        )
-                    ))
-                        default:
-                            EmptyView()
-                        }
+                        ))
+                    default:
+                        EmptyView()
                     }
+                }
             }
             .tabItem {
                 Label(TabItem.calendar.rawValue, systemImage: TabItem.calendar.icon)
@@ -295,6 +295,7 @@ struct MainTabView: View {
                         )
                     )
                 ))
+            }
             .tabItem {
                 Label(TabItem.settings.rawValue, systemImage: TabItem.settings.icon)
             }
@@ -306,4 +307,3 @@ struct MainTabView: View {
 #Preview {
     MainTabView()
 }
-

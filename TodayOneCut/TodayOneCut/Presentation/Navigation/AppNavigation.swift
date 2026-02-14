@@ -45,117 +45,118 @@ struct AppNavigation: View {
                             switch route {
                             case .home:
                                 HomeView(viewModel: HomeViewModel(
-                getTodayRecordUseCase: GetTodayRecordUseCase(
-                    recordRepository: RecordRepositoryImpl(
-                        coreDataStack: CoreDataStack.shared,
-                        recordMapper: RecordMapper()
-                    )
-                ),
-                            checkTodayRecordExistsUseCase: CheckTodayRecordExistsUseCase(
-                                recordRepository: RecordRepositoryImpl(
-                                    coreDataStack: CoreDataStack.shared,
-                                    recordMapper: RecordMapper()
-                                )
-                            )
-                        ))
-                    case .create:
-                        CreateRecordView(viewModel: CreateRecordViewModel(
-                            createRecordUseCase: CreateRecordUseCase(
-                                recordRepository: RecordRepositoryImpl(
-                                    coreDataStack: CoreDataStack.shared,
-                                    recordMapper: RecordMapper()
-                                ),
-                                fileRepository: FileRepositoryImpl(),
-                                validateDailyLimit: ValidateDailyLimitUseCase(
-                                    recordRepository: RecordRepositoryImpl(
-                                        coreDataStack: CoreDataStack.shared,
-                                        recordMapper: RecordMapper()
+                                    getTodayRecordUseCase: GetTodayRecordUseCase(
+                                        recordRepository: RecordRepositoryImpl(
+                                            coreDataStack: CoreDataStack.shared,
+                                            recordMapper: RecordMapper()
+                                        )
+                                    ),
+                                    checkTodayRecordExistsUseCase: CheckTodayRecordExistsUseCase(
+                                        recordRepository: RecordRepositoryImpl(
+                                            coreDataStack: CoreDataStack.shared,
+                                            recordMapper: RecordMapper()
+                                        )
                                     )
-                                ),
-                                validateDate: ValidateDateUseCase(),
-                                validateContent: ValidateRecordContentUseCase()
-                            ),
-                            getCurrentLocationUseCase: GetCurrentLocationUseCase(),
-                            reverseGeocodeUseCase: ReverseGeocodeUseCase(),
-                            getSettingsUseCase: GetSettingsUseCase(
-                                settingsRepository: SettingsRepositoryImpl(
-                                    coreDataStack: CoreDataStack.shared,
-                                    settingsMapper: SettingsMapper()
-                                )
-                            )
-                        ))
-                    case .list:
-                        RecordListView(viewModel: RecordListViewModel(
-                            getAllRecordsUseCase: GetAllRecordsUseCase(
-                                recordRepository: RecordRepositoryImpl(
-                                    coreDataStack: CoreDataStack.shared,
-                                    recordMapper: RecordMapper()
-                                )
-                            ),
-                            searchRecordsUseCase: SearchRecordsUseCase(
-                                recordRepository: RecordRepositoryImpl(
-                                    coreDataStack: CoreDataStack.shared,
-                                    recordMapper: RecordMapper()
-                                )
-                            )
-                        ))
-                    case .detail(let id):
-                        RecordDetailView(recordId: id, viewModel: RecordDetailViewModel(
-                            recordId: id,
-                            getRecordByIdUseCase: GetRecordByIdUseCase(
-                                recordRepository: RecordRepositoryImpl(
-                                    coreDataStack: CoreDataStack.shared,
-                                    recordMapper: RecordMapper()
-                                )
-                            ),
-                            deleteRecordUseCase: DeleteRecordUseCase(
-                                recordRepository: RecordRepositoryImpl(
-                                    coreDataStack: CoreDataStack.shared,
-                                    recordMapper: RecordMapper()
-                                ),
-                                fileRepository: FileRepositoryImpl()
-                            )
-                        ))
-                    case .edit(let id):
-                        EditRecordView(recordId: id, viewModel: EditRecordViewModel(
-                            recordId: id,
-                            getRecordByIdUseCase: GetRecordByIdUseCase(
-                                recordRepository: RecordRepositoryImpl(
-                                    coreDataStack: CoreDataStack.shared,
-                                    recordMapper: RecordMapper()
-                                )
-                            ),
-                            updateRecordUseCase: UpdateRecordUseCase(
-                                recordRepository: RecordRepositoryImpl(
-                                    coreDataStack: CoreDataStack.shared,
-                                    recordMapper: RecordMapper()
-                                ),
-                                fileRepository: FileRepositoryImpl(),
-                                validateUpdateLimit: ValidateUpdateLimitUseCase()
-                            ),
-                            getSettingsUseCase: GetSettingsUseCase(
-                                settingsRepository: SettingsRepositoryImpl(
-                                    coreDataStack: CoreDataStack.shared,
-                                    settingsMapper: SettingsMapper()
-                                )
-                            )
-                        ))
-                    case .calendar:
-                        // 탭바에서 처리
-                        EmptyView()
-                    case .settings:
-                        // 탭바에서 처리
-                        EmptyView()
-                    case .onboarding:
-                        OnboardingView(viewModel: OnboardingViewModel(
-                            markFirstLaunchCompleteUseCase: MarkFirstLaunchCompleteUseCase(
-                                settingsRepository: SettingsRepositoryImpl(
-                                    coreDataStack: CoreDataStack.shared,
-                                    settingsMapper: SettingsMapper()
-                                )
-                            )
-                        ))
-                    }
+                                ))
+                            case .create:
+                                CreateRecordView(viewModel: CreateRecordViewModel(
+                                    createRecordUseCase: CreateRecordUseCase(
+                                        recordRepository: RecordRepositoryImpl(
+                                            coreDataStack: CoreDataStack.shared,
+                                            recordMapper: RecordMapper()
+                                        ),
+                                        fileRepository: FileRepositoryImpl(),
+                                        validateDailyLimit: ValidateDailyLimitUseCase(
+                                            recordRepository: RecordRepositoryImpl(
+                                                coreDataStack: CoreDataStack.shared,
+                                                recordMapper: RecordMapper()
+                                            )
+                                        ),
+                                        validateDate: ValidateDateUseCase(),
+                                        validateContent: ValidateRecordContentUseCase()
+                                    ),
+                                    getCurrentLocationUseCase: GetCurrentLocationUseCase(),
+                                    reverseGeocodeUseCase: ReverseGeocodeUseCase(),
+                                    getSettingsUseCase: GetSettingsUseCase(
+                                        settingsRepository: SettingsRepositoryImpl(
+                                            coreDataStack: CoreDataStack.shared,
+                                            settingsMapper: SettingsMapper()
+                                        )
+                                    )
+                                ))
+                            case .list:
+                                RecordListView(viewModel: RecordListViewModel(
+                                    getAllRecordsUseCase: GetAllRecordsUseCase(
+                                        recordRepository: RecordRepositoryImpl(
+                                            coreDataStack: CoreDataStack.shared,
+                                            recordMapper: RecordMapper()
+                                        )
+                                    ),
+                                    searchRecordsUseCase: SearchRecordsUseCase(
+                                        recordRepository: RecordRepositoryImpl(
+                                            coreDataStack: CoreDataStack.shared,
+                                            recordMapper: RecordMapper()
+                                        )
+                                    )
+                                ))
+                            case .detail(let id):
+                                RecordDetailView(recordId: id, viewModel: RecordDetailViewModel(
+                                    recordId: id,
+                                    getRecordByIdUseCase: GetRecordByIdUseCase(
+                                        recordRepository: RecordRepositoryImpl(
+                                            coreDataStack: CoreDataStack.shared,
+                                            recordMapper: RecordMapper()
+                                        )
+                                    ),
+                                    deleteRecordUseCase: DeleteRecordUseCase(
+                                        recordRepository: RecordRepositoryImpl(
+                                            coreDataStack: CoreDataStack.shared,
+                                            recordMapper: RecordMapper()
+                                        ),
+                                        fileRepository: FileRepositoryImpl()
+                                    )
+                                ))
+                            case .edit(let id):
+                                EditRecordView(recordId: id, viewModel: EditRecordViewModel(
+                                    recordId: id,
+                                    getRecordByIdUseCase: GetRecordByIdUseCase(
+                                        recordRepository: RecordRepositoryImpl(
+                                            coreDataStack: CoreDataStack.shared,
+                                            recordMapper: RecordMapper()
+                                        )
+                                    ),
+                                    updateRecordUseCase: UpdateRecordUseCase(
+                                        recordRepository: RecordRepositoryImpl(
+                                            coreDataStack: CoreDataStack.shared,
+                                            recordMapper: RecordMapper()
+                                        ),
+                                        fileRepository: FileRepositoryImpl(),
+                                        validateUpdateLimit: ValidateUpdateLimitUseCase()
+                                    ),
+                                    getSettingsUseCase: GetSettingsUseCase(
+                                        settingsRepository: SettingsRepositoryImpl(
+                                            coreDataStack: CoreDataStack.shared,
+                                            settingsMapper: SettingsMapper()
+                                        )
+                                    )
+                                ))
+                            case .calendar:
+                                // 탭바에서 처리
+                                EmptyView()
+                            case .settings:
+                                // 탭바에서 처리
+                                EmptyView()
+                            case .onboarding:
+                                OnboardingView(viewModel: OnboardingViewModel(
+                                    markFirstLaunchCompleteUseCase: MarkFirstLaunchCompleteUseCase(
+                                        settingsRepository: SettingsRepositoryImpl(
+                                            coreDataStack: CoreDataStack.shared,
+                                            settingsMapper: SettingsMapper()
+                                        )
+                                    )
+                                ))
+                            }
+                        }
                 }
             }
         }
@@ -177,4 +178,3 @@ struct AppNavigation: View {
         }
     }
 }
-
