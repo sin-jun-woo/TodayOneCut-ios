@@ -7,6 +7,7 @@
 
 import SwiftUI
 import PhotosUI
+import Photos
 
 /// 갤러리 전용 사진 선택기 (카메라 옵션 없음)
 struct PhotoLibraryPicker: UIViewControllerRepresentable {
@@ -24,21 +25,7 @@ struct PhotoLibraryPicker: UIViewControllerRepresentable {
         return picker
     }
     
-    func updateUIViewController(_ uiViewController: PHPickerViewController, context: Context) {
-        if isPresented && uiViewController.presentingViewController == nil {
-            // Present the picker
-            if let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-               let rootViewController = windowScene.windows.first?.rootViewController {
-                var topViewController = rootViewController
-                while let presented = topViewController.presentedViewController {
-                    topViewController = presented
-                }
-                topViewController.present(uiViewController, animated: true)
-            }
-        } else if !isPresented && uiViewController.presentingViewController != nil {
-            uiViewController.dismiss(animated: true)
-        }
-    }
+    func updateUIViewController(_ uiViewController: PHPickerViewController, context: Context) {}
     
     func makeCoordinator() -> Coordinator {
         Coordinator(isPresented: $isPresented, onImageSelected: onImageSelected)
