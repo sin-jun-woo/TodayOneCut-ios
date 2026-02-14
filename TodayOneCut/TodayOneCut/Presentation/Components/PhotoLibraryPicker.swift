@@ -45,7 +45,7 @@ struct PhotoLibraryPicker: UIViewControllerRepresentable {
             
             guard let result = results.first else { return }
             
-            result.item.loadObject(ofClass: UIImage.self) { [weak self] object, error in
+            result.itemProvider.loadObject(ofClass: UIImage.self) { [weak self] (object: NSItemProviderReading?, error: Error?) in
                 DispatchQueue.main.async {
                     if let image = object as? UIImage {
                         self?.onImageSelected(image)
