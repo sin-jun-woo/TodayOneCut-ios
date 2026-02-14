@@ -36,19 +36,19 @@ struct MainTabView: View {
         TabView(selection: $selectedTab) {
             NavigationStack(path: $navigationPath) {
                 HomeView(viewModel: HomeViewModel(
-                getTodayRecordUseCase: GetTodayRecordUseCase(
-                    recordRepository: RecordRepositoryImpl(
-                        coreDataStack: CoreDataStack.shared,
-                        recordMapper: RecordMapper()
+                    getTodayRecordUseCase: GetTodayRecordUseCase(
+                        recordRepository: RecordRepositoryImpl(
+                            coreDataStack: CoreDataStack.shared,
+                            recordMapper: RecordMapper()
+                        )
+                    ),
+                    checkTodayRecordExistsUseCase: CheckTodayRecordExistsUseCase(
+                        recordRepository: RecordRepositoryImpl(
+                            coreDataStack: CoreDataStack.shared,
+                            recordMapper: RecordMapper()
+                        )
                     )
-                ),
-                checkTodayRecordExistsUseCase: CheckTodayRecordExistsUseCase(
-                    recordRepository: RecordRepositoryImpl(
-                        coreDataStack: CoreDataStack.shared,
-                        recordMapper: RecordMapper()
-                    )
-                )
-            ))
+                ))
             .navigationDestination(for: AppRoute.self) { route in
                 switch route {
                 case .create:
@@ -129,19 +129,19 @@ struct MainTabView: View {
             
             NavigationStack {
                 RecordListView(viewModel: RecordListViewModel(
-                getAllRecordsUseCase: GetAllRecordsUseCase(
-                    recordRepository: RecordRepositoryImpl(
-                        coreDataStack: CoreDataStack.shared,
-                        recordMapper: RecordMapper()
+                    getAllRecordsUseCase: GetAllRecordsUseCase(
+                        recordRepository: RecordRepositoryImpl(
+                            coreDataStack: CoreDataStack.shared,
+                            recordMapper: RecordMapper()
+                        )
+                    ),
+                    searchRecordsUseCase: SearchRecordsUseCase(
+                        recordRepository: RecordRepositoryImpl(
+                            coreDataStack: CoreDataStack.shared,
+                            recordMapper: RecordMapper()
+                        )
                     )
-                ),
-                searchRecordsUseCase: SearchRecordsUseCase(
-                    recordRepository: RecordRepositoryImpl(
-                        coreDataStack: CoreDataStack.shared,
-                        recordMapper: RecordMapper()
-                    )
-                )
-            ))
+                ))
             .navigationDestination(for: AppRoute.self) { route in
                 switch route {
                 case .detail(let id):
@@ -196,29 +196,29 @@ struct MainTabView: View {
             
             NavigationStack {
                 CalendarView(viewModel: CalendarViewModel(
-                getMonthRecordsUseCase: GetMonthRecordsUseCase(
+                    getMonthRecordsUseCase: GetMonthRecordsUseCase(
+                        recordRepository: RecordRepositoryImpl(
+                            coreDataStack: CoreDataStack.shared,
+                            recordMapper: RecordMapper()
+                        )
+                    ),
+                    getRecordDatesUseCase: GetRecordDatesUseCase(
+                        recordRepository: RecordRepositoryImpl(
+                            coreDataStack: CoreDataStack.shared,
+                            recordMapper: RecordMapper()
+                        )
+                    ),
+                    getRecordByDateUseCase: GetTodayRecordUseCase(
+                        recordRepository: RecordRepositoryImpl(
+                            coreDataStack: CoreDataStack.shared,
+                            recordMapper: RecordMapper()
+                        )
+                    ),
                     recordRepository: RecordRepositoryImpl(
                         coreDataStack: CoreDataStack.shared,
                         recordMapper: RecordMapper()
                     )
-                ),
-                getRecordDatesUseCase: GetRecordDatesUseCase(
-                    recordRepository: RecordRepositoryImpl(
-                        coreDataStack: CoreDataStack.shared,
-                        recordMapper: RecordMapper()
-                    )
-                ),
-                getRecordByDateUseCase: GetTodayRecordUseCase(
-                    recordRepository: RecordRepositoryImpl(
-                        coreDataStack: CoreDataStack.shared,
-                        recordMapper: RecordMapper()
-                    )
-                ),
-                recordRepository: RecordRepositoryImpl(
-                    coreDataStack: CoreDataStack.shared,
-                    recordMapper: RecordMapper()
-                )
-            ))
+                ))
             .navigationDestination(for: AppRoute.self) { route in
                 switch route {
                 case .detail(let id):
@@ -273,25 +273,25 @@ struct MainTabView: View {
             
             NavigationStack {
                 SettingsView(viewModel: SettingsViewModel(
-                getSettingsUseCase: GetSettingsUseCase(
-                    settingsRepository: SettingsRepositoryImpl(
-                        coreDataStack: CoreDataStack.shared,
-                        settingsMapper: SettingsMapper()
+                    getSettingsUseCase: GetSettingsUseCase(
+                        settingsRepository: SettingsRepositoryImpl(
+                            coreDataStack: CoreDataStack.shared,
+                            settingsMapper: SettingsMapper()
+                        )
+                    ),
+                    updateLocationSettingUseCase: UpdateLocationSettingUseCase(
+                        settingsRepository: SettingsRepositoryImpl(
+                            coreDataStack: CoreDataStack.shared,
+                            settingsMapper: SettingsMapper()
+                        )
+                    ),
+                    updateThemeUseCase: UpdateThemeUseCase(
+                        settingsRepository: SettingsRepositoryImpl(
+                            coreDataStack: CoreDataStack.shared,
+                            settingsMapper: SettingsMapper()
+                        )
                     )
-                ),
-                updateLocationSettingUseCase: UpdateLocationSettingUseCase(
-                    settingsRepository: SettingsRepositoryImpl(
-                        coreDataStack: CoreDataStack.shared,
-                        settingsMapper: SettingsMapper()
-                    )
-                ),
-                updateThemeUseCase: UpdateThemeUseCase(
-                    settingsRepository: SettingsRepositoryImpl(
-                        coreDataStack: CoreDataStack.shared,
-                        settingsMapper: SettingsMapper()
-                    )
-                )
-            ))
+                ))
             .tabItem {
                 Label(TabItem.settings.rawValue, systemImage: TabItem.settings.icon)
             }

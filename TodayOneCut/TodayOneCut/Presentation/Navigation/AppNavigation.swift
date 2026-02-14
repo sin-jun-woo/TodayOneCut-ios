@@ -157,6 +157,7 @@ struct AppNavigation: View {
                         ))
                     }
                 }
+            }
         }
         .onAppear {
             checkFirstLaunch()
@@ -164,7 +165,7 @@ struct AppNavigation: View {
     }
     
     /// 첫 실행 체크
-    private func checkFirstLaunch() {
+    func checkFirstLaunch() {
         Task {
             do {
                 let settings = try await getSettingsUseCase.executeOnce()
