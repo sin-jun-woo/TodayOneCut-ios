@@ -13,6 +13,7 @@ enum AppRoute: Hashable {
     case create
     case list
     case detail(recordId: Int64)
+    case edit(recordId: Int64)
     case calendar
     case settings
     case onboarding

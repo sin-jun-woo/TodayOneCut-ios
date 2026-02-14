@@ -100,9 +100,7 @@ struct RecordDetailView: View {
             ToolbarItem(placement: .navigationBarTrailing) {
                 Menu {
                     if let record = viewModel.record, record.canUpdate {
-                        Button {
-                            // TODO: 수정 화면으로 이동
-                        } label: {
+                        NavigationLink(value: AppRoute.edit(recordId: record.id)) {
                             Label("수정", systemImage: "pencil")
                         }
                     }
