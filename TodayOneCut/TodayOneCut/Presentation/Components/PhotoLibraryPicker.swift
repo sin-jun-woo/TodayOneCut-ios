@@ -41,7 +41,10 @@ struct PhotoLibraryPicker: UIViewControllerRepresentable {
         }
         
         func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
-            isPresented = false
+            // SwiftUI sheet는 바인딩으로 자동 dismiss됨
+            DispatchQueue.main.async {
+                self.isPresented = false
+            }
             
             guard let result = results.first else { return }
             

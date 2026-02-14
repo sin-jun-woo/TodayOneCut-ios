@@ -137,13 +137,19 @@ extension UIImage {
         guard let cgImage = self.cgImage else { return nil }
         
         let mutableData = NSMutableData()
+        
+        // iOS 14+에서 WebP 지원 확인
+        // UTType.webP가 nil일 수 있으므로 "public.webp" 직접 사용
+        let webpType = UTType.webP?.identifier ?? "public.webp"
+        
         guard let destination = CGImageDestinationCreateWithData(
             mutableData,
-            UTType.webP.identifier as CFString,
+            webpType as CFString,
             1,
             nil
         ) else {
-            return nil
+            // WebP 변환 실패 시 JPEG로 fallback
+            return self.jpegData(compressionQuality: quality)
         }
         
         // WebP 옵션 설정
@@ -154,7 +160,8 @@ extension UIImage {
         CGImageDestinationAddImage(destination, cgImage, options as CFDictionary)
         
         guard CGImageDestinationFinalize(destination) else {
-            return nil
+            // WebP 변환 실패 시 JPEG로 fallback
+            return self.jpegData(compressionQuality: quality)
         }
         
         return mutableData as Data
