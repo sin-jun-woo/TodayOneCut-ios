@@ -130,10 +130,13 @@
 
 - [x] Swinject 또는 Factory 의존성 추가
   - Swift Package Manager 사용
+  - Swinject 추가 가이드 작성 (SWINJECT_SETUP.md)
 - [x] AppContainer 기본 구조 생성
-- [x] 빌드 테스트 성공 확인
+  - 전체 의존성 등록 구조 작성 (Phase 1, 2에서 구현 예정)
+- [ ] 빌드 테스트 성공 확인 (Swinject 추가 후)
 
-**산출물**: DI 기본 설정 완료
+**산출물**: DI 기본 설정 완료 ✅
+**참고**: Swinject는 Xcode에서 수동으로 추가 필요 (SWINJECT_SETUP.md 참고)
 
 ---
 
@@ -146,9 +149,10 @@
   - Color.swift: 색상 팔레트 정의
   - Theme.swift: 라이트/다크 테마 설정
 - [x] Constants.swift 파일 생성 및 기본 상수 정의
+- [x] Extensions.swift 파일 생성 (Date 확장 함수)
 - [x] 빌드 테스트 성공 확인
 
-**산출물**: UI Theme 및 상수 정의 완료
+**산출물**: UI Theme 및 상수 정의 완료 ✅
 
 ---
 
