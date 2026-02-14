@@ -38,20 +38,6 @@ struct HomeView: View {
                     .padding(.horizontal)
                 }
                 
-                // 기록 목록으로 가는 버튼
-                NavigationLink(value: AppRoute.list) {
-                    HStack {
-                        Image(systemName: "list.bullet")
-                        Text("모든 기록 보기")
-                    }
-                    .frame(maxWidth: .infinity)
-                    .padding()
-                    .background(Color.accentColor.opacity(0.1))
-                    .foregroundColor(.accentColor)
-                    .cornerRadius(12)
-                }
-                .padding(.horizontal)
-                
                 // 에러 메시지
                 if let errorMessage = viewModel.uiState.errorMessage {
                     Text(errorMessage)
@@ -66,8 +52,9 @@ struct HomeView: View {
         .navigationBarTitleDisplayMode(.large)
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
-                NavigationLink(value: AppRoute.settings) {
-                    Image(systemName: "gearshape")
+                NavigationLink(value: AppRoute.create) {
+                    Image(systemName: "plus.circle.fill")
+                        .font(.title2)
                 }
             }
         }

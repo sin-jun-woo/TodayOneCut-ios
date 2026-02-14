@@ -34,8 +34,8 @@ struct CalendarView: View {
             // 선택된 날짜의 기록
             if let record = viewModel.selectedDateRecord {
                 ScrollView {
-                    RecordCard(record: record) {
-                        // 상세 화면으로 이동
+                    NavigationLink(value: AppRoute.detail(recordId: record.id)) {
+                        RecordCard(record: record)
                     }
                     .padding()
                 }

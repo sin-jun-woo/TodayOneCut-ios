@@ -26,9 +26,9 @@ struct AppNavigation: View {
     }
     
     var body: some View {
-        NavigationStack(path: $navigationPath) {
-            Group {
-                if showOnboarding {
+        Group {
+            if showOnboarding {
+                NavigationStack {
                     OnboardingView(viewModel: OnboardingViewModel(
                         markFirstLaunchCompleteUseCase: MarkFirstLaunchCompleteUseCase(
                             settingsRepository: SettingsRepositoryImpl(
@@ -37,31 +37,20 @@ struct AppNavigation: View {
                             )
                         )
                     ))
-                } else {
-                    HomeView(viewModel: HomeViewModel(
+                }
+            } else {
+                NavigationStack(path: $navigationPath) {
+                    MainTabView()
+                        .navigationDestination(for: AppRoute.self) { route in
+                            switch route {
+                            case .home:
+                                HomeView(viewModel: HomeViewModel(
                 getTodayRecordUseCase: GetTodayRecordUseCase(
                     recordRepository: RecordRepositoryImpl(
                         coreDataStack: CoreDataStack.shared,
                         recordMapper: RecordMapper()
                     )
                 ),
-                checkTodayRecordExistsUseCase: CheckTodayRecordExistsUseCase(
-                    recordRepository: RecordRepositoryImpl(
-                        coreDataStack: CoreDataStack.shared,
-                        recordMapper: RecordMapper()
-                    )
-                )
-            ))
-                .navigationDestination(for: AppRoute.self) { route in
-                    switch route {
-                    case .home:
-                        HomeView(viewModel: HomeViewModel(
-                            getTodayRecordUseCase: GetTodayRecordUseCase(
-                                recordRepository: RecordRepositoryImpl(
-                                    coreDataStack: CoreDataStack.shared,
-                                    recordMapper: RecordMapper()
-                                )
-                            ),
                             checkTodayRecordExistsUseCase: CheckTodayRecordExistsUseCase(
                                 recordRepository: RecordRepositoryImpl(
                                     coreDataStack: CoreDataStack.shared,
@@ -152,51 +141,11 @@ struct AppNavigation: View {
                             )
                         ))
                     case .calendar:
-                        CalendarView(viewModel: CalendarViewModel(
-                            getMonthRecordsUseCase: GetMonthRecordsUseCase(
-                                recordRepository: RecordRepositoryImpl(
-                                    coreDataStack: CoreDataStack.shared,
-                                    recordMapper: RecordMapper()
-                                )
-                            ),
-                            getRecordDatesUseCase: GetRecordDatesUseCase(
-                                recordRepository: RecordRepositoryImpl(
-                                    coreDataStack: CoreDataStack.shared,
-                                    recordMapper: RecordMapper()
-                                )
-                            ),
-                            getRecordByDateUseCase: GetTodayRecordUseCase(
-                                recordRepository: RecordRepositoryImpl(
-                                    coreDataStack: CoreDataStack.shared,
-                                    recordMapper: RecordMapper()
-                                )
-                            ),
-                            recordRepository: RecordRepositoryImpl(
-                                coreDataStack: CoreDataStack.shared,
-                                recordMapper: RecordMapper()
-                            )
-                        ))
+                        // 탭바에서 처리
+                        EmptyView()
                     case .settings:
-                        SettingsView(viewModel: SettingsViewModel(
-                            getSettingsUseCase: GetSettingsUseCase(
-                                settingsRepository: SettingsRepositoryImpl(
-                                    coreDataStack: CoreDataStack.shared,
-                                    settingsMapper: SettingsMapper()
-                                )
-                            ),
-                            updateLocationSettingUseCase: UpdateLocationSettingUseCase(
-                                settingsRepository: SettingsRepositoryImpl(
-                                    coreDataStack: CoreDataStack.shared,
-                                    settingsMapper: SettingsMapper()
-                                )
-                            ),
-                            updateThemeUseCase: UpdateThemeUseCase(
-                                settingsRepository: SettingsRepositoryImpl(
-                                    coreDataStack: CoreDataStack.shared,
-                                    settingsMapper: SettingsMapper()
-                                )
-                            )
-                        ))
+                        // 탭바에서 처리
+                        EmptyView()
                     case .onboarding:
                         OnboardingView(viewModel: OnboardingViewModel(
                             markFirstLaunchCompleteUseCase: MarkFirstLaunchCompleteUseCase(
