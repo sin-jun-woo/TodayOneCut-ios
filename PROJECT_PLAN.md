@@ -223,13 +223,22 @@
 
 ### 상세 작업 계획
 
-- [x] Result.swift 작성
-- [x] 커스텀 예외 클래스 정의
-- [x] Validation Use Cases 작성
-- [x] Record Use Cases 작성
-- [x] Calendar Use Cases 작성
-- [x] Settings Use Cases 작성
-- [x] Location Use Cases 작성
+- [x] Result.swift 작성 ✅
+- [x] 커스텀 예외 클래스 정의 ✅ (TodayOneCutError)
+- [x] Validation Use Cases 작성 ✅
+  - ValidateDailyLimitUseCase, ValidateUpdateLimitUseCase
+  - ValidateDateUseCase, ValidateRecordContentUseCase
+- [x] Record Use Cases 작성 ✅
+  - CreateRecordUseCase, GetTodayRecordUseCase, GetAllRecordsUseCase
+  - GetRecordByIdUseCase, UpdateRecordUseCase, DeleteRecordUseCase
+  - SearchRecordsUseCase, CheckTodayRecordExistsUseCase
+- [x] Calendar Use Cases 작성 ✅
+  - GetMonthRecordsUseCase, GetRecordDatesUseCase
+- [x] Settings Use Cases 작성 ✅
+  - GetSettingsUseCase, UpdateLocationSettingUseCase
+  - UpdateThemeUseCase, MarkFirstLaunchCompleteUseCase
+- [x] Location Use Cases 작성 ✅
+  - GetCurrentLocationUseCase, ReverseGeocodeUseCase
 
 ---
 
@@ -364,10 +373,11 @@
 **현재 진행 상황**:
 
 - ✅ Phase 0 완료 (프로젝트 초기 설정 완전 완료)
-- 🚧 Phase 1 진행 중 (Data Layer 구현)
+- ✅ Phase 1 완료 (Data Layer 구현)
   - ✅ Week 1: Core Data 및 Entity 완료
-  - 🚧 Week 2: Repository 구현 완료 (DI 모듈 설정 대기)
-- ⏳ Phase 2 예정 (Domain Layer 구현)
+  - ✅ Week 2: Repository 구현 완료 (DI 모듈 설정 대기)
+- ✅ Phase 2 완료 (Domain Layer 구현)
+  - ✅ 모든 Use Cases 작성 완료
 - ⏳ Phase 3 예정 (Core UI 구현)
 - ⏳ Phase 4 예정 (Extended UI 구현)
 - ⏳ Phase 5 예정 (통합 및 테스트)
