@@ -27,7 +27,7 @@ class RecordMapper {
         
         return Record(
             id: entity.id,
-            date: entity.recordDate.toDate() ?? Date(),
+            date: entity.recordDate?.toDate() ?? Date(),
             type: RecordType(rawValue: entity.recordType ?? RecordType.text.rawValue) ?? .text,
             contentText: entity.contentText,
             photoPath: entity.photoPath,
