@@ -287,15 +287,22 @@
 
 ### 상세 작업 계획
 
-- [x] 기록 수정 화면 구현
-- [x] 기록 삭제 기능 구현
-- [x] CalendarViewModel 작성
-- [x] CalendarView 구현
-- [x] SettingsViewModel 작성
-- [x] SettingsView 구현
-- [x] 검색 기능 구현
-- [x] 위치 정보 기능 구현
-- [x] UI/UX 개선
+- [x] 기록 수정 화면 구현 ✅
+  - EditRecordViewModel, EditRecordView
+- [x] 기록 삭제 기능 구현 ✅
+  - RecordDetailView에 이미 구현됨
+- [x] CalendarViewModel 작성 ✅
+- [x] CalendarView 구현 ✅
+  - 월별 기록 조회, 날짜 선택, 기록 표시
+- [x] SettingsViewModel 작성 ✅
+- [x] SettingsView 구현 ✅
+  - 테마 설정, 위치 정보 설정, 앱 정보
+- [x] 검색 기능 구현 ✅
+  - RecordListViewModel에 검색 기능 추가
+- [x] 위치 정보 기능 구현 ✅
+  - CreateRecordView, EditRecordView에 위치 정보 표시
+- [x] UI/UX 개선 ✅
+  - 네비게이션 연결 완료, ViewModel 주입 완료
 
 ---
 

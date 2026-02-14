@@ -13,15 +13,78 @@ struct AppNavigation: View {
     
     var body: some View {
         NavigationStack(path: $navigationPath) {
-            HomeView()
+            HomeView(viewModel: HomeViewModel(
+                getTodayRecordUseCase: GetTodayRecordUseCase(
+                    recordRepository: RecordRepositoryImpl(
+                        coreDataStack: CoreDataStack.shared,
+                        recordMapper: RecordMapper()
+                    )
+                ),
+                checkTodayRecordExistsUseCase: CheckTodayRecordExistsUseCase(
+                    recordRepository: RecordRepositoryImpl(
+                        coreDataStack: CoreDataStack.shared,
+                        recordMapper: RecordMapper()
+                    )
+                )
+            ))
                 .navigationDestination(for: AppRoute.self) { route in
                     switch route {
                     case .home:
-                        HomeView()
+                        HomeView(viewModel: HomeViewModel(
+                            getTodayRecordUseCase: GetTodayRecordUseCase(
+                                recordRepository: RecordRepositoryImpl(
+                                    coreDataStack: CoreDataStack.shared,
+                                    recordMapper: RecordMapper()
+                                )
+                            ),
+                            checkTodayRecordExistsUseCase: CheckTodayRecordExistsUseCase(
+                                recordRepository: RecordRepositoryImpl(
+                                    coreDataStack: CoreDataStack.shared,
+                                    recordMapper: RecordMapper()
+                                )
+                            )
+                        ))
                     case .create:
-                        CreateRecordView()
+                        CreateRecordView(viewModel: CreateRecordViewModel(
+                            createRecordUseCase: CreateRecordUseCase(
+                                recordRepository: RecordRepositoryImpl(
+                                    coreDataStack: CoreDataStack.shared,
+                                    recordMapper: RecordMapper()
+                                ),
+                                fileRepository: FileRepositoryImpl(),
+                                validateDailyLimit: ValidateDailyLimitUseCase(
+                                    recordRepository: RecordRepositoryImpl(
+                                        coreDataStack: CoreDataStack.shared,
+                                        recordMapper: RecordMapper()
+                                    )
+                                ),
+                                validateDate: ValidateDateUseCase(),
+                                validateContent: ValidateRecordContentUseCase()
+                            ),
+                            getCurrentLocationUseCase: GetCurrentLocationUseCase(),
+                            reverseGeocodeUseCase: ReverseGeocodeUseCase(),
+                            getSettingsUseCase: GetSettingsUseCase(
+                                settingsRepository: SettingsRepositoryImpl(
+                                    coreDataStack: CoreDataStack.shared,
+                                    settingsMapper: SettingsMapper()
+                                )
+                            )
+                        ))
                     case .list:
-                        RecordListView()
+                        RecordListView(viewModel: RecordListViewModel(
+                            getAllRecordsUseCase: GetAllRecordsUseCase(
+                                recordRepository: RecordRepositoryImpl(
+                                    coreDataStack: CoreDataStack.shared,
+                                    recordMapper: RecordMapper()
+                                )
+                            ),
+                            searchRecordsUseCase: SearchRecordsUseCase(
+                                recordRepository: RecordRepositoryImpl(
+                                    coreDataStack: CoreDataStack.shared,
+                                    recordMapper: RecordMapper()
+                                )
+                            )
+                        ))
                     case .detail(let id):
                         RecordDetailView(recordId: id, viewModel: RecordDetailViewModel(
                             recordId: id,
@@ -64,9 +127,51 @@ struct AppNavigation: View {
                             )
                         ))
                     case .calendar:
-                        CalendarView()
+                        CalendarView(viewModel: CalendarViewModel(
+                            getMonthRecordsUseCase: GetMonthRecordsUseCase(
+                                recordRepository: RecordRepositoryImpl(
+                                    coreDataStack: CoreDataStack.shared,
+                                    recordMapper: RecordMapper()
+                                )
+                            ),
+                            getRecordDatesUseCase: GetRecordDatesUseCase(
+                                recordRepository: RecordRepositoryImpl(
+                                    coreDataStack: CoreDataStack.shared,
+                                    recordMapper: RecordMapper()
+                                )
+                            ),
+                            getRecordByDateUseCase: GetTodayRecordUseCase(
+                                recordRepository: RecordRepositoryImpl(
+                                    coreDataStack: CoreDataStack.shared,
+                                    recordMapper: RecordMapper()
+                                )
+                            ),
+                            recordRepository: RecordRepositoryImpl(
+                                coreDataStack: CoreDataStack.shared,
+                                recordMapper: RecordMapper()
+                            )
+                        ))
                     case .settings:
-                        SettingsView()
+                        SettingsView(viewModel: SettingsViewModel(
+                            getSettingsUseCase: GetSettingsUseCase(
+                                settingsRepository: SettingsRepositoryImpl(
+                                    coreDataStack: CoreDataStack.shared,
+                                    settingsMapper: SettingsMapper()
+                                )
+                            ),
+                            updateLocationSettingUseCase: UpdateLocationSettingUseCase(
+                                settingsRepository: SettingsRepositoryImpl(
+                                    coreDataStack: CoreDataStack.shared,
+                                    settingsMapper: SettingsMapper()
+                                )
+                            ),
+                            updateThemeUseCase: UpdateThemeUseCase(
+                                settingsRepository: SettingsRepositoryImpl(
+                                    coreDataStack: CoreDataStack.shared,
+                                    settingsMapper: SettingsMapper()
+                                )
+                            )
+                        ))
                     case .onboarding:
                         OnboardingView()
                     }
