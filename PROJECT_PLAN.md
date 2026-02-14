@@ -301,8 +301,15 @@
   - RecordListViewModel에 검색 기능 추가
 - [x] 위치 정보 기능 구현 ✅
   - CreateRecordView, EditRecordView에 위치 정보 표시
+- [x] 온보딩 화면 완전 구현 ✅
+  - OnboardingViewModel, OnboardingView (3페이지)
+  - 첫 실행 체크 로직 추가
+- [x] 탭바 네비게이션 추가 ✅
+  - MainTabView: 홈, 목록, 달력, 설정 탭
+  - 각 탭에 NavigationStack 및 네비게이션 연결
 - [x] UI/UX 개선 ✅
   - 네비게이션 연결 완료, ViewModel 주입 완료
+  - 홈 화면에 기록 작성 버튼 추가
 
 ---
 
