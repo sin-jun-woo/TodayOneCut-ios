@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Combine
 
 /// 기록 상세 화면 ViewModel
 @MainActor

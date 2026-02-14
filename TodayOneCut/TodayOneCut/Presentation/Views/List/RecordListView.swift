@@ -121,6 +121,12 @@ struct RecordListView: View {
                         coreDataStack: CoreDataStack.shared,
                         recordMapper: RecordMapper()
                     )
+                ),
+                searchRecordsUseCase: SearchRecordsUseCase(
+                    recordRepository: RecordRepositoryImpl(
+                        coreDataStack: CoreDataStack.shared,
+                        recordMapper: RecordMapper()
+                    )
                 )
             )
         )
