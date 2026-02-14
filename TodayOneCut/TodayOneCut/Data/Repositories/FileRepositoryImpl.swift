@@ -138,9 +138,8 @@ extension UIImage {
         
         let mutableData = NSMutableData()
         
-        // iOS 14+에서 WebP 지원 확인
-        // UTType.webP가 nil일 수 있으므로 "public.webp" 직접 사용
-        let webpType = UTType.webP?.identifier ?? "public.webp"
+        // iOS 14+에서 WebP 지원
+        let webpType = UTType.webP.identifier
         
         guard let destination = CGImageDestinationCreateWithData(
             mutableData,
