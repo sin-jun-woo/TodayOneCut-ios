@@ -11,7 +11,7 @@ import SwiftUI
 struct TodayOneCutApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            AppNavigation()
                 .appTheme()
         }
     }
