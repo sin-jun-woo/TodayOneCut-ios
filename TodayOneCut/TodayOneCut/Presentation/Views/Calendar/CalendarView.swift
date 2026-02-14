@@ -49,6 +49,53 @@ struct CalendarView: View {
         }
         .navigationTitle("달력")
         .navigationBarTitleDisplayMode(.large)
+        .navigationDestination(for: AppRoute.self) { route in
+            switch route {
+            case .detail(let id):
+                RecordDetailView(recordId: id, viewModel: RecordDetailViewModel(
+                    recordId: id,
+                    getRecordByIdUseCase: GetRecordByIdUseCase(
+                        recordRepository: RecordRepositoryImpl(
+                            coreDataStack: CoreDataStack.shared,
+                            recordMapper: RecordMapper()
+                        )
+                    ),
+                    deleteRecordUseCase: DeleteRecordUseCase(
+                        recordRepository: RecordRepositoryImpl(
+                            coreDataStack: CoreDataStack.shared,
+                            recordMapper: RecordMapper()
+                        ),
+                        fileRepository: FileRepositoryImpl()
+                    )
+                ))
+            case .edit(let id):
+                EditRecordView(recordId: id, viewModel: EditRecordViewModel(
+                    recordId: id,
+                    getRecordByIdUseCase: GetRecordByIdUseCase(
+                        recordRepository: RecordRepositoryImpl(
+                            coreDataStack: CoreDataStack.shared,
+                            recordMapper: RecordMapper()
+                        )
+                    ),
+                    updateRecordUseCase: UpdateRecordUseCase(
+                        recordRepository: RecordRepositoryImpl(
+                            coreDataStack: CoreDataStack.shared,
+                            recordMapper: RecordMapper()
+                        ),
+                        fileRepository: FileRepositoryImpl(),
+                        validateUpdateLimit: ValidateUpdateLimitUseCase()
+                    ),
+                    getSettingsUseCase: GetSettingsUseCase(
+                        settingsRepository: SettingsRepositoryImpl(
+                            coreDataStack: CoreDataStack.shared,
+                            settingsMapper: SettingsMapper()
+                        )
+                    )
+                ))
+            default:
+                EmptyView()
+            }
+        }
         .onAppear {
             viewModel.loadRecordsForMonth(currentMonth)
         }
