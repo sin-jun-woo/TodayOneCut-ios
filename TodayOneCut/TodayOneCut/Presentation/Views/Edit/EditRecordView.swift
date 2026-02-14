@@ -7,6 +7,7 @@
 
 import SwiftUI
 import PhotosUI
+import Photos
 
 /// 기록 수정 화면
 struct EditRecordView: View {
@@ -14,7 +15,6 @@ struct EditRecordView: View {
     @Environment(\.dismiss) private var dismiss
     @State private var showImagePicker = false
     @State private var showCamera = false
-    @State private var selectedPhotoItem: PhotosPickerItem?
     
     init(recordId: Int64, viewModel: EditRecordViewModel) {
         _viewModel = StateObject(wrappedValue: viewModel)
@@ -139,17 +139,9 @@ struct EditRecordView: View {
                 )
             }
         }
-        .photosPicker(
-            isPresented: $showImagePicker,
-            selection: $selectedPhotoItem,
-            matching: .images
-        )
-        .onChange(of: selectedPhotoItem) { newItem in
-            Task {
-                if let data = try? await newItem?.loadTransferable(type: Data.self),
-                   let image = UIImage(data: data) {
-                    viewModel.setImage(image)
-                }
+        .sheet(isPresented: $showImagePicker) {
+            PhotoLibraryPicker(isPresented: $showImagePicker) { image in
+                viewModel.setImage(image)
             }
         }
         .fullScreenCover(isPresented: $showCamera) {

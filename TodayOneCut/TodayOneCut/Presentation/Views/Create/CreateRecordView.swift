@@ -7,6 +7,7 @@
 
 import SwiftUI
 import PhotosUI
+import Photos
 
 /// 기록 작성 화면
 struct CreateRecordView: View {
@@ -14,7 +15,6 @@ struct CreateRecordView: View {
     @Environment(\.dismiss) private var dismiss
     @State private var showImagePicker = false
     @State private var showCamera = false
-    @State private var selectedPhotoItem: PhotosPickerItem?
     
     init(viewModel: CreateRecordViewModel) {
         _viewModel = StateObject(wrappedValue: viewModel)
@@ -110,17 +110,9 @@ struct CreateRecordView: View {
                 .disabled(viewModel.isLoading || (viewModel.contentText.isEmpty && viewModel.imageData == nil))
             }
         }
-        .photosPicker(
-            isPresented: $showImagePicker,
-            selection: $selectedPhotoItem,
-            matching: .images
-        )
-        .onChange(of: selectedPhotoItem) { newItem in
-            Task {
-                if let data = try? await newItem?.loadTransferable(type: Data.self),
-                   let image = UIImage(data: data) {
-                    viewModel.setImage(image)
-                }
+        .sheet(isPresented: $showImagePicker) {
+            PhotoLibraryPicker(isPresented: $showImagePicker) { image in
+                viewModel.setImage(image)
             }
         }
         .fullScreenCover(isPresented: $showCamera) {
