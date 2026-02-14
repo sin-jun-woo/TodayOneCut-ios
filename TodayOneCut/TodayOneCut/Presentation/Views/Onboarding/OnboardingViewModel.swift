@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import Combine
 
 /// 온보딩 화면 ViewModel
 @MainActor
