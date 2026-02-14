@@ -52,7 +52,11 @@ class CreateRecordUseCase {
         // 사진 저장 및 압축
         var photoPath: String? = nil
         if let photoData = photoData {
-            let compressedData = try await fileRepository.compressPhoto(photoData)
+            let compressedData = try await fileRepository.compressPhoto(
+                photoData,
+                maxSize: Constants.Photo.maxSize,
+                quality: Constants.Photo.compressionQuality
+            )
             photoPath = try await fileRepository.savePhoto(compressedData, date: today)
         }
         

@@ -16,7 +16,7 @@ class SettingsMapper {
         return AppSettings(
             id: entity.id,
             enableLocation: entity.enableLocation,
-            themeMode: ThemeMode(rawValue: entity.themeMode) ?? .system,
+            themeMode: ThemeMode(rawValue: entity.themeMode ?? ThemeMode.system.rawValue) ?? .system,
             firstLaunch: entity.firstLaunch,
             totalRecords: Int(entity.totalRecords),
             createdAt: entity.createdAt ?? Date(),

@@ -46,7 +46,11 @@ class UpdateRecordUseCase {
             }
             
             // 새 사진 압축 및 저장
-            let compressedData = try await fileRepository.compressPhoto(newPhotoData)
+            let compressedData = try await fileRepository.compressPhoto(
+                newPhotoData,
+                maxSize: Constants.Photo.maxSize,
+                quality: Constants.Photo.compressionQuality
+            )
             photoPath = try await fileRepository.savePhoto(compressedData, date: record.date)
         }
         
