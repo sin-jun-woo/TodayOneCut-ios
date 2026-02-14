@@ -29,14 +29,19 @@ struct AppNavigation: View {
         Group {
             if showOnboarding {
                 NavigationStack {
-                    OnboardingView(viewModel: OnboardingViewModel(
-                        markFirstLaunchCompleteUseCase: MarkFirstLaunchCompleteUseCase(
-                            settingsRepository: SettingsRepositoryImpl(
-                                coreDataStack: CoreDataStack.shared,
-                                settingsMapper: SettingsMapper()
+                    OnboardingView(
+                        viewModel: OnboardingViewModel(
+                            markFirstLaunchCompleteUseCase: MarkFirstLaunchCompleteUseCase(
+                                settingsRepository: SettingsRepositoryImpl(
+                                    coreDataStack: CoreDataStack.shared,
+                                    settingsMapper: SettingsMapper()
+                                )
                             )
-                        )
-                    ))
+                        ),
+                        onComplete: {
+                            showOnboarding = false
+                        }
+                    )
                 }
             } else {
                 MainTabView()

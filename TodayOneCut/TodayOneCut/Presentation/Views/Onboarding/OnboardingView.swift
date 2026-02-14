@@ -10,10 +10,11 @@ import SwiftUI
 /// 온보딩 화면
 struct OnboardingView: View {
     @StateObject private var viewModel: OnboardingViewModel
-    @Environment(\.dismiss) private var dismiss
+    let onComplete: () -> Void
     
-    init(viewModel: OnboardingViewModel) {
+    init(viewModel: OnboardingViewModel, onComplete: @escaping () -> Void) {
         _viewModel = StateObject(wrappedValue: viewModel)
+        self.onComplete = onComplete
     }
     
     var body: some View {
@@ -48,7 +49,7 @@ struct OnboardingView: View {
                     Button("시작하기") {
                         Task {
                             await viewModel.completeOnboarding()
-                            dismiss()
+                            onComplete()
                         }
                     }
                     .buttonStyle(.borderedProminent)
@@ -101,7 +102,8 @@ struct OnboardingPageView: View {
                         settingsMapper: SettingsMapper()
                     )
                 )
-            )
+            ),
+            onComplete: {}
         )
     }
 }
