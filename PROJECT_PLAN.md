@@ -256,21 +256,22 @@
 
 #### Week 1: 네비게이션 및 홈 화면
 
-- [x] 네비게이션 구조 설정 (NavigationStack)
-- [x] 공통 UI 컴포넌트 작성
-- [x] HomeUiState 정의
-- [x] HomeViewModel 작성
-- [x] HomeView 구현
+- [x] 네비게이션 구조 설정 (NavigationStack) ✅
+- [x] 공통 UI 컴포넌트 작성 ✅
+  - EmptyStateView, LoadingView, RecordCard
+- [x] HomeUiState 정의 ✅
+- [x] HomeViewModel 작성 ✅
+- [x] HomeView 구현 ✅
 
 #### Week 2: 기록 작성/목록/상세 화면
 
-- [x] CreateRecordViewModel 작성
-- [x] CreateRecordView 구현
-- [x] 카메라 및 갤러리 연동
-- [x] RecordListViewModel 작성
-- [x] RecordListView 구현
-- [x] RecordDetailViewModel 작성
-- [x] RecordDetailView 구현
+- [x] CreateRecordViewModel 작성 ✅
+- [x] CreateRecordView 구현 ✅
+- [x] 카메라 및 갤러리 연동 ✅
+- [x] RecordListViewModel 작성 ✅
+- [x] RecordListView 구현 ✅
+- [x] RecordDetailViewModel 작성 ✅
+- [x] RecordDetailView 구현 ✅
 
 ---
 
