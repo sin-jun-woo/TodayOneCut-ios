@@ -199,14 +199,16 @@
 
 #### Week 2: Repository 및 Mapper
 
-- [x] Domain Model 작성 (Record, Location, AppSettings)
-- [x] RecordMapper 클래스 작성
-- [x] SettingsMapper 클래스 작성
-- [x] Repository Interface 정의
-- [x] RecordRepositoryImpl 구현
-- [x] SettingsRepositoryImpl 구현
-- [x] FileRepositoryImpl 구현
-- [x] DI 모듈 설정
+- [x] Domain Model 작성 (Record, Location, AppSettings) ✅
+- [x] RecordMapper 클래스 작성 ✅
+- [x] SettingsMapper 클래스 작성 ✅
+- [x] Repository Interface 정의 ✅
+  - RecordRepository, SettingsRepository, FileRepository
+- [x] RecordRepositoryImpl 구현 ✅
+- [x] SettingsRepositoryImpl 구현 ✅
+- [x] FileRepositoryImpl 구현 ✅
+- [x] Utils 추가 (Result, Errors) ✅
+- [ ] DI 모듈 설정 (Swinject 추가 후)
 
 ---
 
@@ -363,6 +365,8 @@
 
 - ✅ Phase 0 완료 (프로젝트 초기 설정 완전 완료)
 - 🚧 Phase 1 진행 중 (Data Layer 구현)
+  - ✅ Week 1: Core Data 및 Entity 완료
+  - 🚧 Week 2: Repository 구현 완료 (DI 모듈 설정 대기)
 - ⏳ Phase 2 예정 (Domain Layer 구현)
 - ⏳ Phase 3 예정 (Core UI 구현)
 - ⏳ Phase 4 예정 (Extended UI 구현)
