@@ -23,18 +23,18 @@ struct HomeView: View {
                     LoadingView()
                         .frame(height: 200)
                 } else if let record = viewModel.uiState.todayRecord {
-                    RecordCard(record: record) {
-                        // TODO: 상세 화면으로 이동
+                    NavigationLink(value: AppRoute.detail(recordId: record.id)) {
+                        RecordCard(record: record)
                     }
                     .padding(.horizontal)
                 } else {
-                    EmptyStateView(
-                        message: "아직 오늘의 장면을 남기지 않았어요",
-                        actionText: "오늘의 장면 남기기",
-                        action: {
-                            // TODO: NavigationLink로 연결
-                        }
-                    )
+                    NavigationLink(value: AppRoute.create) {
+                        EmptyStateView(
+                            message: "아직 오늘의 장면을 남기지 않았어요",
+                            actionText: "오늘의 장면 남기기",
+                            action: nil
+                        )
+                    }
                     .padding(.horizontal)
                 }
                 

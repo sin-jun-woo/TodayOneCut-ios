@@ -21,7 +21,7 @@ struct RecordListView: View {
                 LoadingView()
             } else if viewModel.records.isEmpty {
                 EmptyStateView(
-                    message: "아직 기록이 없어요",
+                    message: viewModel.isSearching ? "검색 결과가 없어요" : "아직 기록이 없어요",
                     actionText: nil,
                     action: nil
                 )
@@ -39,11 +39,28 @@ struct RecordListView: View {
         }
         .navigationTitle("기록 목록")
         .navigationBarTitleDisplayMode(.large)
+        .searchable(
+            text: $viewModel.searchText,
+            isPresented: $viewModel.isSearching,
+            prompt: "기록 검색"
+        )
+        .onSubmit(of: .search) {
+            viewModel.performSearch()
+        }
+        .onChange(of: viewModel.searchText) { newValue in
+            if newValue.isEmpty && !viewModel.isSearching {
+                viewModel.loadRecords()
+            }
+        }
         .onAppear {
             viewModel.loadRecords()
         }
         .refreshable {
-            viewModel.loadRecords()
+            if viewModel.isSearching {
+                viewModel.performSearch()
+            } else {
+                viewModel.loadRecords()
+            }
         }
     }
 }
