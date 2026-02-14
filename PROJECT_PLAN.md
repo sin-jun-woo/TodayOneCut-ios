@@ -191,11 +191,11 @@
 
 #### Week 1: Core Data 및 Entity
 
-- [x] RecordType enum 정의
-- [x] ThemeMode enum 정의
-- [x] RecordEntity 클래스 작성
-- [x] AppSettingsEntity 클래스 작성
-- [x] CoreDataStack 구현
+- [x] RecordType enum 정의 ✅
+- [x] ThemeMode enum 정의 ✅
+- [x] RecordEntity 클래스 작성 ✅ (Core Data 모델에 정의됨)
+- [x] AppSettingsEntity 클래스 작성 ✅ (Core Data 모델에 정의됨)
+- [x] CoreDataStack 구현 ✅
 
 #### Week 2: Repository 및 Mapper
 
