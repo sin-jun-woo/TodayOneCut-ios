@@ -15,7 +15,7 @@ struct CreateRecordView: View {
     @Environment(\.dismiss) private var dismiss
     @State private var imagePickerType: ImagePickerType? = nil
     
-    enum ImagePickerType: Identifiable {
+    enum ImagePickerType: Identifiable, Equatable {
         case gallery
         case camera
         
