@@ -146,8 +146,10 @@ struct EditRecordView: View {
         }
         .sheet(isPresented: Binding(
             get: { 
-                let isGallery = imagePickerType == .gallery
-                return isGallery
+                if case .gallery = imagePickerType {
+                    return true
+                }
+                return false
             },
             set: { newValue in
                 if !newValue {
@@ -156,7 +158,12 @@ struct EditRecordView: View {
             }
         )) {
             PhotoLibraryPicker(isPresented: Binding(
-                get: { imagePickerType == .gallery },
+                get: { 
+                    if case .gallery = imagePickerType {
+                        return true
+                    }
+                    return false
+                },
                 set: { newValue in
                     if !newValue {
                         imagePickerType = nil
@@ -169,8 +176,10 @@ struct EditRecordView: View {
         }
         .fullScreenCover(isPresented: Binding(
             get: { 
-                let isCamera = imagePickerType == .camera
-                return isCamera
+                if case .camera = imagePickerType {
+                    return true
+                }
+                return false
             },
             set: { newValue in
                 if !newValue {
