@@ -19,6 +19,7 @@ class CreateRecordViewModel: ObservableObject {
     @Published var location: Location?
     @Published var isLoading: Bool = false
     @Published var errorMessage: String?
+    @Published var toastMessage: String?
     @Published var isLocationEnabled: Bool = false
     
     private let createRecordUseCase: CreateRecordUseCase
@@ -66,7 +67,8 @@ class CreateRecordViewModel: ObservableObject {
             location = locationWithName
         } catch {
             // 위치 가져오기 실패는 무시 (선택적 기능)
-            errorMessage = "위치 정보를 가져올 수 없습니다"
+            // Toast 메시지만 표시 (에러 메시지는 표시 안 함)
+            toastMessage = "위치 정보를 가져올 수 없습니다"
         }
     }
     
@@ -111,7 +113,9 @@ class CreateRecordViewModel: ObservableObject {
             return true
         } catch {
             isLoading = false
-            errorMessage = (error as? TodayOneCutError)?.userMessage ?? "기록 저장에 실패했습니다"
+            let message = (error as? TodayOneCutError)?.userMessage ?? "기록 저장에 실패했습니다"
+            errorMessage = message
+            toastMessage = message
             return false
         }
     }

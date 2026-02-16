@@ -175,6 +175,7 @@ struct CreateRecordView: View {
                 await viewModel.fetchCurrentLocation()
             }
         }
+        .toast(message: $viewModel.toastMessage)
     }
 }
 

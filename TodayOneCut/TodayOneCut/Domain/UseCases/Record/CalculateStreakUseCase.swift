@@ -25,9 +25,10 @@ class CalculateStreakUseCase {
             return 0
         }
         
-        let calendar = Calendar.current
+        var calendar = Calendar.current
+        calendar.timeZone = DateTimeUtils.koreaTimeZone
         var streak = 0
-        var expectedDate = Date().startOfDay
+        var expectedDate = DateTimeUtils.todayInKorea()
         
         // 오늘 기록이 있으면 streak 시작
         if let firstRecord = allRecords.first,

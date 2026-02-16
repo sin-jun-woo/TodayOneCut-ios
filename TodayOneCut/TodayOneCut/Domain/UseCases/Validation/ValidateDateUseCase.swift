@@ -14,8 +14,9 @@ class ValidateDateUseCase {
     /// - Parameter date: 검증할 날짜
     /// - Throws: InvalidDateError 과거/미래 날짜인 경우
     func execute(date: Date) throws {
-        let today = Date()
-        let calendar = Calendar.current
+        let today = DateTimeUtils.todayInKorea()
+        var calendar = Calendar.current
+        calendar.timeZone = DateTimeUtils.koreaTimeZone
         
         if calendar.compare(date, to: today, toGranularity: .day) == .orderedDescending {
             throw TodayOneCutError.invalidDate(message: "미래 날짜는 기록할 수 없습니다")

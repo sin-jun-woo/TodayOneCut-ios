@@ -11,6 +11,7 @@ import SwiftUI
 struct HomeView: View {
     @StateObject private var viewModel: HomeViewModel
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.tabSelection) private var tabSelection
     
     init(viewModel: HomeViewModel) {
         _viewModel = StateObject(wrappedValue: viewModel)
@@ -41,6 +42,38 @@ struct HomeView: View {
                     }
                     .padding(.horizontal)
                 }
+                
+                // 전체 기록, 달력 버튼
+                HStack(spacing: 12) {
+                    Button {
+                        tabSelection.wrappedValue = .list
+                    } label: {
+                        HStack {
+                            Image(systemName: "list.bullet")
+                            Text("전체 기록")
+                        }
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(Color(.systemGray6))
+                        .foregroundColor(.primary)
+                        .cornerRadius(12)
+                    }
+                    
+                    Button {
+                        tabSelection.wrappedValue = .calendar
+                    } label: {
+                        HStack {
+                            Image(systemName: "calendar")
+                            Text("달력")
+                        }
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .background(Color(.systemGray6))
+                        .foregroundColor(.primary)
+                        .cornerRadius(12)
+                    }
+                }
+                .padding(.horizontal)
                 
                 // 에러 메시지
                 if let errorMessage = viewModel.uiState.errorMessage {

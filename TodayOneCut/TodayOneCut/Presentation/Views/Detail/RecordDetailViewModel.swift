@@ -14,6 +14,7 @@ class RecordDetailViewModel: ObservableObject {
     @Published var record: Record?
     @Published var isLoading: Bool = false
     @Published var errorMessage: String?
+    @Published var toastMessage: String?
     
     private let getRecordByIdUseCase: GetRecordByIdUseCase
     private let deleteRecordUseCase: DeleteRecordUseCase
@@ -38,7 +39,9 @@ class RecordDetailViewModel: ObservableObject {
             do {
                 record = try await getRecordByIdUseCase.execute(id: recordId)
             } catch {
-                errorMessage = (error as? TodayOneCutError)?.userMessage ?? "기록을 불러올 수 없습니다"
+                let message = (error as? TodayOneCutError)?.userMessage ?? "기록을 불러올 수 없습니다"
+                errorMessage = message
+                toastMessage = message
             }
             
             isLoading = false
@@ -56,7 +59,9 @@ class RecordDetailViewModel: ObservableObject {
             return true
         } catch {
             isLoading = false
-            errorMessage = (error as? TodayOneCutError)?.userMessage ?? "기록 삭제에 실패했습니다"
+            let message = (error as? TodayOneCutError)?.userMessage ?? "기록 삭제에 실패했습니다"
+            errorMessage = message
+            toastMessage = message
             return false
         }
     }

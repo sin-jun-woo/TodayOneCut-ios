@@ -49,6 +49,17 @@ struct CalendarView: View {
         }
         .navigationTitle("달력")
         .navigationBarTitleDisplayMode(.large)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button("오늘") {
+                    let today = Date()
+                    currentMonth = today
+                    viewModel.selectDate(today)
+                    viewModel.loadRecordsForMonth(today)
+                }
+                .fontWeight(.semibold)
+            }
+        }
         .navigationDestination(for: AppRoute.self) { route in
             switch route {
             case .detail(let id):

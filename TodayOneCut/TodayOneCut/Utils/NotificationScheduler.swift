@@ -13,7 +13,7 @@ class NotificationScheduler {
     static let shared = NotificationScheduler()
     
     private let notificationCenter = UNUserNotificationCenter.current()
-    private let dailyReminderIdentifier = "daily_reminder"
+    let dailyReminderIdentifier = "daily_reminder"
     
     private init() {}
     

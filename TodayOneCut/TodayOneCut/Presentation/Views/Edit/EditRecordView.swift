@@ -197,6 +197,7 @@ struct EditRecordView: View {
         .onAppear {
             viewModel.loadRecord()
         }
+        .toast(message: $viewModel.toastMessage)
     }
 }
 

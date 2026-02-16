@@ -18,7 +18,7 @@ class CheckTodayRecordExistsUseCase {
     /// 오늘 기록 존재 여부 확인
     /// - Returns: 기록 존재 여부
     func execute() async throws -> Bool {
-        let today = Date()
+        let today = DateTimeUtils.todayInKorea()
         return try await recordRepository.recordExistsForDate(today)
     }
 }

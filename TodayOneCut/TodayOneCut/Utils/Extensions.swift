@@ -83,3 +83,58 @@ extension Bundle {
     }
 }
 
+/// 한국 시간대 유틸리티
+struct DateTimeUtils {
+    /// 한국 시간대 (Asia/Seoul, UTC+9)
+    static let koreaTimeZone = TimeZone(identifier: "Asia/Seoul") ?? TimeZone.current
+    
+    /// 한국 시간 기준 현재 날짜를 반환합니다.
+    static func todayInKorea() -> Date {
+        var calendar = Calendar.current
+        calendar.timeZone = koreaTimeZone
+        return calendar.startOfDay(for: Date())
+    }
+    
+    /// Date를 한국 시간대로 변환하여 반환합니다.
+    static func toKoreaTime(_ date: Date) -> Date {
+        let sourceTimeZone = TimeZone.current
+        let destinationTimeZone = koreaTimeZone
+        
+        let sourceOffset = sourceTimeZone.secondsFromGMT(for: date)
+        let destinationOffset = destinationTimeZone.secondsFromGMT(for: date)
+        let timeInterval = TimeInterval(destinationOffset - sourceOffset)
+        
+        return date.addingTimeInterval(timeInterval)
+    }
+    
+    /// Date를 한국 시간 기준으로 포맷팅합니다.
+    /// 형식: "yyyy년 MM월 dd일 HH:mm:ss"
+    static func formatToKoreaDateTime(_ date: Date) -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy년 MM월 dd일 HH:mm:ss"
+        formatter.locale = Locale(identifier: "ko_KR")
+        formatter.timeZone = koreaTimeZone
+        return formatter.string(from: date)
+    }
+    
+    /// Date를 한국 시간 기준으로 시간만 포맷팅합니다.
+    /// 형식: "HH:mm:ss"
+    static func formatToKoreaTime(_ date: Date) -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "HH:mm:ss"
+        formatter.locale = Locale(identifier: "ko_KR")
+        formatter.timeZone = koreaTimeZone
+        return formatter.string(from: date)
+    }
+    
+    /// Date를 한국 시간 기준으로 날짜만 포맷팅합니다.
+    /// 형식: "yyyy년 MM월 dd일"
+    static func formatToKoreaDate(_ date: Date) -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy년 MM월 dd일"
+        formatter.locale = Locale(identifier: "ko_KR")
+        formatter.timeZone = koreaTimeZone
+        return formatter.string(from: date)
+    }
+}
+

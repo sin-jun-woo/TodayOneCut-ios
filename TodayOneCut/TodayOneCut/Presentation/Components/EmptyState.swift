@@ -13,6 +13,8 @@ struct EmptyStateView: View {
     let actionText: String?
     let action: (() -> Void)?
     
+    @State private var animated = false
+    
     init(
         message: String,
         actionText: String? = nil,
@@ -48,6 +50,12 @@ struct EmptyStateView: View {
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .opacity(animated ? 1.0 : 0.0)
+        .onAppear {
+            withAnimation(.easeInOut(duration: 0.6)) {
+                animated = true
+            }
+        }
     }
 }
 

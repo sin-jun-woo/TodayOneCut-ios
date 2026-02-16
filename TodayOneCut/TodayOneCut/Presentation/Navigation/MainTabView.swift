@@ -7,6 +7,18 @@
 
 import SwiftUI
 
+/// 탭 선택을 위한 Environment Key
+struct TabSelectionKey: EnvironmentKey {
+    static var defaultValue: Binding<MainTabView.TabItem> = .constant(.home)
+}
+
+extension EnvironmentValues {
+    var tabSelection: Binding<MainTabView.TabItem> {
+        get { self[TabSelectionKey.self] }
+        set { self[TabSelectionKey.self] = newValue }
+    }
+}
+
 /// 메인 탭바 뷰
 struct MainTabView: View {
     @State private var selectedTab: TabItem = .home
@@ -57,6 +69,7 @@ struct MainTabView: View {
                         settingsMapper: SettingsMapper()
                     )
                 ))
+                .environment(\.tabSelection, $selectedTab)
             }
             .tabItem {
                 Label(TabItem.home.rawValue, systemImage: TabItem.home.icon)

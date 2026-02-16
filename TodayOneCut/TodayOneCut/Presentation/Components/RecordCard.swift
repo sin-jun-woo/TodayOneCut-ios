@@ -12,6 +12,8 @@ struct RecordCard: View {
     let record: Record
     let onTap: (() -> Void)?
     
+    @State private var isPressed = false
+    
     init(record: Record, onTap: (() -> Void)? = nil) {
         self.record = record
         self.onTap = onTap
@@ -79,9 +81,22 @@ struct RecordCard: View {
             .padding()
             .background(Color(.systemBackground))
             .cornerRadius(16)
-            .shadow(color: Color.black.opacity(0.1), radius: 8, x: 0, y: 2)
+            .shadow(color: Color.black.opacity(0.1), radius: isPressed ? 4 : 8, x: 0, y: isPressed ? 1 : 2)
+            .scaleEffect(isPressed ? 0.98 : 1.0)
+            .animation(.spring(response: 0.1, dampingFraction: 0.7), value: isPressed)
         }
         .buttonStyle(PlainButtonStyle())
+        .simultaneousGesture(
+            DragGesture(minimumDistance: 0)
+                .onChanged { _ in
+                    if !isPressed {
+                        isPressed = true
+                    }
+                }
+                .onEnded { _ in
+                    isPressed = false
+                }
+        )
     }
 }
 

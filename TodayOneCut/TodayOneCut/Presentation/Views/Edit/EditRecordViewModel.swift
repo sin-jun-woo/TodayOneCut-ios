@@ -18,6 +18,7 @@ class EditRecordViewModel: ObservableObject {
     @Published var imageData: Data?
     @Published var isLoading: Bool = false
     @Published var errorMessage: String?
+    @Published var toastMessage: String?
     @Published var isLocationEnabled: Bool = false
     
     private let getRecordByIdUseCase: GetRecordByIdUseCase
@@ -118,7 +119,9 @@ class EditRecordViewModel: ObservableObject {
             return true
         } catch {
             isLoading = false
-            errorMessage = (error as? TodayOneCutError)?.userMessage ?? "기록 수정에 실패했습니다"
+            let message = (error as? TodayOneCutError)?.userMessage ?? "기록 수정에 실패했습니다"
+            errorMessage = message
+            toastMessage = message
             return false
         }
     }

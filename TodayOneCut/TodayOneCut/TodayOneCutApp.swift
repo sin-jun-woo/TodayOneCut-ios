@@ -9,6 +9,11 @@ import SwiftUI
 
 @main
 struct TodayOneCutApp: App {
+    init() {
+        // NotificationManager 초기화 (delegate 설정)
+        _ = NotificationManager.shared
+    }
+    
     var body: some Scene {
         WindowGroup {
             AppNavigation()

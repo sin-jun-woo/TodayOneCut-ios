@@ -202,6 +202,7 @@ struct RecordDetailView: View {
         .onAppear {
             viewModel.loadRecord()
         }
+        .toast(message: $viewModel.toastMessage)
     }
 }
 

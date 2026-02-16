@@ -18,7 +18,7 @@ class GetTodayRecordUseCase {
     /// 오늘의 기록 조회
     /// - Returns: 오늘의 기록 또는 nil
     func execute() async throws -> Record? {
-        let today = Date()
+        let today = DateTimeUtils.todayInKorea()
         return try await recordRepository.getRecordByDate(today)
     }
 }

@@ -48,7 +48,7 @@ class CreateRecordUseCase {
         photoData: Data?,
         location: Location?
     ) async throws -> Record {
-        let today = Date()
+        let today = DateTimeUtils.todayInKorea()
         
         // 비즈니스 규칙 검증
         try validateDate.execute(date: today)

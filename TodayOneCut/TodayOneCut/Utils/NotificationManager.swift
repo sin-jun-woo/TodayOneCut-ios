@@ -9,13 +9,83 @@ import Foundation
 import UserNotifications
 
 /// 알림 관리자
-class NotificationManager {
+class NotificationManager: NSObject, UNUserNotificationCenterDelegate {
     static let shared = NotificationManager()
     
     private let notificationCenter = UNUserNotificationCenter.current()
     private let scheduler = NotificationScheduler.shared
     
-    private init() {}
+    private override init() {
+        super.init()
+        notificationCenter.delegate = self
+    }
+    
+    // MARK: - UNUserNotificationCenterDelegate
+    
+    /// 알림이 표시되기 전에 호출됨 (앱이 포그라운드에 있을 때)
+    func userNotificationCenter(
+        _ center: UNUserNotificationCenter,
+        willPresent notification: UNNotification,
+        withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void
+    ) {
+        // 일일 리마인더인 경우 조건 체크
+        if notification.request.identifier == NotificationScheduler.shared.dailyReminderIdentifier {
+            Task {
+                let shouldShow = await shouldShowDailyReminder()
+                if shouldShow {
+                    completionHandler([.banner, .sound, .badge])
+                } else {
+                    completionHandler([]) // 알림 표시 안 함
+                }
+            }
+        } else {
+            // 다른 알림은 그대로 표시
+            completionHandler([.banner, .sound, .badge])
+        }
+    }
+    
+    /// 알림을 탭했을 때 호출됨
+    func userNotificationCenter(
+        _ center: UNUserNotificationCenter,
+        didReceive response: UNNotificationResponse,
+        withCompletionHandler completionHandler: @escaping () -> Void
+    ) {
+        completionHandler()
+    }
+    
+    /// 일일 리마인더를 표시해야 하는지 확인
+    private func shouldShowDailyReminder() async -> Bool {
+        // 알림 설정 확인
+        let settingsRepository = SettingsRepositoryImpl(
+            coreDataStack: CoreDataStack.shared,
+            settingsMapper: SettingsMapper()
+        )
+        
+        do {
+            let settings = try await settingsRepository.getSettingsOnce()
+            
+            // 알림이 꺼져 있으면 표시 안 함
+            guard settings.enableNotification else {
+                return false
+            }
+            
+            // 오늘 기록이 있는지 확인
+            let recordRepository = RecordRepositoryImpl(
+                coreDataStack: CoreDataStack.shared,
+                recordMapper: RecordMapper()
+            )
+            
+            let today = DateTimeUtils.todayInKorea()
+            let hasTodayRecord = try await recordRepository.recordExistsForDate(today)
+            
+            // 오늘 기록이 없으면 알림 표시
+            return !hasTodayRecord
+        } catch {
+            // 에러 발생 시 알림 표시 (안전하게)
+            print("일일 리마인더 조건 체크 실패: \(error)")
+            return true
+        }
+    }
     
     /// 알림 권한 요청
     func requestAuthorization() async -> Bool {
