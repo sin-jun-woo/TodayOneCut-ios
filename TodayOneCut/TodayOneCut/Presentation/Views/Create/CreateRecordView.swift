@@ -128,21 +128,26 @@ struct CreateRecordView: View {
         .sheet(isPresented: Binding(
             get: {
                 let isGallery = imagePickerType == .gallery
-                if isGallery {
-                    print("DEBUG: 갤러리 sheet 표시")
-                }
+                print("DEBUG: 갤러리 sheet get 호출 - imagePickerType: \(imagePickerType?.id ?? -1), isGallery: \(isGallery)")
                 return isGallery
             },
             set: { 
+                print("DEBUG: 갤러리 sheet set 호출 - \($0)")
                 if !$0 { 
-                    print("DEBUG: 갤러리 sheet 닫기")
                     imagePickerType = nil 
                 }
             }
         )) {
             PhotoLibraryPicker(isPresented: Binding(
-                get: { imagePickerType == .gallery },
-                set: { if !$0 { imagePickerType = nil } }
+                get: { 
+                    let isGallery = imagePickerType == .gallery
+                    print("DEBUG: PhotoLibraryPicker isPresented get - \(isGallery)")
+                    return isGallery
+                },
+                set: { 
+                    print("DEBUG: PhotoLibraryPicker isPresented set - \($0)")
+                    if !$0 { imagePickerType = nil } 
+                }
             )) { image in
                 print("DEBUG: 갤러리에서 이미지 선택됨")
                 viewModel.setImage(image)
@@ -152,14 +157,12 @@ struct CreateRecordView: View {
         .fullScreenCover(isPresented: Binding(
             get: {
                 let isCamera = imagePickerType == .camera
-                if isCamera {
-                    print("DEBUG: 카메라 fullScreenCover 표시")
-                }
+                print("DEBUG: 카메라 fullScreenCover get 호출 - imagePickerType: \(imagePickerType?.id ?? -1), isCamera: \(isCamera)")
                 return isCamera
             },
             set: { 
+                print("DEBUG: 카메라 fullScreenCover set 호출 - \($0)")
                 if !$0 { 
-                    print("DEBUG: 카메라 fullScreenCover 닫기")
                     imagePickerType = nil 
                 }
             }
