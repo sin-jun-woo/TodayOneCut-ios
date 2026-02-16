@@ -45,7 +45,9 @@ struct CreateRecordView: View {
                 } else {
                     HStack {
                         Button {
+                            print("🔵 갤러리 버튼 클릭")
                             imagePickerType = .gallery
+                            print("🔵 imagePickerType 설정: \(imagePickerType)")
                         } label: {
                             Label("갤러리에서 선택", systemImage: "photo.on.rectangle")
                         }
@@ -53,7 +55,9 @@ struct CreateRecordView: View {
                         Spacer()
                         
                         Button {
+                            print("🔴 카메라 버튼 클릭")
                             imagePickerType = .camera
+                            print("🔴 imagePickerType 설정: \(imagePickerType)")
                         } label: {
                             Label("카메라로 촬영", systemImage: "camera")
                         }
@@ -117,12 +121,12 @@ struct CreateRecordView: View {
         }
         .sheet(isPresented: Binding(
             get: { 
-                if case .gallery = imagePickerType {
-                    return true
-                }
-                return false
+                let isGallery = if case .gallery = imagePickerType { true } else { false }
+                print("📱 갤러리 sheet get 호출 - imagePickerType: \(String(describing: imagePickerType)), isGallery: \(isGallery)")
+                return isGallery
             },
             set: { newValue in
+                print("📱 갤러리 sheet set 호출 - \(newValue)")
                 if !newValue {
                     imagePickerType = nil
                 }
@@ -130,10 +134,8 @@ struct CreateRecordView: View {
         )) {
             PhotoLibraryPicker(isPresented: Binding(
                 get: { 
-                    if case .gallery = imagePickerType {
-                        return true
-                    }
-                    return false
+                    let isGallery = if case .gallery = imagePickerType { true } else { false }
+                    return isGallery
                 },
                 set: { newValue in
                     if !newValue {
@@ -141,24 +143,26 @@ struct CreateRecordView: View {
                     }
                 }
             )) { image in
+                print("✅ 갤러리에서 이미지 선택됨")
                 viewModel.setImage(image)
                 imagePickerType = nil
             }
         }
         .fullScreenCover(isPresented: Binding(
             get: { 
-                if case .camera = imagePickerType {
-                    return true
-                }
-                return false
+                let isCamera = if case .camera = imagePickerType { true } else { false }
+                print("📷 카메라 fullScreenCover get 호출 - imagePickerType: \(String(describing: imagePickerType)), isCamera: \(isCamera)")
+                return isCamera
             },
             set: { newValue in
+                print("📷 카메라 fullScreenCover set 호출 - \(newValue)")
                 if !newValue {
                     imagePickerType = nil
                 }
             }
         )) {
             CameraView { image in
+                print("✅ 카메라에서 이미지 촬영됨")
                 viewModel.setImage(image)
                 imagePickerType = nil
             }
