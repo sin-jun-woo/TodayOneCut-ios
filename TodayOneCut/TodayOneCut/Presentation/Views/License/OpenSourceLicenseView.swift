@@ -77,6 +77,12 @@ private let libraries: [OpenSourceLibrary] = [
 /// 라이브러리 카드
 struct LibraryCard: View {
     let library: OpenSourceLibrary
+    @AppStorage("appTheme") private var appThemeString: String = AppTheme.warmCozy.rawValue
+    
+    private var themeSurface: Color {
+        let appTheme = AppTheme(rawValue: appThemeString) ?? .warmCozy
+        return getColorForAppTheme(appTheme).surface
+    }
     
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
@@ -99,7 +105,7 @@ struct LibraryCard: View {
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding()
-        .background(Color(.systemGray6))
+        .background(themeSurface)
         .cornerRadius(12)
     }
 }

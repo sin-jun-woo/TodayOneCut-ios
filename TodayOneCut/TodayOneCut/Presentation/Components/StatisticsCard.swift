@@ -10,6 +10,12 @@ import SwiftUI
 /// 통계 카드 컴포넌트
 struct StatisticsCard: View {
     let totalRecords: Int
+    @AppStorage("appTheme") private var appThemeString: String = AppTheme.warmCozy.rawValue
+    
+    private var themeSurface: Color {
+        let appTheme = AppTheme(rawValue: appThemeString) ?? .warmCozy
+        return getColorForAppTheme(appTheme).surface
+    }
     
     var body: some View {
         HStack(spacing: 4) {
@@ -30,7 +36,7 @@ struct StatisticsCard: View {
         .padding(.vertical, 16)
         .background(
             RoundedRectangle(cornerRadius: 12)
-                .fill(Color(.systemGray6))
+                .fill(themeSurface)
         )
     }
 }

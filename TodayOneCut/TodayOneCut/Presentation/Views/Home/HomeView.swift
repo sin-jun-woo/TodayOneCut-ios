@@ -12,6 +12,12 @@ struct HomeView: View {
     @StateObject private var viewModel: HomeViewModel
     @Environment(\.dismiss) private var dismiss
     @Environment(\.tabSelection) private var tabSelection
+    @AppStorage("appTheme") private var appThemeString: String = AppTheme.warmCozy.rawValue
+    
+    private var themeSurface: Color {
+        let appTheme = AppTheme(rawValue: appThemeString) ?? .warmCozy
+        return getColorForAppTheme(appTheme).surface
+    }
     
     init(viewModel: HomeViewModel) {
         _viewModel = StateObject(wrappedValue: viewModel)
@@ -62,7 +68,7 @@ struct HomeView: View {
                         }
                         .frame(maxWidth: .infinity)
                         .padding()
-                        .background(Color(.systemGray6))
+                        .background(themeSurface)
                         .foregroundColor(.primary)
                         .cornerRadius(12)
                     }
@@ -76,7 +82,7 @@ struct HomeView: View {
                         }
                         .frame(maxWidth: .infinity)
                         .padding()
-                        .background(Color(.systemGray6))
+                        .background(themeSurface)
                         .foregroundColor(.primary)
                         .cornerRadius(12)
                     }

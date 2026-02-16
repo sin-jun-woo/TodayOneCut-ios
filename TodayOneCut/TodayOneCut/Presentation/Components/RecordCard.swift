@@ -11,8 +11,14 @@ import SwiftUI
 struct RecordCard: View {
     let record: Record
     let onTap: (() -> Void)?
+    @AppStorage("appTheme") private var appThemeString: String = AppTheme.warmCozy.rawValue
     
     @State private var isPressed = false
+    
+    private var themePrimary: Color {
+        let appTheme = AppTheme(rawValue: appThemeString) ?? .warmCozy
+        return getColorForAppTheme(appTheme).primary
+    }
     
     init(record: Record, onTap: (() -> Void)? = nil) {
         self.record = record
@@ -37,7 +43,7 @@ struct RecordCard: View {
                             .aspectRatio(contentMode: .fill)
                     } placeholder: {
                         Rectangle()
-                            .fill(Color.gray.opacity(0.3))
+                            .fill(themePrimary.opacity(0.1))
                             .overlay {
                                 ProgressView()
                             }

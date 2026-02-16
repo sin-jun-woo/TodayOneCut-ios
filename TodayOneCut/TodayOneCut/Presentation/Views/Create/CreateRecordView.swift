@@ -13,9 +13,15 @@ import Photos
 struct CreateRecordView: View {
     @StateObject private var viewModel: CreateRecordViewModel
     @Environment(\.dismiss) private var dismiss
+    @AppStorage("appTheme") private var appThemeString: String = AppTheme.warmCozy.rawValue
     
     @State private var showGalleryPicker: Bool = false
     @State private var showCamera: Bool = false
+    
+    private var themePrimary: Color {
+        let appTheme = AppTheme(rawValue: appThemeString) ?? .warmCozy
+        return getColorForAppTheme(appTheme).primary
+    }
     
     init(viewModel: CreateRecordViewModel) {
         _viewModel = StateObject(wrappedValue: viewModel)
@@ -81,7 +87,7 @@ struct CreateRecordView: View {
                                     }
                                     .frame(maxWidth: .infinity)
                                     .padding()
-                                    .background(Color.gray.opacity(0.2))
+                                    .background(themePrimary.opacity(0.1))
                                     .foregroundColor(.red)
                                     .cornerRadius(8)
                                     .buttonStyle(PlainButtonStyle())
@@ -267,7 +273,7 @@ struct RecordTypeCard: View {
             )
             .overlay(
                 RoundedRectangle(cornerRadius: 12)
-                    .stroke(isSelected ? (type == .photo ? Color.blue : Color.green) : Color.gray.opacity(0.3), lineWidth: isSelected ? 2 : 1)
+                    .stroke(isSelected ? (type == .photo ? Color.blue : Color.green) : themePrimary.opacity(0.3), lineWidth: isSelected ? 2 : 1)
             )
         }
         .buttonStyle(PlainButtonStyle())

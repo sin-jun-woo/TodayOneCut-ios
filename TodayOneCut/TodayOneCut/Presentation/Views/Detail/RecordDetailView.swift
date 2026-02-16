@@ -11,8 +11,14 @@ import SwiftUI
 struct RecordDetailView: View {
     @StateObject private var viewModel: RecordDetailViewModel
     @Environment(\.dismiss) private var dismiss
+    @AppStorage("appTheme") private var appThemeString: String = AppTheme.warmCozy.rawValue
     @State private var showDeleteAlert = false
     @State private var showImageViewer = false
+    
+    private var themePrimary: Color {
+        let appTheme = AppTheme(rawValue: appThemeString) ?? .warmCozy
+        return getColorForAppTheme(appTheme).primary
+    }
     
     init(recordId: Int64, viewModel: RecordDetailViewModel) {
         _viewModel = StateObject(wrappedValue: viewModel)
@@ -54,7 +60,7 @@ struct RecordDetailView: View {
                                         .aspectRatio(contentMode: .fit)
                                 } placeholder: {
                                     Rectangle()
-                                        .fill(Color.gray.opacity(0.3))
+                                        .fill(themePrimary.opacity(0.1))
                                         .overlay {
                                             ProgressView()
                                         }

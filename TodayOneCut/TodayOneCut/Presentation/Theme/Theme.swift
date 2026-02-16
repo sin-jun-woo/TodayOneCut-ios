@@ -41,3 +41,26 @@ extension View {
     }
 }
 
+/// 테마 색상 헬퍼
+struct ThemeColorHelper {
+    @AppStorage("appTheme") private static var appThemeString: String = AppTheme.warmCozy.rawValue
+    
+    /// 현재 테마의 surface 색상 반환
+    static var surface: Color {
+        let appTheme = AppTheme(rawValue: appThemeString) ?? .warmCozy
+        return getColorForAppTheme(appTheme).surface
+    }
+    
+    /// 현재 테마의 primary 색상 반환
+    static var primary: Color {
+        let appTheme = AppTheme(rawValue: appThemeString) ?? .warmCozy
+        return getColorForAppTheme(appTheme).primary
+    }
+    
+    /// 현재 테마의 primary 색상 (낮은 opacity) - 회색 박스 대체용
+    static var primaryLight: Color {
+        let appTheme = AppTheme(rawValue: appThemeString) ?? .warmCozy
+        return getColorForAppTheme(appTheme).primary.opacity(0.1)
+    }
+}
+
