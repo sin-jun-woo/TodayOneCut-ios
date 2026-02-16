@@ -121,25 +121,21 @@ struct CreateRecordView: View {
                 .disabled(viewModel.isLoading || (viewModel.contentText.isEmpty && viewModel.imageData == nil))
             }
         }
-        .sheet(isPresented: Binding(
-            get: { imagePickerType == .gallery },
-            set: { if !$0 { imagePickerType = nil } }
-        )) {
-            PhotoLibraryPicker(isPresented: Binding(
-                get: { imagePickerType == .gallery },
-                set: { if !$0 { imagePickerType = nil } }
-            )) { image in
-                viewModel.setImage(image)
-                imagePickerType = nil
-            }
-        }
-        .fullScreenCover(isPresented: Binding(
-            get: { imagePickerType == .camera },
-            set: { if !$0 { imagePickerType = nil } }
-        )) {
-            CameraView { image in
-                viewModel.setImage(image)
-                imagePickerType = nil
+        .sheet(item: $imagePickerType) { type in
+            switch type {
+            case .gallery:
+                PhotoLibraryPicker(isPresented: Binding(
+                    get: { imagePickerType == .gallery },
+                    set: { if !$0 { imagePickerType = nil } }
+                )) { image in
+                    viewModel.setImage(image)
+                    imagePickerType = nil
+                }
+            case .camera:
+                CameraView { image in
+                    viewModel.setImage(image)
+                    imagePickerType = nil
+                }
             }
         }
         .onAppear {

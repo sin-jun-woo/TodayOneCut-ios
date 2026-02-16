@@ -19,6 +19,8 @@ struct PhotoLibraryPicker: UIViewControllerRepresentable {
         configuration.filter = .images
         configuration.selectionLimit = 1
         configuration.preferredAssetRepresentationMode = .current
+        // 갤러리만 표시 (카메라 옵션 제거)
+        configuration.preselectedAssetIdentifiers = []
         
         let picker = PHPickerViewController(configuration: configuration)
         picker.delegate = context.coordinator
