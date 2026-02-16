@@ -34,13 +34,8 @@ struct EditRecordView: View {
                         
                         HStack {
                             Button("사진 변경") {
-                                if showCamera {
-                                    showCamera = false
-                                    Task { @MainActor in
-                                        try? await Task.sleep(nanoseconds: 100_000_000)
-                                        showGalleryPicker = true
-                                    }
-                                } else {
+                                showCamera = false
+                                DispatchQueue.main.async {
                                     showGalleryPicker = true
                                 }
                             }
@@ -56,13 +51,8 @@ struct EditRecordView: View {
                 } else {
                     HStack {
                         Button {
-                            if showCamera {
-                                showCamera = false
-                                Task { @MainActor in
-                                    try? await Task.sleep(nanoseconds: 100_000_000)
-                                    showGalleryPicker = true
-                                }
-                            } else {
+                            showCamera = false
+                            DispatchQueue.main.async {
                                 showGalleryPicker = true
                             }
                         } label: {
@@ -72,13 +62,8 @@ struct EditRecordView: View {
                         Spacer()
                         
                         Button {
-                            if showGalleryPicker {
-                                showGalleryPicker = false
-                                Task { @MainActor in
-                                    try? await Task.sleep(nanoseconds: 100_000_000)
-                                    showCamera = true
-                                }
-                            } else {
+                            showGalleryPicker = false
+                            DispatchQueue.main.async {
                                 showCamera = true
                             }
                         } label: {
