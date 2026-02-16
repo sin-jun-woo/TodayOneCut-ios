@@ -52,8 +52,19 @@ struct CreateRecordView: View {
                     HStack {
                         Button {
                             print("DEBUG: 갤러리 버튼 클릭")
-                            imagePickerType = .gallery
-                            print("DEBUG: imagePickerType = \(imagePickerType?.id ?? -1)")
+                            // 다른 picker가 열려있으면 먼저 닫기
+                            if imagePickerType == .camera {
+                                imagePickerType = nil
+                                // 약간의 딜레이 후 갤러리 열기
+                                Task { @MainActor in
+                                    try? await Task.sleep(nanoseconds: 100_000_000) // 0.1초
+                                    imagePickerType = .gallery
+                                    print("DEBUG: imagePickerType = \(imagePickerType?.id ?? -1)")
+                                }
+                            } else {
+                                imagePickerType = .gallery
+                                print("DEBUG: imagePickerType = \(imagePickerType?.id ?? -1)")
+                            }
                         } label: {
                             Label("갤러리에서 선택", systemImage: "photo.on.rectangle")
                         }
@@ -62,8 +73,19 @@ struct CreateRecordView: View {
                         
                         Button {
                             print("DEBUG: 카메라 버튼 클릭")
-                            imagePickerType = .camera
-                            print("DEBUG: imagePickerType = \(imagePickerType?.id ?? -1)")
+                            // 다른 picker가 열려있으면 먼저 닫기
+                            if imagePickerType == .gallery {
+                                imagePickerType = nil
+                                // 약간의 딜레이 후 카메라 열기
+                                Task { @MainActor in
+                                    try? await Task.sleep(nanoseconds: 100_000_000) // 0.1초
+                                    imagePickerType = .camera
+                                    print("DEBUG: imagePickerType = \(imagePickerType?.id ?? -1)")
+                                }
+                            } else {
+                                imagePickerType = .camera
+                                print("DEBUG: imagePickerType = \(imagePickerType?.id ?? -1)")
+                            }
                         } label: {
                             Label("카메라로 촬영", systemImage: "camera")
                         }

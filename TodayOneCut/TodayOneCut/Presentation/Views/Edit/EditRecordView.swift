@@ -59,7 +59,17 @@ struct EditRecordView: View {
                 } else {
                     HStack {
                         Button {
-                            imagePickerType = .gallery
+                            // 다른 picker가 열려있으면 먼저 닫기
+                            if imagePickerType == .camera {
+                                imagePickerType = nil
+                                // 약간의 딜레이 후 갤러리 열기
+                                Task { @MainActor in
+                                    try? await Task.sleep(nanoseconds: 100_000_000) // 0.1초
+                                    imagePickerType = .gallery
+                                }
+                            } else {
+                                imagePickerType = .gallery
+                            }
                         } label: {
                             Label("갤러리에서 선택", systemImage: "photo.on.rectangle")
                         }
@@ -67,7 +77,17 @@ struct EditRecordView: View {
                         Spacer()
                         
                         Button {
-                            imagePickerType = .camera
+                            // 다른 picker가 열려있으면 먼저 닫기
+                            if imagePickerType == .gallery {
+                                imagePickerType = nil
+                                // 약간의 딜레이 후 카메라 열기
+                                Task { @MainActor in
+                                    try? await Task.sleep(nanoseconds: 100_000_000) // 0.1초
+                                    imagePickerType = .camera
+                                }
+                            } else {
+                                imagePickerType = .camera
+                            }
                         } label: {
                             Label("카메라로 촬영", systemImage: "camera")
                         }
