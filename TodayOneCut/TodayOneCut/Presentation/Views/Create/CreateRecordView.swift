@@ -117,18 +117,41 @@ struct CreateRecordView: View {
                 .disabled(viewModel.isLoading || (viewModel.contentText.isEmpty && viewModel.imageData == nil))
             }
         }
-        .sheet(isPresented: $showGalleryPicker) {
-            PhotoLibraryPicker(isPresented: $showGalleryPicker) { image in
+        .sheet(isPresented: Binding(
+            get: { showGalleryPicker && !showCamera },
+            set: { newValue in
+                if !newValue {
+                    showGalleryPicker = false
+                }
+            }
+        )) {
+            PhotoLibraryPicker(isPresented: Binding(
+                get: { showGalleryPicker && !showCamera },
+                set: { newValue in
+                    if !newValue {
+                        showGalleryPicker = false
+                    }
+                }
+            )) { image in
                 print("✅ 갤러리에서 이미지 선택됨")
                 viewModel.setImage(image)
                 showGalleryPicker = false
+                showCamera = false
             }
         }
-        .fullScreenCover(isPresented: $showCamera) {
+        .fullScreenCover(isPresented: Binding(
+            get: { showCamera && !showGalleryPicker },
+            set: { newValue in
+                if !newValue {
+                    showCamera = false
+                }
+            }
+        )) {
             CameraView { image in
                 print("✅ 카메라에서 이미지 촬영됨")
                 viewModel.setImage(image)
                 showCamera = false
+                showGalleryPicker = false
             }
         }
         .onAppear {
