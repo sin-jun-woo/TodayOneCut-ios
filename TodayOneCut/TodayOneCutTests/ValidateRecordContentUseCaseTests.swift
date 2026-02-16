@@ -84,5 +84,37 @@ final class ValidateRecordContentUseCaseTests: XCTestCase {
             }
         }
     }
+    
+    /// 텍스트 길이 제한 초과 시 에러를 던져야 함
+    func testExecute_WhenTextExceedsMaxLength_ShouldThrowInvalidContent() {
+        // Given
+        let longText = String(repeating: "a", count: Constants.Text.maxContentLength + 1)
+        let photoData: Data? = nil
+        
+        // When & Then
+        XCTAssertThrowsError(try useCase.execute(type: .text, contentText: longText, photoData: photoData)) { error in
+            if case .invalidContent = error as? TodayOneCutError {
+                // 성공
+            } else {
+                XCTFail("InvalidContent 에러가 아닙니다.")
+            }
+        }
+    }
+    
+    /// PHOTO 타입인데 사진이 없으면 에러를 던져야 함
+    func testExecute_WhenPhotoTypeButNoPhoto_ShouldThrowInvalidContent() {
+        // Given
+        let text = "테스트 텍스트"
+        let photoData: Data? = nil
+        
+        // When & Then
+        XCTAssertThrowsError(try useCase.execute(type: .photo, contentText: text, photoData: photoData)) { error in
+            if case .invalidContent = error as? TodayOneCutError {
+                // 성공
+            } else {
+                XCTFail("InvalidContent 에러가 아닙니다.")
+            }
+        }
+    }
 }
 
