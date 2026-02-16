@@ -13,19 +13,8 @@ import Photos
 struct EditRecordView: View {
     @StateObject private var viewModel: EditRecordViewModel
     @Environment(\.dismiss) private var dismiss
-    @State private var imagePickerType: ImagePickerType? = nil
-    
-    enum ImagePickerType: Identifiable, Equatable {
-        case gallery
-        case camera
-        
-        var id: Int {
-            switch self {
-            case .gallery: return 0
-            case .camera: return 1
-            }
-        }
-    }
+    @State private var showGalleryPicker = false
+    @State private var showCamera = false
     
     init(recordId: Int64, viewModel: EditRecordViewModel) {
         _viewModel = StateObject(wrappedValue: viewModel)
@@ -45,7 +34,15 @@ struct EditRecordView: View {
                         
                         HStack {
                             Button("사진 변경") {
-                                imagePickerType = .gallery
+                                if showCamera {
+                                    showCamera = false
+                                    Task { @MainActor in
+                                        try? await Task.sleep(nanoseconds: 100_000_000)
+                                        showGalleryPicker = true
+                                    }
+                                } else {
+                                    showGalleryPicker = true
+                                }
                             }
                             
                             Spacer()
@@ -59,16 +56,14 @@ struct EditRecordView: View {
                 } else {
                     HStack {
                         Button {
-                            // 다른 picker가 열려있으면 먼저 닫기
-                            if imagePickerType == .camera {
-                                imagePickerType = nil
-                                // 약간의 딜레이 후 갤러리 열기
+                            if showCamera {
+                                showCamera = false
                                 Task { @MainActor in
-                                    try? await Task.sleep(nanoseconds: 100_000_000) // 0.1초
-                                    imagePickerType = .gallery
+                                    try? await Task.sleep(nanoseconds: 100_000_000)
+                                    showGalleryPicker = true
                                 }
                             } else {
-                                imagePickerType = .gallery
+                                showGalleryPicker = true
                             }
                         } label: {
                             Label("갤러리에서 선택", systemImage: "photo.on.rectangle")
@@ -77,16 +72,14 @@ struct EditRecordView: View {
                         Spacer()
                         
                         Button {
-                            // 다른 picker가 열려있으면 먼저 닫기
-                            if imagePickerType == .gallery {
-                                imagePickerType = nil
-                                // 약간의 딜레이 후 카메라 열기
+                            if showGalleryPicker {
+                                showGalleryPicker = false
                                 Task { @MainActor in
-                                    try? await Task.sleep(nanoseconds: 100_000_000) // 0.1초
-                                    imagePickerType = .camera
+                                    try? await Task.sleep(nanoseconds: 100_000_000)
+                                    showCamera = true
                                 }
                             } else {
-                                imagePickerType = .camera
+                                showCamera = true
                             }
                         } label: {
                             Label("카메라로 촬영", systemImage: "camera")
@@ -170,25 +163,16 @@ struct EditRecordView: View {
                 )
             }
         }
-        .sheet(isPresented: Binding(
-            get: { imagePickerType == .gallery },
-            set: { if !$0 { imagePickerType = nil } }
-        )) {
-            PhotoLibraryPicker(isPresented: Binding(
-                get: { imagePickerType == .gallery },
-                set: { if !$0 { imagePickerType = nil } }
-            )) { image in
+        .sheet(isPresented: $showGalleryPicker) {
+            PhotoLibraryPicker(isPresented: $showGalleryPicker) { image in
                 viewModel.setImage(image)
-                imagePickerType = nil
+                showGalleryPicker = false
             }
         }
-        .fullScreenCover(isPresented: Binding(
-            get: { imagePickerType == .camera },
-            set: { if !$0 { imagePickerType = nil } }
-        )) {
+        .fullScreenCover(isPresented: $showCamera) {
             CameraView { image in
                 viewModel.setImage(image)
-                imagePickerType = nil
+                showCamera = false
             }
         }
         .onAppear {
