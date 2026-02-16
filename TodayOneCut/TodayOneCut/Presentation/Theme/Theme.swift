@@ -23,14 +23,17 @@ func getColorForAppTheme(_ appTheme: AppTheme) -> (primary: Color, surface: Colo
 struct ThemeModifier: ViewModifier {
     @AppStorage("themeMode") private var themeMode: String = ThemeMode.system.rawValue
     @AppStorage("appTheme") private var appThemeString: String = AppTheme.warmCozy.rawValue
+    @AppStorage("fontFamily") private var fontFamilyString: String = AppFont.systemSerif.rawValue
     
     func body(content: Content) -> some View {
         let mode = ThemeMode(rawValue: themeMode) ?? .system
         let appTheme = AppTheme(rawValue: appThemeString) ?? .warmCozy
+        let fontFamily = AppFont(rawValue: fontFamilyString) ?? .systemSerif
         
         content
             .preferredColorScheme(mode.colorScheme)
             .tint(getColorForAppTheme(appTheme).primary)
+            .font(.appFont(fontFamily))
     }
 }
 
