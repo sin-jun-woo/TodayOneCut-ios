@@ -47,6 +47,14 @@ struct MainTabView: View {
                             coreDataStack: CoreDataStack.shared,
                             recordMapper: RecordMapper()
                         )
+                    ),
+                    recordRepository: RecordRepositoryImpl(
+                        coreDataStack: CoreDataStack.shared,
+                        recordMapper: RecordMapper()
+                    ),
+                    settingsRepository: SettingsRepositoryImpl(
+                        coreDataStack: CoreDataStack.shared,
+                        settingsMapper: SettingsMapper()
                     )
                 ))
             }
@@ -126,8 +134,47 @@ struct MainTabView: View {
                             coreDataStack: CoreDataStack.shared,
                             settingsMapper: SettingsMapper()
                         )
+                    ),
+                    updateNotificationSettingUseCase: UpdateNotificationSettingUseCase(
+                        settingsRepository: SettingsRepositoryImpl(
+                            coreDataStack: CoreDataStack.shared,
+                            settingsMapper: SettingsMapper()
+                        )
+                    ),
+                    updateAppThemeUseCase: UpdateAppThemeUseCase(
+                        settingsRepository: SettingsRepositoryImpl(
+                            coreDataStack: CoreDataStack.shared,
+                            settingsMapper: SettingsMapper()
+                        )
+                    ),
+                    updateFontFamilyUseCase: UpdateFontFamilyUseCase(
+                        settingsRepository: SettingsRepositoryImpl(
+                            coreDataStack: CoreDataStack.shared,
+                            settingsMapper: SettingsMapper()
+                        )
+                    ),
+                    deleteAllDataUseCase: DeleteAllDataUseCase(
+                        recordRepository: RecordRepositoryImpl(
+                            coreDataStack: CoreDataStack.shared,
+                            recordMapper: RecordMapper()
+                        ),
+                        settingsRepository: SettingsRepositoryImpl(
+                            coreDataStack: CoreDataStack.shared,
+                            settingsMapper: SettingsMapper()
+                        ),
+                        fileRepository: FileRepositoryImpl()
                     )
                 ))
+                .navigationDestination(for: AppRoute.self) { route in
+                    switch route {
+                    case .privacyPolicy:
+                        PrivacyPolicyView()
+                    case .openSourceLicense:
+                        OpenSourceLicenseView()
+                    default:
+                        EmptyView()
+                    }
+                }
             }
             .tabItem {
                 Label(TabItem.settings.rawValue, systemImage: TabItem.settings.icon)

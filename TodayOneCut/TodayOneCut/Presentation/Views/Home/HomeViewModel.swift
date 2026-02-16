@@ -15,14 +15,22 @@ class HomeViewModel: ObservableObject {
     
     private let getTodayRecordUseCase: GetTodayRecordUseCase
     private let checkTodayRecordExistsUseCase: CheckTodayRecordExistsUseCase
+    private let recordRepository: RecordRepository
+    private let settingsRepository: SettingsRepository
     private var cancellables = Set<AnyCancellable>()
     
     init(
         getTodayRecordUseCase: GetTodayRecordUseCase,
-        checkTodayRecordExistsUseCase: CheckTodayRecordExistsUseCase
+        checkTodayRecordExistsUseCase: CheckTodayRecordExistsUseCase,
+        recordRepository: RecordRepository,
+        settingsRepository: SettingsRepository
     ) {
         self.getTodayRecordUseCase = getTodayRecordUseCase
         self.checkTodayRecordExistsUseCase = checkTodayRecordExistsUseCase
+        self.recordRepository = recordRepository
+        self.settingsRepository = settingsRepository
+        
+        observeTotalRecords()
     }
     
     /// 화면 로드
@@ -47,6 +55,20 @@ class HomeViewModel: ObservableObject {
             
             uiState.isLoading = false
         }
+    }
+    
+    /// 총 기록 개수 관찰
+    private func observeTotalRecords() {
+        recordRepository.getTotalRecordCount()
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] count in
+                self?.uiState.totalRecords = count
+                // Settings에도 업데이트 (캐시)
+                Task {
+                    try? await self?.settingsRepository.updateTotalRecords(count)
+                }
+            }
+            .store(in: &cancellables)
     }
     
     /// 기록 새로고침

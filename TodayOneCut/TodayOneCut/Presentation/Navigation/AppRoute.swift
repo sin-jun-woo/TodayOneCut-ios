@@ -17,5 +17,7 @@ enum AppRoute: Hashable {
     case calendar
     case settings
     case onboarding
+    case privacyPolicy
+    case openSourceLicense
 }
 

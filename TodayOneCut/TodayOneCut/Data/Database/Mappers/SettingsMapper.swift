@@ -16,7 +16,10 @@ class SettingsMapper {
         return AppSettings(
             id: entity.id,
             enableLocation: entity.enableLocation,
+            enableNotification: entity.enableNotification,
             themeMode: ThemeMode(rawValue: entity.themeMode ?? ThemeMode.system.rawValue) ?? .system,
+            appTheme: AppTheme(rawValue: entity.appTheme ?? AppTheme.warmCozy.rawValue) ?? .warmCozy,
+            fontFamily: AppFont(rawValue: entity.fontFamily ?? AppFont.systemSerif.rawValue) ?? .systemSerif,
             firstLaunch: entity.firstLaunch,
             totalRecords: Int(entity.totalRecords),
             createdAt: entity.createdAt ?? Date(),
@@ -29,7 +32,10 @@ class SettingsMapper {
         let entity = AppSettingsEntity(context: context)
         entity.id = settings.id
         entity.enableLocation = settings.enableLocation
+        entity.enableNotification = settings.enableNotification
         entity.themeMode = settings.themeMode.rawValue
+        entity.appTheme = settings.appTheme.rawValue
+        entity.fontFamily = settings.fontFamily.rawValue
         entity.firstLaunch = settings.firstLaunch
         entity.totalRecords = Int32(settings.totalRecords)
         entity.createdAt = settings.createdAt

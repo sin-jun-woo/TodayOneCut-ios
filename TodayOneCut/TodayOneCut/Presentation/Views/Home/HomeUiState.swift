@@ -13,5 +13,6 @@ struct HomeUiState {
     var isLoading: Bool = false
     var errorMessage: String?
     var hasTodayRecord: Bool = false
+    var totalRecords: Int = 0
 }
 

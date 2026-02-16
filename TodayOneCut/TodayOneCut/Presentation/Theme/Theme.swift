@@ -7,23 +7,30 @@
 
 import SwiftUI
 
-/// 앱 테마 설정
-struct AppTheme {
-    /// 라이트 테마 색상 스킴
-    static let light = ColorScheme.light
-    
-    /// 다크 테마 색상 스킴
-    static let dark = ColorScheme.dark
+/// AppTheme enum에 따른 색상 팔레트 반환
+func getColorForAppTheme(_ appTheme: AppTheme) -> (primary: Color, surface: Color, onSurface: Color) {
+    switch appTheme {
+    case .warmCozy:
+        return (Color.WarmCozy.primary, Color.WarmCozy.surface, Color.WarmCozy.onSurface)
+    case .natureCalm:
+        return (Color.NatureCalm.primary, Color.NatureCalm.surface, Color.NatureCalm.onSurface)
+    case .deepEmotional:
+        return (Color.DeepEmotional.primary, Color.DeepEmotional.surface, Color.DeepEmotional.onSurface)
+    }
 }
 
 /// 테마 뷰 모디파이어
 struct ThemeModifier: ViewModifier {
     @AppStorage("themeMode") private var themeMode: String = ThemeMode.system.rawValue
+    @AppStorage("appTheme") private var appThemeString: String = AppTheme.warmCozy.rawValue
     
     func body(content: Content) -> some View {
         let mode = ThemeMode(rawValue: themeMode) ?? .system
+        let appTheme = AppTheme(rawValue: appThemeString) ?? .warmCozy
+        
         content
             .preferredColorScheme(mode.colorScheme)
+            .tint(getColorForAppTheme(appTheme).primary)
     }
 }
 

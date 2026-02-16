@@ -66,3 +66,20 @@ extension String {
     }
 }
 
+extension Bundle {
+    /// 앱 버전 문자열 (예: "1.0.0")
+    var appVersion: String {
+        return infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.0.0"
+    }
+    
+    /// 빌드 번호 (예: "1")
+    var buildNumber: String {
+        return infoDictionary?["CFBundleVersion"] as? String ?? "1"
+    }
+    
+    /// 전체 버전 문자열 (예: "1.0.0 (1)")
+    var fullVersionString: String {
+        return "\(appVersion) (\(buildNumber))"
+    }
+}
+

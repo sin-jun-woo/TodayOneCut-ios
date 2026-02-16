@@ -16,7 +16,10 @@
     <entity name="AppSettingsEntity" representedClassName="AppSettingsEntity" syncable="YES" codeGenerationType="class">
         <attribute name="id" optional="NO" attributeType="Integer 32" defaultValueString="1" usesScalarValueType="YES"/>
         <attribute name="enableLocation" optional="NO" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="enableNotification" optional="NO" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
         <attribute name="themeMode" optional="NO" attributeType="String" defaultValueString="SYSTEM"/>
+        <attribute name="appTheme" optional="YES" attributeType="String" defaultValueString="WARM_COZY"/>
+        <attribute name="fontFamily" optional="YES" attributeType="String" defaultValueString="SYSTEM_SERIF"/>
         <attribute name="firstLaunch" optional="NO" attributeType="Boolean" defaultValueString="YES" usesScalarValueType="YES"/>
         <attribute name="totalRecords" optional="NO" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="createdAt" optional="NO" attributeType="Date" usesScalarValueType="NO"/>

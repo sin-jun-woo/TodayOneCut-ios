@@ -87,7 +87,10 @@ class CoreDataStack {
                 let defaultSettings = AppSettingsEntity(context: context)
                 defaultSettings.id = 1
                 defaultSettings.enableLocation = false
+                defaultSettings.enableNotification = false
                 defaultSettings.themeMode = ThemeMode.system.rawValue
+                defaultSettings.appTheme = AppTheme.warmCozy.rawValue
+                defaultSettings.fontFamily = AppFont.systemSerif.rawValue
                 defaultSettings.firstLaunch = true
                 defaultSettings.totalRecords = 0
                 defaultSettings.createdAt = Date()

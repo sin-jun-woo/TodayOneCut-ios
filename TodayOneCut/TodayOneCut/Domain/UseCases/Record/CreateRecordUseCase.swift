@@ -14,19 +14,25 @@ class CreateRecordUseCase {
     private let validateDailyLimit: ValidateDailyLimitUseCase
     private let validateDate: ValidateDateUseCase
     private let validateContent: ValidateRecordContentUseCase
+    private let calculateStreak: CalculateStreakUseCase?
+    private let settingsRepository: SettingsRepository?
     
     init(
         recordRepository: RecordRepository,
         fileRepository: FileRepository,
         validateDailyLimit: ValidateDailyLimitUseCase,
         validateDate: ValidateDateUseCase,
-        validateContent: ValidateRecordContentUseCase
+        validateContent: ValidateRecordContentUseCase,
+        calculateStreak: CalculateStreakUseCase? = nil,
+        settingsRepository: SettingsRepository? = nil
     ) {
         self.recordRepository = recordRepository
         self.fileRepository = fileRepository
         self.validateDailyLimit = validateDailyLimit
         self.validateDate = validateDate
         self.validateContent = validateContent
+        self.calculateStreak = calculateStreak
+        self.settingsRepository = settingsRepository
     }
     
     /// 기록 생성
@@ -70,7 +76,40 @@ class CreateRecordUseCase {
             createdAt: Date()
         )
         
-        return try await recordRepository.createRecord(record)
+        let createdRecord = try await recordRepository.createRecord(record)
+        
+        // 연속 기록 축하 알림 체크
+        await checkAndShowStreakCelebration()
+        
+        return createdRecord
+    }
+    
+    /// 연속 기록 축하 알림 체크 및 표시
+    private func checkAndShowStreakCelebration() async {
+        guard let calculateStreak = calculateStreak,
+              let settingsRepository = settingsRepository else {
+            return
+        }
+        
+        // 알림 설정 확인
+        do {
+            let settings = try await settingsRepository.getSettingsOnce()
+            guard settings.enableNotification else {
+                return
+            }
+            
+            // 연속 기록 일수 계산
+            let streak = try await calculateStreak.execute()
+            
+            // 특정 일수 달성 시 축하 알림 (7일, 14일, 30일 등)
+            let celebrationDays = [7, 14, 30, 50, 100]
+            if celebrationDays.contains(streak) {
+                await NotificationManager.shared.showStreakCelebration(days: streak)
+            }
+        } catch {
+            // 에러는 무시 (선택적 기능)
+            print("연속 기록 축하 알림 체크 실패: \(error)")
+        }
     }
 }
 

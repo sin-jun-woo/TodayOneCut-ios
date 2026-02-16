@@ -259,6 +259,7 @@
 				INFOPLIST_KEY_NSCameraUsageDescription = "사진을 촬영하기 위해 카메라 권한이 필요합니다.";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "오늘의 장면에 위치 정보를 저장하기 위해 위치 권한이 필요합니다.";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "사진을 선택하기 위해 사진 라이브러리 접근 권한이 필요합니다.";
+				INFOPLIST_KEY_UIAppFonts = "GowunBatang-Bold.ttf KyoboHandwriting2024psw.ttf MaruBuri-Bold.ttf";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -294,6 +295,7 @@
 				INFOPLIST_KEY_NSCameraUsageDescription = "사진을 촬영하기 위해 카메라 권한이 필요합니다.";
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "오늘의 장면에 위치 정보를 저장하기 위해 위치 권한이 필요합니다.";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "사진을 선택하기 위해 사진 라이브러리 접근 권한이 필요합니다.";
+				INFOPLIST_KEY_UIAppFonts = "GowunBatang-Bold.ttf KyoboHandwriting2024psw.ttf MaruBuri-Bold.ttf";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;

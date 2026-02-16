@@ -54,6 +54,27 @@ class FileRepositoryImpl: FileRepository {
         try fileManager.removeItem(atPath: path)
     }
     
+    func deleteAllPhotos() async throws {
+        let documentsURL = fileManager.urls(
+            for: .documentDirectory,
+            in: .userDomainMask
+        )[0]
+        
+        let photosURL = documentsURL.appendingPathComponent(Constants.Photo.photosDirectory)
+        
+        guard fileManager.fileExists(atPath: photosURL.path) else {
+            return // 디렉토리가 없으면 이미 삭제된 것
+        }
+        
+        try fileManager.removeItem(at: photosURL)
+        
+        // 디렉토리 다시 생성 (나중에 사용할 수 있도록)
+        try fileManager.createDirectory(
+            at: photosURL,
+            withIntermediateDirectories: true
+        )
+    }
+    
     func photoExists(path: String) async throws -> Bool {
         return fileManager.fileExists(atPath: path)
     }

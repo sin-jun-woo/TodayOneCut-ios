@@ -72,6 +72,45 @@ class SettingsRepositoryImpl: SettingsRepository {
         try coreDataStack.saveContext()
     }
     
+    func updateNotificationEnabled(_ enabled: Bool) async throws {
+        let context = coreDataStack.viewContext
+        
+        guard let entity = fetchSettingsEntity(context: context) else {
+            throw TodayOneCutError.databaseError(message: "설정을 찾을 수 없습니다")
+        }
+        
+        entity.enableNotification = enabled
+        entity.updatedAt = Date()
+        
+        try coreDataStack.saveContext()
+    }
+    
+    func updateAppTheme(_ theme: AppTheme) async throws {
+        let context = coreDataStack.viewContext
+        
+        guard let entity = fetchSettingsEntity(context: context) else {
+            throw TodayOneCutError.databaseError(message: "설정을 찾을 수 없습니다")
+        }
+        
+        entity.appTheme = theme.rawValue
+        entity.updatedAt = Date()
+        
+        try coreDataStack.saveContext()
+    }
+    
+    func updateFontFamily(_ font: AppFont) async throws {
+        let context = coreDataStack.viewContext
+        
+        guard let entity = fetchSettingsEntity(context: context) else {
+            throw TodayOneCutError.databaseError(message: "설정을 찾을 수 없습니다")
+        }
+        
+        entity.fontFamily = font.rawValue
+        entity.updatedAt = Date()
+        
+        try coreDataStack.saveContext()
+    }
+    
     func markFirstLaunchComplete() async throws {
         let context = coreDataStack.viewContext
         
@@ -93,7 +132,10 @@ class SettingsRepositoryImpl: SettingsRepository {
         let updatedEntity = settingsMapper.toEntity(settings, context: context)
         entity.id = updatedEntity.id
         entity.enableLocation = updatedEntity.enableLocation
+        entity.enableNotification = updatedEntity.enableNotification
         entity.themeMode = updatedEntity.themeMode
+        entity.appTheme = updatedEntity.appTheme
+        entity.fontFamily = updatedEntity.fontFamily
         entity.firstLaunch = updatedEntity.firstLaunch
         entity.totalRecords = updatedEntity.totalRecords
         entity.createdAt = updatedEntity.createdAt
@@ -110,6 +152,29 @@ class SettingsRepositoryImpl: SettingsRepository {
         }
         
         entity.totalRecords = Int32(count)
+        entity.updatedAt = Date()
+        
+        try coreDataStack.saveContext()
+    }
+    
+    func resetSettings() async throws {
+        let context = coreDataStack.viewContext
+        
+        guard let entity = fetchSettingsEntity(context: context) else {
+            // 없으면 기본 설정 생성
+            let defaultSettings = AppSettings()
+            try await updateSettings(defaultSettings)
+            return
+        }
+        
+        // 기본값으로 리셋
+        entity.enableLocation = false
+        entity.enableNotification = false
+        entity.themeMode = ThemeMode.system.rawValue
+        entity.appTheme = AppTheme.warmCozy.rawValue
+        entity.fontFamily = AppFont.systemSerif.rawValue
+        entity.firstLaunch = false // 이미 실행한 적이 있으므로 false
+        entity.totalRecords = 0
         entity.updatedAt = Date()
         
         try coreDataStack.saveContext()

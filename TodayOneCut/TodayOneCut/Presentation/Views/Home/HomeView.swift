@@ -19,6 +19,10 @@ struct HomeView: View {
     var body: some View {
         ScrollView {
             VStack(spacing: 20) {
+                // 통계 카드
+                StatisticsCard(totalRecords: viewModel.uiState.totalRecords)
+                    .padding(.horizontal)
+                
                 if viewModel.uiState.isLoading {
                     LoadingView()
                         .frame(height: 200)
@@ -67,7 +71,17 @@ struct HomeView: View {
                             )
                         ),
                         validateDate: ValidateDateUseCase(),
-                        validateContent: ValidateRecordContentUseCase()
+                        validateContent: ValidateRecordContentUseCase(),
+                        calculateStreak: CalculateStreakUseCase(
+                            recordRepository: RecordRepositoryImpl(
+                                coreDataStack: CoreDataStack.shared,
+                                recordMapper: RecordMapper()
+                            )
+                        ),
+                        settingsRepository: SettingsRepositoryImpl(
+                            coreDataStack: CoreDataStack.shared,
+                            settingsMapper: SettingsMapper()
+                        )
                     ),
                     getCurrentLocationUseCase: GetCurrentLocationUseCase(),
                     reverseGeocodeUseCase: ReverseGeocodeUseCase(),
@@ -155,6 +169,14 @@ struct HomeView: View {
                         coreDataStack: CoreDataStack.shared,
                         recordMapper: RecordMapper()
                     )
+                ),
+                recordRepository: RecordRepositoryImpl(
+                    coreDataStack: CoreDataStack.shared,
+                    recordMapper: RecordMapper()
+                ),
+                settingsRepository: SettingsRepositoryImpl(
+                    coreDataStack: CoreDataStack.shared,
+                    settingsMapper: SettingsMapper()
                 )
             )
         )

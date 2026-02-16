@@ -12,6 +12,7 @@ struct RecordDetailView: View {
     @StateObject private var viewModel: RecordDetailViewModel
     @Environment(\.dismiss) private var dismiss
     @State private var showDeleteAlert = false
+    @State private var showImageViewer = false
     
     init(recordId: Int64, viewModel: RecordDetailViewModel) {
         _viewModel = StateObject(wrappedValue: viewModel)
@@ -24,11 +25,9 @@ struct RecordDetailView: View {
                     LoadingView()
                         .frame(height: 200)
                 } else if let record = viewModel.record {
-                    // 날짜
-                    Text(record.date.toDisplayDateString())
-                        .font(.title2)
-                        .fontWeight(.bold)
-                        .padding(.horizontal)
+                    // 날짜 헤더
+                    DateHeader(date: record.date)
+                        .padding(.bottom, 8)
                     
                     // 사진
                     if let photoPath = record.photoPath {
@@ -46,6 +45,9 @@ struct RecordDetailView: View {
                         .frame(maxHeight: 400)
                         .cornerRadius(12)
                         .padding(.horizontal)
+                        .onTapGesture {
+                            showImageViewer = true
+                        }
                     }
                     
                     // 텍스트
@@ -127,6 +129,13 @@ struct RecordDetailView: View {
             }
         } message: {
             Text("이 기록을 삭제하시겠어요?")
+        }
+        .fullScreenCover(isPresented: $showImageViewer) {
+            if let photoPath = viewModel.record?.photoPath {
+                ImageViewer(imagePath: photoPath) {
+                    showImageViewer = false
+                }
+            }
         }
         .onAppear {
             viewModel.loadRecord()

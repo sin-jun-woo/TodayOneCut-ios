@@ -1,0 +1,135 @@
+//
+//  PrivacyPolicyView.swift
+//  TodayOneCut
+//
+//  Created by 신준우 on 2/13/26.
+//
+
+import SwiftUI
+
+/// 개인정보 처리방침 화면
+struct PrivacyPolicyView: View {
+    var body: some View {
+        ScrollView {
+            VStack(alignment: .leading, spacing: 24) {
+                Text("오늘의 한 컷 개인정보 처리방침")
+                    .font(.title)
+                    .fontWeight(.bold)
+                    .foregroundColor(.primary)
+                
+                Text("최종 업데이트: 2026-03-15")
+                    .font(.subheadline)
+                    .foregroundColor(.secondary)
+                
+                Text("오늘의 한 컷(\"본 앱\")은 사용자의 개인정보 보호를 매우 중요하게 생각합니다. 본 개인정보 처리방침은 본 앱이 수집, 사용, 저장하는 정보에 대해 설명합니다.")
+                    .font(.body)
+                
+                PrivacyPolicySection(
+                    title: "1. 수집하는 정보",
+                    content: """
+본 앱은 **모든 데이터를 사용자의 기기 내부에만 저장**합니다. 네트워크를 통한 데이터 전송이 없으며, 서버에 데이터를 전송하거나 저장하지 않습니다.
+
+로컬에 저장되는 정보:
+• 기록 데이터: 사진, 텍스트, 날짜, 위치 정보
+• 설정 정보: 테마 설정, 위치 정보 사용 설정
+
+권한 사용:
+본 앱은 다음 권한을 사용합니다:
+• 카메라 권한: 사진 촬영 시 사용 (선택적)
+• 저장소 권한: 사진 저장 및 읽기 시 사용 (선택적)
+• 위치 권한: 사용자가 선택한 경우에만 위치 정보 저장 시 사용 (선택적)
+• 알림 권한: 일일 리마인더 알림 시 사용 (선택적)
+"""
+                )
+                
+                PrivacyPolicySection(
+                    title: "2. 데이터 사용",
+                    content: """
+• 기록 보기 및 관리 목적으로만 사용됩니다.
+• 제3자와 공유되지 않습니다.
+• 광고 목적으로 사용되지 않습니다.
+• 분석 또는 추적 목적으로 사용되지 않습니다.
+"""
+                )
+                
+                PrivacyPolicySection(
+                    title: "3. 데이터 저장",
+                    content: """
+• 모든 데이터는 **로컬 데이터베이스 (Core Data)**에 저장됩니다.
+• 모든 데이터는 **사용자의 기기에만 저장**됩니다.
+• 네트워크를 통한 데이터 전송이 없습니다.
+• 클라우드 동기화 기능이 없습니다.
+• 앱 삭제 시 모든 데이터가 함께 삭제됩니다.
+"""
+                )
+                
+                PrivacyPolicySection(
+                    title: "4. 데이터 보안",
+                    content: """
+• iOS 기본 암호화 기능을 사용합니다.
+• 모든 데이터는 기기 내부 저장소에 저장됩니다.
+• 외부에서 데이터에 접근할 수 없습니다.
+"""
+                )
+                
+                PrivacyPolicySection(
+                    title: "5. 제3자 서비스",
+                    content: "본 앱은 제3자 서비스를 사용하지 않으며, 제3자와 데이터를 공유하지 않습니다."
+                )
+                
+                PrivacyPolicySection(
+                    title: "6. 어린이의 개인정보",
+                    content: "본 앱은 13세 미만의 어린이를 대상으로 하지 않습니다. 본 앱은 고의로 13세 미만 어린이의 개인정보를 수집하지 않습니다."
+                )
+                
+                PrivacyPolicySection(
+                    title: "7. 개인정보 처리방침 변경",
+                    content: "본 개인정보 처리방침은 필요시 변경될 수 있습니다. 변경사항은 본 페이지에 게시되며, 변경일은 상단에 표시됩니다."
+                )
+                
+                PrivacyPolicySection(
+                    title: "8. 연락처",
+                    content: """
+개인정보 처리방침에 대한 질문이나 문의사항이 있으시면 다음으로 연락해주세요:
+
+이메일: sus3456@naver.com
+"""
+                )
+                
+                Text("최종 업데이트: 2026-03-15")
+                    .font(.caption)
+                    .foregroundColor(.secondary)
+                    .padding(.top)
+            }
+            .padding()
+        }
+        .navigationTitle("개인정보 처리방침")
+        .navigationBarTitleDisplayMode(.inline)
+    }
+}
+
+/// 개인정보 처리방침 섹션
+struct PrivacyPolicySection: View {
+    let title: String
+    let content: String
+    
+    var body: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text(title)
+                .font(.headline)
+                .fontWeight(.bold)
+                .foregroundColor(.primary)
+            
+            Text(content)
+                .font(.body)
+                .lineSpacing(4)
+        }
+    }
+}
+
+#Preview {
+    NavigationStack {
+        PrivacyPolicyView()
+    }
+}
+

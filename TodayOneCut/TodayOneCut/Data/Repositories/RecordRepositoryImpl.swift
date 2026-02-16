@@ -248,5 +248,17 @@ class RecordRepositoryImpl: RecordRepository {
         let entities = try context.fetch(fetchRequest)
         return entities.first
     }
+    
+    // MARK: - Delete All
+    
+    func deleteAllRecords() async throws {
+        let context = coreDataStack.viewContext
+        
+        let fetchRequest: NSFetchRequest<NSFetchRequestResult> = RecordEntity.fetchRequest()
+        let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
+        
+        try context.execute(deleteRequest)
+        try coreDataStack.saveContext()
+    }
 }
 

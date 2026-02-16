@@ -73,5 +73,9 @@ protocol RecordRepository {
     /// - Parameter yearMonth: 조회할 년월 문자열 (yyyy-MM)
     /// - Returns: 기록이 있는 날짜 집합
     func getRecordDatesForMonth(_ yearMonth: String) async throws -> Set<Date>
+    
+    /// 모든 기록 삭제
+    /// - Throws: 데이터베이스 오류
+    func deleteAllRecords() async throws
 }
 
