@@ -11,10 +11,18 @@ import SwiftUI
 struct StatisticsCard: View {
     let totalRecords: Int
     @AppStorage("appTheme") private var appThemeString: String = AppTheme.warmCozy.rawValue
+    @Environment(\.colorScheme) private var colorScheme
     
-    private var themeSurface: Color {
+    private var cardBackground: Color {
         let appTheme = AppTheme(rawValue: appThemeString) ?? .warmCozy
-        return getColorForAppTheme(appTheme).surface
+        let themeColors = getColorForAppTheme(appTheme)
+        
+        // 다크모드일 때는 primary 색상의 낮은 opacity 사용
+        if colorScheme == .dark {
+            return themeColors.primary.opacity(0.15)
+        } else {
+            return themeColors.surface
+        }
     }
     
     var body: some View {
@@ -36,7 +44,7 @@ struct StatisticsCard: View {
         .padding(.vertical, 16)
         .background(
             RoundedRectangle(cornerRadius: 12)
-                .fill(themeSurface)
+                .fill(cardBackground)
         )
     }
 }

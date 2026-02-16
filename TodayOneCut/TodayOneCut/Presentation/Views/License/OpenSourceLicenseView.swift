@@ -78,10 +78,18 @@ private let libraries: [OpenSourceLibrary] = [
 struct LibraryCard: View {
     let library: OpenSourceLibrary
     @AppStorage("appTheme") private var appThemeString: String = AppTheme.warmCozy.rawValue
+    @Environment(\.colorScheme) private var colorScheme
     
-    private var themeSurface: Color {
+    private var cardBackground: Color {
         let appTheme = AppTheme(rawValue: appThemeString) ?? .warmCozy
-        return getColorForAppTheme(appTheme).surface
+        let themeColors = getColorForAppTheme(appTheme)
+        
+        // 다크모드일 때는 primary 색상의 낮은 opacity 사용
+        if colorScheme == .dark {
+            return themeColors.primary.opacity(0.15)
+        } else {
+            return themeColors.surface
+        }
     }
     
     var body: some View {
@@ -105,7 +113,7 @@ struct LibraryCard: View {
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding()
-        .background(themeSurface)
+        .background(cardBackground)
         .cornerRadius(12)
     }
 }

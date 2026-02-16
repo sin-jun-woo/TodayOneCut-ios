@@ -13,10 +13,18 @@ struct HomeView: View {
     @Environment(\.dismiss) private var dismiss
     @Environment(\.tabSelection) private var tabSelection
     @AppStorage("appTheme") private var appThemeString: String = AppTheme.warmCozy.rawValue
+    @Environment(\.colorScheme) private var colorScheme
     
-    private var themeSurface: Color {
+    private var cardBackground: Color {
         let appTheme = AppTheme(rawValue: appThemeString) ?? .warmCozy
-        return getColorForAppTheme(appTheme).surface
+        let themeColors = getColorForAppTheme(appTheme)
+        
+        // 다크모드일 때는 primary 색상의 낮은 opacity 사용
+        if colorScheme == .dark {
+            return themeColors.primary.opacity(0.15)
+        } else {
+            return themeColors.surface
+        }
     }
     
     init(viewModel: HomeViewModel) {
@@ -68,7 +76,7 @@ struct HomeView: View {
                         }
                         .frame(maxWidth: .infinity)
                         .padding()
-                        .background(themeSurface)
+                        .background(cardBackground)
                         .foregroundColor(.primary)
                         .cornerRadius(12)
                     }
@@ -82,7 +90,7 @@ struct HomeView: View {
                         }
                         .frame(maxWidth: .infinity)
                         .padding()
-                        .background(themeSurface)
+                        .background(cardBackground)
                         .foregroundColor(.primary)
                         .cornerRadius(12)
                     }
