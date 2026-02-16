@@ -34,8 +34,13 @@ struct EditRecordView: View {
                         
                         HStack {
                             Button("사진 변경") {
-                                showCamera = false
-                                DispatchQueue.main.async {
+                                if showCamera {
+                                    showCamera = false
+                                    Task { @MainActor in
+                                        try? await Task.sleep(nanoseconds: 300_000_000)
+                                        showGalleryPicker = true
+                                    }
+                                } else {
                                     showGalleryPicker = true
                                 }
                             }
@@ -51,8 +56,13 @@ struct EditRecordView: View {
                 } else {
                     HStack {
                         Button {
-                            showCamera = false
-                            DispatchQueue.main.async {
+                            if showCamera {
+                                showCamera = false
+                                Task { @MainActor in
+                                    try? await Task.sleep(nanoseconds: 300_000_000)
+                                    showGalleryPicker = true
+                                }
+                            } else {
                                 showGalleryPicker = true
                             }
                         } label: {
@@ -62,8 +72,13 @@ struct EditRecordView: View {
                         Spacer()
                         
                         Button {
-                            showGalleryPicker = false
-                            DispatchQueue.main.async {
+                            if showGalleryPicker {
+                                showGalleryPicker = false
+                                Task { @MainActor in
+                                    try? await Task.sleep(nanoseconds: 300_000_000)
+                                    showCamera = true
+                                }
+                            } else {
                                 showCamera = true
                             }
                         } label: {

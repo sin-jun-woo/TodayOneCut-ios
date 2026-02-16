@@ -53,10 +53,16 @@ struct CreateRecordView: View {
                     HStack {
                         Button {
                             print("DEBUG: 갤러리 버튼 클릭")
-                            // 다른 picker를 먼저 확실히 닫기
-                            showCamera = false
-                            // 다음 프레임에서 갤러리 열기
-                            DispatchQueue.main.async {
+                            // 다른 picker가 열려있으면 먼저 닫기
+                            if showCamera {
+                                showCamera = false
+                                // 약간의 딜레이 후 갤러리 열기
+                                Task { @MainActor in
+                                    try? await Task.sleep(nanoseconds: 300_000_000) // 0.3초
+                                    showGalleryPicker = true
+                                    print("DEBUG: showGalleryPicker = \(showGalleryPicker)")
+                                }
+                            } else {
                                 showGalleryPicker = true
                                 print("DEBUG: showGalleryPicker = \(showGalleryPicker)")
                             }
@@ -68,10 +74,16 @@ struct CreateRecordView: View {
                         
                         Button {
                             print("DEBUG: 카메라 버튼 클릭")
-                            // 다른 picker를 먼저 확실히 닫기
-                            showGalleryPicker = false
-                            // 다음 프레임에서 카메라 열기
-                            DispatchQueue.main.async {
+                            // 다른 picker가 열려있으면 먼저 닫기
+                            if showGalleryPicker {
+                                showGalleryPicker = false
+                                // 약간의 딜레이 후 카메라 열기
+                                Task { @MainActor in
+                                    try? await Task.sleep(nanoseconds: 300_000_000) // 0.3초
+                                    showCamera = true
+                                    print("DEBUG: showCamera = \(showCamera)")
+                                }
+                            } else {
                                 showCamera = true
                                 print("DEBUG: showCamera = \(showCamera)")
                             }
