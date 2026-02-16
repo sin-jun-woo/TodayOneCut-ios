@@ -23,6 +23,10 @@ protocol FileRepository {
     /// - Throws: FileNotFoundError 파일이 존재하지 않는 경우
     func deletePhoto(path: String) async throws
     
+    /// 모든 사진 삭제
+    /// - Throws: FileSaveError 삭제 실패
+    func deleteAllPhotos() async throws
+    
     /// 사진 파일 존재 확인
     /// - Parameter path: 파일 경로
     /// - Returns: 파일 존재 여부
