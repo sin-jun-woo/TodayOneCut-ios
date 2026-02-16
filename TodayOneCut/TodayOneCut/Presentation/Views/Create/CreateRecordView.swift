@@ -42,8 +42,9 @@ struct CreateRecordView: View {
                     HStack {
                         Button {
                             print("🔵 갤러리 버튼 클릭")
+                            showCamera = false  // 카메라 먼저 닫기
                             showGalleryPicker = true
-                            print("🔵 showGalleryPicker = \(showGalleryPicker)")
+                            print("🔵 showGalleryPicker = \(showGalleryPicker), showCamera = \(showCamera)")
                         } label: {
                             Label("갤러리에서 선택", systemImage: "photo.on.rectangle")
                         }
@@ -52,8 +53,9 @@ struct CreateRecordView: View {
                         
                         Button {
                             print("🔴 카메라 버튼 클릭")
+                            showGalleryPicker = false  // 갤러리 먼저 닫기
                             showCamera = true
-                            print("🔴 showCamera = \(showCamera)")
+                            print("🔴 showCamera = \(showCamera), showGalleryPicker = \(showGalleryPicker)")
                         } label: {
                             Label("카메라로 촬영", systemImage: "camera")
                         }

@@ -35,6 +35,7 @@ struct EditRecordView: View {
                         
                         HStack {
                             Button("사진 변경") {
+                                showCamera = false
                                 showGalleryPicker = true
                             }
                             
@@ -49,6 +50,7 @@ struct EditRecordView: View {
                 } else {
                     HStack {
                         Button {
+                            showCamera = false
                             showGalleryPicker = true
                         } label: {
                             Label("갤러리에서 선택", systemImage: "photo.on.rectangle")
@@ -57,6 +59,7 @@ struct EditRecordView: View {
                         Spacer()
                         
                         Button {
+                            showGalleryPicker = false
                             showCamera = true
                         } label: {
                             Label("카메라로 촬영", systemImage: "camera")
@@ -140,16 +143,39 @@ struct EditRecordView: View {
                 )
             }
         }
-        .sheet(isPresented: $showGalleryPicker) {
-            PhotoLibraryPicker(isPresented: $showGalleryPicker) { image in
+        .sheet(isPresented: Binding(
+            get: { showGalleryPicker && !showCamera },
+            set: { newValue in
+                if !newValue {
+                    showGalleryPicker = false
+                }
+            }
+        )) {
+            PhotoLibraryPicker(isPresented: Binding(
+                get: { showGalleryPicker && !showCamera },
+                set: { newValue in
+                    if !newValue {
+                        showGalleryPicker = false
+                    }
+                }
+            )) { image in
                 viewModel.setImage(image)
                 showGalleryPicker = false
+                showCamera = false
             }
         }
-        .fullScreenCover(isPresented: $showCamera) {
+        .fullScreenCover(isPresented: Binding(
+            get: { showCamera && !showGalleryPicker },
+            set: { newValue in
+                if !newValue {
+                    showCamera = false
+                }
+            }
+        )) {
             CameraView { image in
                 viewModel.setImage(image)
                 showCamera = false
+                showGalleryPicker = false
             }
         }
         .onAppear {
