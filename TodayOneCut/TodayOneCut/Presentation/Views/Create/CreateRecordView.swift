@@ -39,17 +39,24 @@ struct CreateRecordView: View {
                         .foregroundColor(.red)
                     }
                 } else {
-                    HStack {
+                    VStack(spacing: 12) {
                         Button {
                             print("🔵 갤러리 버튼 클릭")
                             showCamera = false  // 카메라 먼저 닫기
                             showGalleryPicker = true
                             print("🔵 showGalleryPicker = \(showGalleryPicker), showCamera = \(showCamera)")
                         } label: {
-                            Label("갤러리에서 선택", systemImage: "photo.on.rectangle")
+                            HStack {
+                                Image(systemName: "photo.on.rectangle")
+                                Text("갤러리에서 선택")
+                            }
+                            .frame(maxWidth: .infinity)
+                            .padding()
+                            .background(Color.blue.opacity(0.1))
+                            .foregroundColor(.blue)
+                            .cornerRadius(8)
                         }
-                        
-                        Spacer()
+                        .buttonStyle(PlainButtonStyle())
                         
                         Button {
                             print("🔴 카메라 버튼 클릭")
@@ -57,8 +64,17 @@ struct CreateRecordView: View {
                             showCamera = true
                             print("🔴 showCamera = \(showCamera), showGalleryPicker = \(showGalleryPicker)")
                         } label: {
-                            Label("카메라로 촬영", systemImage: "camera")
+                            HStack {
+                                Image(systemName: "camera")
+                                Text("카메라로 촬영")
+                            }
+                            .frame(maxWidth: .infinity)
+                            .padding()
+                            .background(Color.green.opacity(0.1))
+                            .foregroundColor(.green)
+                            .cornerRadius(8)
                         }
+                        .buttonStyle(PlainButtonStyle())
                     }
                 }
             } header: {
