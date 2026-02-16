@@ -7,6 +7,7 @@
 
 import Foundation
 import Combine
+import UserNotifications
 
 /// 설정 화면 ViewModel
 @MainActor
