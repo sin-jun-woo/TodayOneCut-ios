@@ -252,6 +252,12 @@ struct RecordTypeCard: View {
     let type: RecordType
     let isSelected: Bool
     let onSelect: () -> Void
+    @AppStorage("appTheme") private var appThemeString: String = AppTheme.warmCozy.rawValue
+    
+    private var themePrimary: Color {
+        let appTheme = AppTheme(rawValue: appThemeString) ?? .warmCozy
+        return getColorForAppTheme(appTheme).primary
+    }
     
     var body: some View {
         Button(action: onSelect) {
