@@ -6,14 +6,27 @@
 //
 
 import SwiftUI
+import UIKit
+import CoreText
 
 extension Font {
     /// AppFont에 따른 Font 반환
     static func appFont(_ appFont: AppFont, size: CGFloat = 17) -> Font {
         switch appFont {
         case .gowunBatang:
-            // 여러 가능한 폰트 이름 시도
-            let possibleNames = ["GowunBatang-Bold", "Gowun Batang Bold", "GowunBatangBold"]
+            // Bundle에서 폰트 파일 직접 로드
+            if let fontURL = Bundle.main.url(forResource: "GowunBatang-Bold", withExtension: "ttf"),
+               let fontData = try? Data(contentsOf: fontURL),
+               let provider = CGDataProvider(data: fontData as CFData),
+               let font = CGFont(provider) {
+                CTFontManagerRegisterGraphicsFont(font, nil)
+                if let fontName = font.postScriptName as String?,
+                   let uiFont = UIFont(name: fontName, size: size) {
+                    return Font(uiFont)
+                }
+            }
+            // 폴백: 여러 가능한 폰트 이름 시도
+            let possibleNames = ["GowunBatang-Bold", "Gowun Batang Bold", "GowunBatangBold", "GowunBatang"]
             for fontName in possibleNames {
                 if let font = UIFont(name: fontName, size: size) {
                     return Font(font)
@@ -22,8 +35,19 @@ extension Font {
             return .system(size: size, design: .serif)
             
         case .kyoboHandwriting:
-            // 여러 가능한 폰트 이름 시도
-            let possibleNames = ["KyoboHandwriting2024psw", "Kyobo Handwriting 2024", "KyoboHandwriting"]
+            // Bundle에서 폰트 파일 직접 로드
+            if let fontURL = Bundle.main.url(forResource: "KyoboHandwriting2024psw", withExtension: "ttf"),
+               let fontData = try? Data(contentsOf: fontURL),
+               let provider = CGDataProvider(data: fontData as CFData),
+               let font = CGFont(provider) {
+                CTFontManagerRegisterGraphicsFont(font, nil)
+                if let fontName = font.postScriptName as String?,
+                   let uiFont = UIFont(name: fontName, size: size) {
+                    return Font(uiFont)
+                }
+            }
+            // 폴백: 여러 가능한 폰트 이름 시도
+            let possibleNames = ["KyoboHandwriting2024psw", "Kyobo Handwriting 2024", "KyoboHandwriting", "KyoboHandwriting2024"]
             for fontName in possibleNames {
                 if let font = UIFont(name: fontName, size: size) {
                     return Font(font)
@@ -32,8 +56,19 @@ extension Font {
             return .system(size: size, design: .default)
             
         case .maruBuri:
-            // 여러 가능한 폰트 이름 시도
-            let possibleNames = ["MaruBuri-Bold", "Maru Buri Bold", "MaruBuriBold"]
+            // Bundle에서 폰트 파일 직접 로드
+            if let fontURL = Bundle.main.url(forResource: "MaruBuri-Bold", withExtension: "ttf"),
+               let fontData = try? Data(contentsOf: fontURL),
+               let provider = CGDataProvider(data: fontData as CFData),
+               let font = CGFont(provider) {
+                CTFontManagerRegisterGraphicsFont(font, nil)
+                if let fontName = font.postScriptName as String?,
+                   let uiFont = UIFont(name: fontName, size: size) {
+                    return Font(uiFont)
+                }
+            }
+            // 폴백: 여러 가능한 폰트 이름 시도
+            let possibleNames = ["MaruBuri-Bold", "Maru Buri Bold", "MaruBuriBold", "MaruBuri"]
             for fontName in possibleNames {
                 if let font = UIFont(name: fontName, size: size) {
                     return Font(font)
@@ -50,7 +85,18 @@ extension Font {
     static func uiFont(_ appFont: AppFont, size: CGFloat = 17) -> UIFont? {
         switch appFont {
         case .gowunBatang:
-            let possibleNames = ["GowunBatang-Bold", "Gowun Batang Bold", "GowunBatangBold"]
+            // Bundle에서 폰트 파일 직접 로드
+            if let fontURL = Bundle.main.url(forResource: "GowunBatang-Bold", withExtension: "ttf"),
+               let fontData = try? Data(contentsOf: fontURL),
+               let provider = CGDataProvider(data: fontData as CFData),
+               let font = CGFont(provider) {
+                CTFontManagerRegisterGraphicsFont(font, nil)
+                if let fontName = font.postScriptName as String? {
+                    return UIFont(name: fontName, size: size)
+                }
+            }
+            // 폴백: 여러 가능한 폰트 이름 시도
+            let possibleNames = ["GowunBatang-Bold", "Gowun Batang Bold", "GowunBatangBold", "GowunBatang"]
             for fontName in possibleNames {
                 if let font = UIFont(name: fontName, size: size) {
                     return font
@@ -59,7 +105,18 @@ extension Font {
             return UIFont.systemFont(ofSize: size)
             
         case .kyoboHandwriting:
-            let possibleNames = ["KyoboHandwriting2024psw", "Kyobo Handwriting 2024", "KyoboHandwriting"]
+            // Bundle에서 폰트 파일 직접 로드
+            if let fontURL = Bundle.main.url(forResource: "KyoboHandwriting2024psw", withExtension: "ttf"),
+               let fontData = try? Data(contentsOf: fontURL),
+               let provider = CGDataProvider(data: fontData as CFData),
+               let font = CGFont(provider) {
+                CTFontManagerRegisterGraphicsFont(font, nil)
+                if let fontName = font.postScriptName as String? {
+                    return UIFont(name: fontName, size: size)
+                }
+            }
+            // 폴백: 여러 가능한 폰트 이름 시도
+            let possibleNames = ["KyoboHandwriting2024psw", "Kyobo Handwriting 2024", "KyoboHandwriting", "KyoboHandwriting2024"]
             for fontName in possibleNames {
                 if let font = UIFont(name: fontName, size: size) {
                     return font
@@ -68,7 +125,18 @@ extension Font {
             return UIFont.systemFont(ofSize: size)
             
         case .maruBuri:
-            let possibleNames = ["MaruBuri-Bold", "Maru Buri Bold", "MaruBuriBold"]
+            // Bundle에서 폰트 파일 직접 로드
+            if let fontURL = Bundle.main.url(forResource: "MaruBuri-Bold", withExtension: "ttf"),
+               let fontData = try? Data(contentsOf: fontURL),
+               let provider = CGDataProvider(data: fontData as CFData),
+               let font = CGFont(provider) {
+                CTFontManagerRegisterGraphicsFont(font, nil)
+                if let fontName = font.postScriptName as String? {
+                    return UIFont(name: fontName, size: size)
+                }
+            }
+            // 폴백: 여러 가능한 폰트 이름 시도
+            let possibleNames = ["MaruBuri-Bold", "Maru Buri Bold", "MaruBuriBold", "MaruBuri"]
             for fontName in possibleNames {
                 if let font = UIFont(name: fontName, size: size) {
                     return font
