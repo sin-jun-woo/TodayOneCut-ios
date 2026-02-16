@@ -45,17 +45,23 @@ struct PhotoLibraryPicker: UIViewControllerRepresentable {
         }
         
         func picker(_ picker: PHPickerViewController, didFinishPicking results: [PHPickerResult]) {
-            // SwiftUI sheet는 바인딩으로 자동 dismiss됨
-            DispatchQueue.main.async {
-                self.isPresented = false
+            guard let result = results.first else {
+                // 선택 취소 시 sheet 닫기
+                DispatchQueue.main.async {
+                    self.isPresented = false
+                }
+                return
             }
-            
-            guard let result = results.first else { return }
             
             result.itemProvider.loadObject(ofClass: UIImage.self) { [weak self] (object: NSItemProviderReading?, error: Error?) in
                 DispatchQueue.main.async {
                     if let image = object as? UIImage {
                         self?.onImageSelected(image)
+                        // 이미지 선택 후 sheet 닫기 (onImageSelected에서도 닫지만 확실히)
+                        self?.isPresented = false
+                    } else if error != nil {
+                        // 에러 발생 시 sheet 닫기
+                        self?.isPresented = false
                     }
                 }
             }

@@ -13,8 +13,13 @@ import Photos
 struct EditRecordView: View {
     @StateObject private var viewModel: EditRecordViewModel
     @Environment(\.dismiss) private var dismiss
-    @State private var showGalleryPicker = false
-    @State private var showCamera = false
+    
+    enum ImagePickerType: Equatable {
+        case gallery
+        case camera
+    }
+    
+    @State private var imagePickerType: ImagePickerType? = nil
     
     init(recordId: Int64, viewModel: EditRecordViewModel) {
         _viewModel = StateObject(wrappedValue: viewModel)
@@ -34,10 +39,7 @@ struct EditRecordView: View {
                         
                         HStack {
                             Button("사진 변경") {
-                                showCamera = false
-                                DispatchQueue.main.async {
-                                    self.showGalleryPicker = true
-                                }
+                                imagePickerType = .gallery
                             }
                             
                             Spacer()
@@ -51,10 +53,7 @@ struct EditRecordView: View {
                 } else {
                     HStack {
                         Button {
-                            showCamera = false
-                            DispatchQueue.main.async {
-                                self.showGalleryPicker = true
-                            }
+                            imagePickerType = .gallery
                         } label: {
                             Label("갤러리에서 선택", systemImage: "photo.on.rectangle")
                         }
@@ -62,10 +61,7 @@ struct EditRecordView: View {
                         Spacer()
                         
                         Button {
-                            showGalleryPicker = false
-                            DispatchQueue.main.async {
-                                self.showCamera = true
-                            }
+                            imagePickerType = .camera
                         } label: {
                             Label("카메라로 촬영", systemImage: "camera")
                         }
@@ -148,16 +144,43 @@ struct EditRecordView: View {
                 )
             }
         }
-        .sheet(isPresented: $showGalleryPicker) {
-            PhotoLibraryPicker(isPresented: $showGalleryPicker) { image in
+        .sheet(isPresented: Binding(
+            get: { 
+                let isGallery = imagePickerType == .gallery
+                return isGallery
+            },
+            set: { newValue in
+                if !newValue {
+                    imagePickerType = nil
+                }
+            }
+        )) {
+            PhotoLibraryPicker(isPresented: Binding(
+                get: { imagePickerType == .gallery },
+                set: { newValue in
+                    if !newValue {
+                        imagePickerType = nil
+                    }
+                }
+            )) { image in
                 viewModel.setImage(image)
-                showGalleryPicker = false
+                imagePickerType = nil
             }
         }
-        .fullScreenCover(isPresented: $showCamera) {
+        .fullScreenCover(isPresented: Binding(
+            get: { 
+                let isCamera = imagePickerType == .camera
+                return isCamera
+            },
+            set: { newValue in
+                if !newValue {
+                    imagePickerType = nil
+                }
+            }
+        )) {
             CameraView { image in
                 viewModel.setImage(image)
-                showCamera = false
+                imagePickerType = nil
             }
         }
         .onAppear {
