@@ -65,37 +65,4 @@ final class ValidateDailyLimitUseCaseTests: XCTestCase {
     }
 }
 
-/// Mock RecordRepository
-class MockRecordRepository: RecordRepository {
-    var recordExistsResult: Bool = false
-    var createRecordResult: Record?
-    var getAllRecordsResult: [Record] = []
-    
-    func recordExistsForDate(_ date: Date) async throws -> Bool {
-        return recordExistsResult
-    }
-    
-    func createRecord(_ record: Record) async throws -> Record {
-        if let result = createRecordResult {
-            return result
-        }
-        return record
-    }
-    
-    func getAllRecords() -> AnyPublisher<[Record], Never> {
-        return Just(getAllRecordsResult).eraseToAnyPublisher()
-    }
-    
-    // 나머지 메서드는 기본 구현 (필요시 추가)
-    func getRecordByDate(_ date: Date) async throws -> Record? { return nil }
-    func getRecordById(_ id: Int64) async throws -> Record? { return nil }
-    func updateRecord(_ record: Record) async throws -> Record { return record }
-    func deleteRecord(id: Int64) async throws {}
-    func getRecordsPaged(page: Int, pageSize: Int) async throws -> [Record] { return [] }
-    func getRecordsByMonth(_ yearMonth: String) async throws -> [Record] { return [] }
-    func searchRecords(keyword: String) async throws -> [Record] { return [] }
-    func getRecordDatesForMonth(_ yearMonth: String) async throws -> Set<Date> { return [] }
-    func getTotalRecordCount() -> AnyPublisher<Int, Never> { return Just(0).eraseToAnyPublisher() }
-    func deleteAllRecords() async throws {}
-}
 
