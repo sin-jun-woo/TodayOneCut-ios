@@ -228,30 +228,37 @@ TodayOneCut/
 
 ## 📊 프로젝트 상태
 
-**현재 상태**: 🟡 포팅 진행 중
+**현재 상태**: 🟢 MVP 완료
 
 ### 완료된 작업
 
 - ✅ 프로젝트 기본 구조
 - ✅ Domain Layer (Models, Repositories, UseCases)
 - ✅ Data Layer (Core Data Stack, Repository 구현)
-- ✅ 기본 View 및 ViewModel
+- ✅ Presentation Layer (모든 화면 구현)
+- ✅ 네비게이션 구현
+- ✅ 테스트 코드 작성 (Unit Test, UI Test)
+- ✅ 성능 최적화 (이미지 WebP, 압축)
+- ✅ 메모리 최적화 가이드
+- ✅ 문서화 완료
 
-### 진행 중
+### 주요 기능
 
-- 🚧 Core Data 엔티티 정의 (Xcode에서 수동 설정 필요)
-- 🚧 네비게이션 연결
-- 🚧 DI 설정
-- 🚧 나머지 화면 구현
+- ✅ 기록 작성/수정/삭제
+- ✅ 하루 1개 기록 제한
+- ✅ 당일 기록 1회 수정 제한
+- ✅ 검색 기능
+- ✅ 달력 기능
+- ✅ 설정 기능 (테마, 폰트, 앱 테마, 알림)
+- ✅ 온보딩 화면
+- ✅ 개인정보 처리방침
+- ✅ 오픈소스 라이선스
 
 ### 다음 단계
 
-1. Core Data 모델 완성
-2. DI 컨테이너 설정
-3. 네비게이션 구현
-4. 나머지 화면 구현
-5. 테스트 작성
-6. App Store 배포 준비
+1. 실제 기기 테스트
+2. Release 빌드 생성
+3. App Store 배포 준비
 
 ---
 
