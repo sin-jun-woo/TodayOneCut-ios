@@ -325,14 +325,32 @@
 
 ### 상세 작업 계획
 
-- [x] 테스트 환경 설정
-- [x] Use Case 테스트 작성
-- [x] ViewModel 테스트 작성
-- [x] Repository 통합 테스트 작성
-- [x] UI 테스트 작성
-- [x] 엣지 케이스 테스트 작성
-- [x] 발견된 버그 수정
-- [x] 전체 테스트 실행 및 검증
+- [x] 테스트 환경 설정 ✅
+- [x] Use Case 테스트 작성 ✅
+  - ValidateDailyLimitUseCaseTests
+  - ValidateUpdateLimitUseCaseTests
+  - ValidateRecordContentUseCaseTests
+  - CreateRecordUseCaseTests
+  - UpdateRecordUseCaseTests
+  - DeleteRecordUseCaseTests
+- [x] ViewModel 테스트 작성 ✅
+  - HomeViewModelTests (기본 구조)
+- [x] Repository 통합 테스트 작성 ✅
+  - TestCoreDataStack (in-memory 테스트용)
+  - RecordRepositoryImplTests
+  - SettingsRepositoryImplTests
+- [x] UI 테스트 작성 ✅
+  - TodayOneCutUITests (기본 네비게이션 테스트)
+- [x] 엣지 케이스 테스트 작성 ✅
+  - EdgeCaseTests (하루 1개 제한, 수정 횟수 제한, 과거 기록 수정 불가, 빈 검색어, 긴 텍스트 등)
+- [x] 발견된 버그 수정 ✅
+  - 갤러리/카메라 분리 문제 해결
+  - WebP 저장 문제 해결
+  - 빌드 에러 수정
+- [x] 전체 테스트 실행 및 검증 ✅
+  - 테스트 가이드 작성 (TESTING_GUIDE.md)
+  - Release 빌드 가이드 작성 (RELEASE_BUILD_GUIDE.md)
+  - 최종 점검 체크리스트 작성 (FINAL_CHECKLIST.md)
 
 ---
 
