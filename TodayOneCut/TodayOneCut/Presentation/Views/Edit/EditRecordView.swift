@@ -87,11 +87,27 @@ struct EditRecordView: View {
             }
             
             // 텍스트 섹션
-            Section {
-                TextField("오늘의 장면을 기록해보세요", text: $viewModel.contentText, axis: .vertical)
-                    .lineLimit(5...10)
-            } header: {
-                Text("내용")
+            if viewModel.record?.type == .text {
+                Section {
+                    TextField("오늘의 기록을 입력하세요", text: $viewModel.contentText, axis: .vertical)
+                        .lineLimit(5...10)
+                    
+                    HStack {
+                        Spacer()
+                        Text("\(viewModel.contentText.count) / \(Constants.Text.maxContentLength)자")
+                            .font(.caption)
+                            .foregroundColor(viewModel.contentText.count > Constants.Text.maxContentLength ? .red : .secondary)
+                    }
+                } header: {
+                    Text("글로 남기기")
+                }
+            } else if viewModel.record?.type == .photo {
+                Section {
+                    TextField("사진에 대한 메모를 입력하세요", text: $viewModel.contentText, axis: .vertical)
+                        .lineLimit(5...10)
+                } header: {
+                    Text("메모 (선택사항)")
+                }
             }
             
             // 위치 정보

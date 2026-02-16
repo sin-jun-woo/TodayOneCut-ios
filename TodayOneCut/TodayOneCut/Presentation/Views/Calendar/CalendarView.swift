@@ -160,13 +160,15 @@ struct CalendarViewComponent: View {
                 ForEach(["일", "월", "화", "수", "목", "금", "토"], id: \.self) { day in
                     Text(day)
                         .font(.caption)
-                        .foregroundColor(.secondary)
+                        .fontWeight(.bold)
+                        .foregroundColor(day == "일" ? .red : (day == "토" ? .blue : .secondary))
                         .frame(maxWidth: .infinity)
                 }
             }
             
             // 날짜 그리드
-            LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 7), spacing: 8) {
+            VStack {
+                LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 7), spacing: 8) {
                 ForEach(daysInMonth, id: \.self) { date in
                     if let date = date {
                         DayView(
@@ -183,7 +185,14 @@ struct CalendarViewComponent: View {
                             .frame(height: 40)
                     }
                 }
+                }
+                .padding(12)
             }
+            .background(
+                RoundedRectangle(cornerRadius: 12)
+                    .fill(Color(.systemBackground))
+                    .shadow(color: Color.black.opacity(0.1), radius: 2, x: 0, y: 2)
+            )
         }
     }
     
@@ -217,6 +226,7 @@ struct DayView: View {
     let isCurrentMonth: Bool
     let onTap: () -> Void
     
+    private let calendar = Calendar.current
     private let dayFormatter: DateFormatter = {
         let formatter = DateFormatter()
         formatter.dateFormat = "d"
@@ -231,7 +241,9 @@ struct DayView: View {
                     .foregroundColor(
                         isSelected ? .white :
                         isToday ? .blue :
-                        isCurrentMonth ? .primary : .secondary
+                        (calendar.component(.weekday, from: date) == 1 ? .red : // 일요일
+                         calendar.component(.weekday, from: date) == 7 ? .blue : // 토요일
+                         isCurrentMonth ? .primary : .secondary)
                     )
                 
                 if hasRecord {

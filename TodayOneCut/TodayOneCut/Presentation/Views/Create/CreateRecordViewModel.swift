@@ -15,7 +15,7 @@ class CreateRecordViewModel: ObservableObject {
     @Published var contentText: String = ""
     @Published var selectedImage: UIImage?
     @Published var imageData: Data?
-    @Published var recordType: RecordType = .text
+    @Published var recordType: RecordType? = nil
     @Published var location: Location?
     @Published var isLoading: Bool = false
     @Published var errorMessage: String?
@@ -72,6 +72,16 @@ class CreateRecordViewModel: ObservableObject {
         }
     }
     
+    /// 기록 타입 선택
+    func selectRecordType(_ type: RecordType) {
+        recordType = type
+        if type == .text {
+            // 텍스트 타입 선택 시 이미지 제거
+            selectedImage = nil
+            imageData = nil
+        }
+    }
+    
     /// 이미지 선택
     func setImage(_ image: UIImage) {
         selectedImage = image
@@ -87,12 +97,17 @@ class CreateRecordViewModel: ObservableObject {
         selectedImage = nil
         imageData = nil
         if contentText.isEmpty {
-            recordType = .text
+            recordType = nil
         }
     }
     
     /// 기록 저장
     func saveRecord() async -> Bool {
+        guard let type = recordType else {
+            errorMessage = "기록 타입을 선택해주세요"
+            return false
+        }
+        
         guard !contentText.isEmpty || imageData != nil else {
             errorMessage = "사진 또는 텍스트가 필요합니다"
             return false
@@ -103,7 +118,7 @@ class CreateRecordViewModel: ObservableObject {
         
         do {
             _ = try await createRecordUseCase.execute(
-                type: recordType,
+                type: type,
                 contentText: contentText.isEmpty ? nil : contentText,
                 photoData: imageData,
                 location: isLocationEnabled ? location : nil

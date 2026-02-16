@@ -23,70 +23,132 @@ struct CreateRecordView: View {
     
     var body: some View {
         Form {
-            // 이미지 섹션
+            // 기록 타입 선택
             Section {
-                if let image = viewModel.selectedImage {
-                    VStack {
-                        Image(uiImage: image)
-                            .resizable()
-                            .aspectRatio(contentMode: .fit)
-                            .frame(maxHeight: 300)
-                            .cornerRadius(12)
+                VStack(alignment: .leading, spacing: 12) {
+                    Text("어떤 순간을 남기시나요?")
+                        .font(.headline)
+                        .foregroundColor(.primary)
+                    
+                    HStack(spacing: 12) {
+                        RecordTypeCard(
+                            type: .photo,
+                            isSelected: viewModel.recordType == .photo,
+                            onSelect: { viewModel.selectRecordType(.photo) }
+                        )
                         
-                        Button("사진 제거") {
-                            viewModel.removeImage()
-                        }
-                        .foregroundColor(.red)
-                    }
-                } else {
-                    VStack(spacing: 12) {
-                        Button {
-                            print("🔵 갤러리 버튼 클릭")
-                            showCamera = false  // 카메라 먼저 닫기
-                            showGalleryPicker = true
-                            print("🔵 showGalleryPicker = \(showGalleryPicker), showCamera = \(showCamera)")
-                        } label: {
-                            HStack {
-                                Image(systemName: "photo.on.rectangle")
-                                Text("갤러리에서 선택")
-                            }
-                            .frame(maxWidth: .infinity)
-                            .padding()
-                            .background(Color.blue.opacity(0.1))
-                            .foregroundColor(.blue)
-                            .cornerRadius(8)
-                        }
-                        .buttonStyle(PlainButtonStyle())
-                        
-                        Button {
-                            print("🔴 카메라 버튼 클릭")
-                            showGalleryPicker = false  // 갤러리 먼저 닫기
-                            showCamera = true
-                            print("🔴 showCamera = \(showCamera), showGalleryPicker = \(showGalleryPicker)")
-                        } label: {
-                            HStack {
-                                Image(systemName: "camera")
-                                Text("카메라로 촬영")
-                            }
-                            .frame(maxWidth: .infinity)
-                            .padding()
-                            .background(Color.green.opacity(0.1))
-                            .foregroundColor(.green)
-                            .cornerRadius(8)
-                        }
-                        .buttonStyle(PlainButtonStyle())
+                        RecordTypeCard(
+                            type: .text,
+                            isSelected: viewModel.recordType == .text,
+                            onSelect: { viewModel.selectRecordType(.text) }
+                        )
                     }
                 }
+                .padding(.vertical, 8)
             } header: {
-                Text("사진")
+                Text("기록 타입")
             }
             
-            // 텍스트 섹션
-            Section {
-                TextField("오늘의 장면을 기록해보세요", text: $viewModel.contentText, axis: .vertical)
-                    .lineLimit(5...10)
-            } header: {
-                Text("내용")
+            // 사진/텍스트 입력 영역
+            if let recordType = viewModel.recordType {
+                if recordType == .photo {
+                    // 이미지 섹션
+                    Section {
+                        if let image = viewModel.selectedImage {
+                            VStack {
+                                Image(uiImage: image)
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fit)
+                                    .frame(maxHeight: 300)
+                                    .cornerRadius(12)
+                                
+                                HStack(spacing: 12) {
+                                    Button {
+                                        showCamera = false
+                                        showGalleryPicker = true
+                                    } label: {
+                                        Text("다시 선택")
+                                            .frame(maxWidth: .infinity)
+                                            .padding()
+                                            .background(Color.blue)
+                                            .foregroundColor(.white)
+                                            .cornerRadius(8)
+                                    }
+                                    .buttonStyle(PlainButtonStyle())
+                                    
+                                    Button("제거") {
+                                        viewModel.removeImage()
+                                    }
+                                    .frame(maxWidth: .infinity)
+                                    .padding()
+                                    .background(Color.gray.opacity(0.2))
+                                    .foregroundColor(.red)
+                                    .cornerRadius(8)
+                                    .buttonStyle(PlainButtonStyle())
+                                }
+                            }
+                        } else {
+                            VStack(spacing: 12) {
+                                Button {
+                                    showCamera = false
+                                    showGalleryPicker = true
+                                } label: {
+                                    HStack {
+                                        Image(systemName: "photo.on.rectangle")
+                                        Text("갤러리에서 선택")
+                                    }
+                                    .frame(maxWidth: .infinity)
+                                    .padding()
+                                    .background(Color.blue.opacity(0.1))
+                                    .foregroundColor(.blue)
+                                    .cornerRadius(8)
+                                }
+                                .buttonStyle(PlainButtonStyle())
+                                
+                                Button {
+                                    showGalleryPicker = false
+                                    showCamera = true
+                                } label: {
+                                    HStack {
+                                        Image(systemName: "camera")
+                                        Text("카메라로 촬영")
+                                    }
+                                    .frame(maxWidth: .infinity)
+                                    .padding()
+                                    .background(Color.green.opacity(0.1))
+                                    .foregroundColor(.green)
+                                    .cornerRadius(8)
+                                }
+                                .buttonStyle(PlainButtonStyle())
+                            }
+                        }
+                    } header: {
+                        Text("사진으로 남기기")
+                    }
+                    
+                    // 메모 섹션
+                    Section {
+                        TextField("사진에 대한 메모를 입력하세요", text: $viewModel.contentText, axis: .vertical)
+                            .lineLimit(5...10)
+                    } header: {
+                        Text("메모 (선택사항)")
+                    }
+                } else {
+                    // 텍스트 섹션
+                    Section {
+                        TextField("오늘의 기록을 입력하세요", text: $viewModel.contentText, axis: .vertical)
+                            .lineLimit(5...10)
+                        
+                        HStack {
+                            Spacer()
+                            Text("\(viewModel.contentText.count) / \(Constants.Text.maxContentLength)자")
+                                .font(.caption)
+                                .foregroundColor(viewModel.contentText.count > Constants.Text.maxContentLength ? .red : .secondary)
+                        }
+                    } header: {
+                        Text("글로 남기기")
+                    }
+                }
             }
             
             // 위치 정보
@@ -130,7 +192,7 @@ struct CreateRecordView: View {
                         }
                     }
                 }
-                .disabled(viewModel.isLoading || (viewModel.contentText.isEmpty && viewModel.imageData == nil))
+                .disabled(viewModel.isLoading || viewModel.recordType == nil || (viewModel.contentText.isEmpty && viewModel.imageData == nil))
             }
         }
         .sheet(isPresented: Binding(
@@ -176,6 +238,39 @@ struct CreateRecordView: View {
             }
         }
         .toast(message: $viewModel.toastMessage)
+    }
+}
+
+/// 기록 타입 선택 카드
+struct RecordTypeCard: View {
+    let type: RecordType
+    let isSelected: Bool
+    let onSelect: () -> Void
+    
+    var body: some View {
+        Button(action: onSelect) {
+            VStack(spacing: 8) {
+                Image(systemName: type == .photo ? "camera.fill" : "text.alignleft")
+                    .font(.system(size: 32))
+                    .foregroundColor(isSelected ? (type == .photo ? .blue : .green) : .secondary)
+                
+                Text(type.displayName)
+                    .font(.subheadline)
+                    .fontWeight(isSelected ? .bold : .medium)
+                    .foregroundColor(isSelected ? .primary : .secondary)
+            }
+            .frame(maxWidth: .infinity)
+            .frame(height: 110)
+            .background(
+                RoundedRectangle(cornerRadius: 12)
+                    .fill(isSelected ? (type == .photo ? Color.blue.opacity(0.1) : Color.green.opacity(0.1)) : Color.clear)
+            )
+            .overlay(
+                RoundedRectangle(cornerRadius: 12)
+                    .stroke(isSelected ? (type == .photo ? Color.blue : Color.green) : Color.gray.opacity(0.3), lineWidth: isSelected ? 2 : 1)
+            )
+        }
+        .buttonStyle(PlainButtonStyle())
     }
 }
 

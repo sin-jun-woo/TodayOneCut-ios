@@ -28,10 +28,18 @@ struct HomeView: View {
                     LoadingView()
                         .frame(height: 200)
                 } else if let record = viewModel.uiState.todayRecord {
-                    NavigationLink(value: AppRoute.detail(recordId: record.id)) {
-                        RecordCard(record: record)
+                    VStack(alignment: .leading, spacing: 12) {
+                        Text("오늘의 기록")
+                            .font(.headline)
+                            .fontWeight(.bold)
+                            .foregroundColor(.primary)
+                            .padding(.horizontal)
+                        
+                        NavigationLink(value: AppRoute.detail(recordId: record.id)) {
+                            RecordCard(record: record)
+                        }
+                        .padding(.horizontal)
                     }
-                    .padding(.horizontal)
                 } else {
                     NavigationLink(value: AppRoute.create) {
                         EmptyStateView(
