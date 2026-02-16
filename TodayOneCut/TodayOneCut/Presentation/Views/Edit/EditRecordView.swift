@@ -34,14 +34,9 @@ struct EditRecordView: View {
                         
                         HStack {
                             Button("사진 변경") {
-                                if showCamera {
-                                    showCamera = false
-                                    Task { @MainActor in
-                                        try? await Task.sleep(nanoseconds: 300_000_000)
-                                        showGalleryPicker = true
-                                    }
-                                } else {
-                                    showGalleryPicker = true
+                                showCamera = false
+                                DispatchQueue.main.async {
+                                    self.showGalleryPicker = true
                                 }
                             }
                             
@@ -56,14 +51,9 @@ struct EditRecordView: View {
                 } else {
                     HStack {
                         Button {
-                            if showCamera {
-                                showCamera = false
-                                Task { @MainActor in
-                                    try? await Task.sleep(nanoseconds: 300_000_000)
-                                    showGalleryPicker = true
-                                }
-                            } else {
-                                showGalleryPicker = true
+                            showCamera = false
+                            DispatchQueue.main.async {
+                                self.showGalleryPicker = true
                             }
                         } label: {
                             Label("갤러리에서 선택", systemImage: "photo.on.rectangle")
@@ -72,14 +62,9 @@ struct EditRecordView: View {
                         Spacer()
                         
                         Button {
-                            if showGalleryPicker {
-                                showGalleryPicker = false
-                                Task { @MainActor in
-                                    try? await Task.sleep(nanoseconds: 300_000_000)
-                                    showCamera = true
-                                }
-                            } else {
-                                showCamera = true
+                            showGalleryPicker = false
+                            DispatchQueue.main.async {
+                                self.showCamera = true
                             }
                         } label: {
                             Label("카메라로 촬영", systemImage: "camera")
