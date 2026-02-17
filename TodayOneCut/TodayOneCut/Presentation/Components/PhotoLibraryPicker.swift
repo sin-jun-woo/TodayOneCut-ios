@@ -15,7 +15,9 @@ struct PhotoLibraryPicker: UIViewControllerRepresentable {
     let onImageSelected: (UIImage) -> Void
     
     func makeUIViewController(context: Context) -> PHPickerViewController {
+        #if DEBUG
         print("DEBUG: PhotoLibraryPicker 생성 중 - 갤러리 전용")
+        #endif
         var configuration = PHPickerConfiguration()
         configuration.filter = .images
         configuration.selectionLimit = 1
@@ -25,7 +27,9 @@ struct PhotoLibraryPicker: UIViewControllerRepresentable {
         
         let picker = PHPickerViewController(configuration: configuration)
         picker.delegate = context.coordinator
+        #if DEBUG
         print("DEBUG: PHPickerViewController 생성 완료")
+        #endif
         return picker
     }
     

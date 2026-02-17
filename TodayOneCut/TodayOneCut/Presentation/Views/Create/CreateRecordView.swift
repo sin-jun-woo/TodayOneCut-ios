@@ -217,7 +217,9 @@ struct CreateRecordView: View {
                     }
                 }
             )) { image in
+                #if DEBUG
                 print("✅ 갤러리에서 이미지 선택됨")
+                #endif
                 viewModel.setImage(image)
                 showGalleryPicker = false
                 showCamera = false
@@ -232,7 +234,9 @@ struct CreateRecordView: View {
             }
         )) {
             CameraView { image in
+                #if DEBUG
                 print("✅ 카메라에서 이미지 촬영됨")
+                #endif
                 viewModel.setImage(image)
                 showCamera = false
                 showGalleryPicker = false

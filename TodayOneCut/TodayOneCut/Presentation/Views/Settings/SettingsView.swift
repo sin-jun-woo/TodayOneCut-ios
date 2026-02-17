@@ -100,7 +100,7 @@ struct SettingsView: View {
             // 데이터
             Section {
                 Button {
-                    // TODO: 백업 화면으로 이동
+                    // 백업 기능은 추후 버전에서 구현 예정
                 } label: {
                     HStack {
                         Text("백업 및 복원")

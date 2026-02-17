@@ -104,12 +104,12 @@ class FileRepositoryImpl: FileRepository {
     // MARK: - Data Export/Import
     
     func exportData(to destinationURL: URL) async throws {
-        // TODO: Phase 5에서 구현
+        // 백업 기능은 추후 버전에서 구현 예정
         throw TodayOneCutError.fileSaveError(message: "백업 기능은 아직 구현되지 않았습니다")
     }
     
     func importData(from sourceURL: URL) async throws -> Int {
-        // TODO: Phase 5에서 구현
+        // 복원 기능은 추후 버전에서 구현 예정
         throw TodayOneCutError.fileSaveError(message: "복원 기능은 아직 구현되지 않았습니다")
     }
     

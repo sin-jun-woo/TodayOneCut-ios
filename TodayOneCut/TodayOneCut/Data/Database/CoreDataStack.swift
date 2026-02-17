@@ -98,7 +98,9 @@ class CoreDataStack {
                 try context.save()
             }
         } catch {
+            #if DEBUG
             print("데이터베이스 초기화 실패: \(error)")
+            #endif
         }
     }
 }

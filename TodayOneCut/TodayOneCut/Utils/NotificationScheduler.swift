@@ -25,7 +25,9 @@ class NotificationScheduler {
         // 알림 권한 확인
         let settings = await notificationCenter.notificationSettings()
         guard settings.authorizationStatus == .authorized else {
+            #if DEBUG
             print("알림 권한이 없어 스케줄링할 수 없습니다")
+            #endif
             return
         }
         
@@ -59,9 +61,13 @@ class NotificationScheduler {
         
         do {
             try await notificationCenter.add(request)
+            #if DEBUG
             print("일일 리마인더 스케줄링 완료: \(targetDate)")
+            #endif
         } catch {
+            #if DEBUG
             print("일일 리마인더 스케줄링 실패: \(error)")
+            #endif
         }
     }
     
@@ -69,7 +75,9 @@ class NotificationScheduler {
     func cancelDailyReminder() async {
         notificationCenter.removePendingNotificationRequests(withIdentifiers: [dailyReminderIdentifier])
         notificationCenter.removeDeliveredNotifications(withIdentifiers: [dailyReminderIdentifier])
+        #if DEBUG
         print("일일 리마인더 취소 완료")
+        #endif
     }
     
     /// 스케줄 상태 확인

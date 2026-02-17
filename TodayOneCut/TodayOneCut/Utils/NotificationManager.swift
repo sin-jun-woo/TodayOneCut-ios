@@ -82,7 +82,9 @@ class NotificationManager: NSObject, UNUserNotificationCenterDelegate {
             return !hasTodayRecord
         } catch {
             // 에러 발생 시 알림 표시 (안전하게)
+            #if DEBUG
             print("일일 리마인더 조건 체크 실패: \(error)")
+            #endif
             return true
         }
     }
@@ -93,7 +95,9 @@ class NotificationManager: NSObject, UNUserNotificationCenterDelegate {
             let granted = try await notificationCenter.requestAuthorization(options: [.alert, .sound, .badge])
             return granted
         } catch {
+            #if DEBUG
             print("알림 권한 요청 실패: \(error)")
+            #endif
             return false
         }
     }
@@ -118,7 +122,9 @@ class NotificationManager: NSObject, UNUserNotificationCenterDelegate {
     func showStreakCelebration(days: Int) async {
         let status = await authorizationStatus()
         guard status == .authorized else {
+            #if DEBUG
             print("알림 권한이 없어 축하 알림을 표시할 수 없습니다")
+            #endif
             return
         }
         
@@ -131,9 +137,13 @@ class NotificationManager: NSObject, UNUserNotificationCenterDelegate {
         
         do {
             try await notificationCenter.add(request)
+            #if DEBUG
             print("연속 기록 축하 알림 표시: \(days)일")
+            #endif
         } catch {
+            #if DEBUG
             print("연속 기록 축하 알림 표시 실패: \(error)")
+            #endif
         }
     }
     
@@ -141,7 +151,9 @@ class NotificationManager: NSObject, UNUserNotificationCenterDelegate {
     func showDailyReminderNow() async {
         let status = await authorizationStatus()
         guard status == .authorized else {
+            #if DEBUG
             print("알림 권한이 없어 알림을 표시할 수 없습니다")
+            #endif
             return
         }
         
@@ -154,9 +166,13 @@ class NotificationManager: NSObject, UNUserNotificationCenterDelegate {
         
         do {
             try await notificationCenter.add(request)
+            #if DEBUG
             print("일일 리마인더 알림 표시 (테스트)")
+            #endif
         } catch {
+            #if DEBUG
             print("일일 리마인더 알림 표시 실패: \(error)")
+            #endif
         }
     }
 }

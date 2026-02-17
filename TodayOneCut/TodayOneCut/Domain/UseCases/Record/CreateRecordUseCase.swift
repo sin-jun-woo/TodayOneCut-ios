@@ -108,7 +108,9 @@ class CreateRecordUseCase {
             }
         } catch {
             // 에러는 무시 (선택적 기능)
+            #if DEBUG
             print("연속 기록 축하 알림 체크 실패: \(error)")
+            #endif
         }
     }
 }
