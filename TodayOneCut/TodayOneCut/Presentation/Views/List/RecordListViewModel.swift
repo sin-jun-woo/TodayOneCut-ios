@@ -57,19 +57,25 @@ class RecordListViewModel: ObservableObject {
         isLoading = true
         errorMessage = nil
         
+        // 검색 시작 전에 records를 빈 배열로 초기화 (이전 결과가 보이지 않도록)
+        records = []
+        
         Task {
             do {
                 let searchResults = try await searchRecordsUseCase.execute(keyword: trimmedKeyword)
                 await MainActor.run {
+                    // 검색 결과를 명확하게 할당 (0개여도 빈 배열로 표시)
                     self.records = searchResults
                     self.isLoading = false
-                    self.isSearching = false
+                    self.isSearching = true // 검색어가 있으면 검색 모드 유지
                 }
             } catch {
                 await MainActor.run {
                     self.errorMessage = (error as? TodayOneCutError)?.userMessage ?? "검색에 실패했습니다"
                     self.isLoading = false
                     self.isSearching = false
+                    // 에러 발생 시에도 빈 배열로 표시
+                    self.records = []
                 }
             }
         }
