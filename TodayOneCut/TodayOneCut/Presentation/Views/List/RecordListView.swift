@@ -36,14 +36,7 @@ struct RecordListView: View {
                                 viewModel.loadRecords()
                             } else {
                                 // 검색어가 있으면 검색 모드로 전환하고 검색 실행
-                                // debounce를 위해 약간의 지연 추가 (0.3초)
-                                Task {
-                                    try? await Task.sleep(nanoseconds: 300_000_000) // 0.3초
-                                    // 검색어가 여전히 같고 비어있지 않으면 검색 실행
-                                    if viewModel.searchText.trimmingCharacters(in: .whitespaces) == trimmedNew && !trimmedNew.isEmpty {
-                                        await viewModel.performSearch()
-                                    }
-                                }
+                                viewModel.performSearch()
                             }
                         }
                     
@@ -140,7 +133,10 @@ struct RecordListView: View {
             }
         }
         .onAppear {
-            viewModel.loadRecords()
+            // 검색 중이 아니고 기록이 비어있을 때만 로드
+            if !viewModel.isSearching && viewModel.records.isEmpty {
+                viewModel.loadRecords()
+            }
         }
         .refreshable {
             if viewModel.isSearching {

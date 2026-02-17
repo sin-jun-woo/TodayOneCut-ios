@@ -31,14 +31,20 @@ class RecordListViewModel: ObservableObject {
     
     /// 기록 목록 로드
     func loadRecords() {
+        // 검색 중이면 전체 목록을 로드하지 않음
+        guard !isSearching else {
+            return
+        }
+        
         isLoading = true
         errorMessage = nil
         
         getAllRecordsUseCase.execute()
             .receive(on: DispatchQueue.main)
             .sink { [weak self] records in
-                self?.records = records
-                self?.isLoading = false
+                guard let self = self, !self.isSearching else { return }
+                self.records = records
+                self.isLoading = false
             }
             .store(in: &cancellables)
     }
@@ -53,29 +59,33 @@ class RecordListViewModel: ObservableObject {
             return
         }
         
+        // 검색 모드로 전환하고 즉시 빈 배열로 초기화
         isSearching = true
         isLoading = true
         errorMessage = nil
-        
-        // 검색 시작 전에 records를 빈 배열로 초기화 (이전 결과가 보이지 않도록)
-        records = []
+        records = [] // 검색 시작 전에 즉시 빈 배열로 설정
         
         Task {
             do {
                 let searchResults = try await searchRecordsUseCase.execute(keyword: trimmedKeyword)
                 await MainActor.run {
-                    // 검색 결과를 명확하게 할당 (0개여도 빈 배열로 표시)
-                    self.records = searchResults
-                    self.isLoading = false
-                    self.isSearching = true // 검색어가 있으면 검색 모드 유지
+                    // 검색어가 여전히 같고 검색 중인지 확인
+                    if self.searchText.trimmingCharacters(in: .whitespaces) == trimmedKeyword && self.isSearching {
+                        // 검색 결과를 명확하게 할당 (0개여도 빈 배열로 표시)
+                        self.records = searchResults
+                        self.isLoading = false
+                    }
                 }
             } catch {
                 await MainActor.run {
-                    self.errorMessage = (error as? TodayOneCutError)?.userMessage ?? "검색에 실패했습니다"
-                    self.isLoading = false
-                    self.isSearching = false
-                    // 에러 발생 시에도 빈 배열로 표시
-                    self.records = []
+                    // 검색어가 여전히 같고 검색 중인지 확인
+                    if self.searchText.trimmingCharacters(in: .whitespaces) == trimmedKeyword && self.isSearching {
+                        self.errorMessage = (error as? TodayOneCutError)?.userMessage ?? "검색에 실패했습니다"
+                        self.isLoading = false
+                        self.isSearching = false
+                        // 에러 발생 시에도 빈 배열로 표시
+                        self.records = []
+                    }
                 }
             }
         }
