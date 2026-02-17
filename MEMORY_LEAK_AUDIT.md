@@ -66,18 +66,46 @@
 
 ---
 
-## 🔍 추가 확인 사항
+## ✅ 추가 확인 완료 항목
+
+### 1. CLLocationManager ✅
+**확인 결과**: 안전
+- `GetCurrentLocationUseCase`는 매번 새로 생성됨
+- `continuation`은 완료 후 `nil`로 설정됨
+- `CLLocationManager`는 UseCase와 함께 해제됨
+
+### 2. CLGeocoder ✅
+**확인 결과**: 안전
+- `ReverseGeocodeUseCase`는 매번 새로 생성됨
+- `CLGeocoder`는 UseCase와 함께 해제됨
+
+### 3. AsyncImage ✅
+**확인 결과**: 안전
+- SwiftUI가 자동으로 메모리 관리
+- 이미지 로딩 완료 후 자동 해제
+- `RecordCard`, `RecordDetailView`, `ImageViewer`에서 사용
+
+### 4. Core Data Context ✅
+**확인 결과**: 안전
+- `viewContext`는 싱글톤으로 관리됨
+- `automaticallyMergesChangesFromParent = true` 설정
+- 자동으로 메모리 관리됨
+
+---
+
+## 🔍 Instruments 검사 필요
 
 ### 1. Instruments 검사 필요
 - [ ] Xcode에서 `⌘I` (Product > Profile)
 - [ ] Leaks 템플릿 선택
 - [ ] 앱 실행 및 주요 기능 사용
 - [ ] 메모리 누수 확인
+- **가이드**: `INSTRUMENTS_GUIDE.md` 참고
 
 ### 2. 반복 작업 테스트
-- [ ] 기록 작성/수정/삭제 반복
-- [ ] 화면 전환 반복
-- [ ] 검색 반복
+- [ ] 기록 작성/수정/삭제 반복 (10회)
+- [ ] 화면 전환 반복 (10회)
+- [ ] 검색 반복 (10회)
 - [ ] 메모리 사용량 증가 확인
 
 ### 3. 이미지 메모리 테스트
