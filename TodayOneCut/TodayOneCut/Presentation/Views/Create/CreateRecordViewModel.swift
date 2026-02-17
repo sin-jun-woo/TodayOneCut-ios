@@ -26,6 +26,8 @@ class CreateRecordViewModel: ObservableObject {
     private let getCurrentLocationUseCase: GetCurrentLocationUseCase
     private let reverseGeocodeUseCase: ReverseGeocodeUseCase
     private let getSettingsUseCase: GetSettingsUseCase
+    private var loadTask: Task<Void, Never>?
+    private var locationTask: Task<Void, Never>?
     
     init(
         createRecordUseCase: CreateRecordUseCase,
@@ -43,16 +45,21 @@ class CreateRecordViewModel: ObservableObject {
     
     /// 설정 로드
     private func loadSettings() {
-        Task {
+        loadTask?.cancel()
+        
+        loadTask = Task {
             do {
                 let settings = try await getSettingsUseCase.executeOnce()
+                try Task.checkCancellation()
                 isLocationEnabled = settings.enableLocation
                 
                 if isLocationEnabled {
                     await fetchCurrentLocation()
                 }
             } catch {
-                // 설정 로드 실패는 무시
+                if !Task.isCancelled {
+                    // 설정 로드 실패는 무시
+                }
             }
         }
     }
@@ -61,14 +68,22 @@ class CreateRecordViewModel: ObservableObject {
     func fetchCurrentLocation() async {
         guard isLocationEnabled else { return }
         
-        do {
-            let currentLocation = try await getCurrentLocationUseCase.execute()
-            let locationWithName = try await reverseGeocodeUseCase.execute(location: currentLocation)
-            location = locationWithName
-        } catch {
-            // 위치 가져오기 실패는 무시 (선택적 기능)
-            // Toast 메시지만 표시 (에러 메시지는 표시 안 함)
-            toastMessage = "위치 정보를 가져올 수 없습니다"
+        locationTask?.cancel()
+        
+        locationTask = Task {
+            do {
+                let currentLocation = try await getCurrentLocationUseCase.execute()
+                try Task.checkCancellation()
+                let locationWithName = try await reverseGeocodeUseCase.execute(location: currentLocation)
+                try Task.checkCancellation()
+                location = locationWithName
+            } catch {
+                if !Task.isCancelled {
+                    // 위치 가져오기 실패는 무시 (선택적 기능)
+                    // Toast 메시지만 표시 (에러 메시지는 표시 안 함)
+                    toastMessage = "위치 정보를 가져올 수 없습니다"
+                }
+            }
         }
     }
     
@@ -133,6 +148,14 @@ class CreateRecordViewModel: ObservableObject {
             toastMessage = message
             return false
         }
+    }
+    
+    deinit {
+        loadTask?.cancel()
+        locationTask?.cancel()
+        // 이미지 메모리 해제
+        selectedImage = nil
+        imageData = nil
     }
 }
 

@@ -25,6 +25,7 @@ class SettingsViewModel: ObservableObject {
     private let deleteAllDataUseCase: DeleteAllDataUseCase
     private let notificationManager = NotificationManager.shared
     private var cancellables = Set<AnyCancellable>()
+    private var updateTasks: [Task<Void, Never>] = []
     
     @Published var showThemeSelector = false
     @Published var showAppThemeSelector = false
@@ -65,35 +66,43 @@ class SettingsViewModel: ObservableObject {
     
     /// 위치 정보 저장 설정 변경
     func updateLocationEnabled(_ enabled: Bool) {
-        Task {
+        let task = Task {
             do {
                 try await updateLocationSettingUseCase.execute(enabled: enabled)
             } catch {
-                errorMessage = (error as? TodayOneCutError)?.userMessage ?? "설정 저장에 실패했습니다"
+                if !Task.isCancelled {
+                    errorMessage = (error as? TodayOneCutError)?.userMessage ?? "설정 저장에 실패했습니다"
+                }
             }
         }
+        updateTasks.append(task)
     }
     
     /// 테마 모드 변경
     func updateThemeMode(_ mode: ThemeMode) {
-        Task {
+        let task = Task {
             do {
                 try await updateThemeUseCase.execute(mode: mode)
             } catch {
-                errorMessage = (error as? TodayOneCutError)?.userMessage ?? "설정 저장에 실패했습니다"
+                if !Task.isCancelled {
+                    errorMessage = (error as? TodayOneCutError)?.userMessage ?? "설정 저장에 실패했습니다"
+                }
             }
         }
+        updateTasks.append(task)
     }
     
     /// 알림 설정 변경
     func updateNotificationEnabled(_ enabled: Bool) {
-        Task {
+        let task = Task {
             do {
                 // 알림을 켜려고 할 때 권한 확인
                 if enabled {
                     let status = await notificationManager.authorizationStatus()
+                    try Task.checkCancellation()
                     if status != .authorized {
                         let granted = await notificationManager.requestAuthorization()
+                        try Task.checkCancellation()
                         if !granted {
                             errorMessage = "알림 권한이 필요합니다. 설정에서 알림 권한을 허용해주세요."
                             return
@@ -102,6 +111,7 @@ class SettingsViewModel: ObservableObject {
                 }
                 
                 try await updateNotificationSettingUseCase.execute(enabled)
+                try Task.checkCancellation()
                 
                 // 알림 스케줄링 또는 취소
                 if enabled {
@@ -110,48 +120,68 @@ class SettingsViewModel: ObservableObject {
                     await notificationManager.cancelDailyReminder()
                 }
             } catch {
-                errorMessage = (error as? TodayOneCutError)?.userMessage ?? "설정 저장에 실패했습니다"
+                if !Task.isCancelled {
+                    errorMessage = (error as? TodayOneCutError)?.userMessage ?? "설정 저장에 실패했습니다"
+                }
             }
         }
+        updateTasks.append(task)
     }
     
     /// 앱 테마 변경
     func updateAppTheme(_ theme: AppTheme) {
-        Task {
+        let task = Task {
             do {
                 try await updateAppThemeUseCase.execute(theme)
+                try Task.checkCancellation()
                 // AppStorage 업데이트
                 UserDefaults.standard.set(theme.rawValue, forKey: "appTheme")
             } catch {
-                errorMessage = (error as? TodayOneCutError)?.userMessage ?? "설정 저장에 실패했습니다"
+                if !Task.isCancelled {
+                    errorMessage = (error as? TodayOneCutError)?.userMessage ?? "설정 저장에 실패했습니다"
+                }
             }
         }
+        updateTasks.append(task)
     }
     
     /// 폰트 패밀리 변경
     func updateFontFamily(_ font: AppFont) {
-        Task {
+        let task = Task {
             do {
                 try await updateFontFamilyUseCase.execute(font)
+                try Task.checkCancellation()
                 // AppStorage 업데이트
                 UserDefaults.standard.set(font.rawValue, forKey: "fontFamily")
             } catch {
-                errorMessage = (error as? TodayOneCutError)?.userMessage ?? "설정 저장에 실패했습니다"
+                if !Task.isCancelled {
+                    errorMessage = (error as? TodayOneCutError)?.userMessage ?? "설정 저장에 실패했습니다"
+                }
             }
         }
+        updateTasks.append(task)
     }
     
     /// 모든 데이터 삭제
     func deleteAllData() {
-        Task {
+        let task = Task {
             do {
                 try await deleteAllDataUseCase.execute()
+                try Task.checkCancellation()
                 // 설정 다시 로드
                 loadSettings()
             } catch {
-                errorMessage = (error as? TodayOneCutError)?.userMessage ?? "데이터 삭제에 실패했습니다"
+                if !Task.isCancelled {
+                    errorMessage = (error as? TodayOneCutError)?.userMessage ?? "데이터 삭제에 실패했습니다"
+                }
             }
         }
+        updateTasks.append(task)
+    }
+    
+    deinit {
+        updateTasks.forEach { $0.cancel() }
+        cancellables.removeAll()
     }
 }
 

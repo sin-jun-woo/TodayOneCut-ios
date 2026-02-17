@@ -25,6 +25,7 @@ class EditRecordViewModel: ObservableObject {
     private let updateRecordUseCase: UpdateRecordUseCase
     private let getSettingsUseCase: GetSettingsUseCase
     private let recordId: Int64
+    private var loadTask: Task<Void, Never>?
     
     init(
         recordId: Int64,
@@ -40,12 +41,15 @@ class EditRecordViewModel: ObservableObject {
     
     /// 기록 로드
     func loadRecord() {
-        Task {
+        loadTask?.cancel()
+        
+        loadTask = Task {
             isLoading = true
             errorMessage = nil
             
             do {
                 record = try await getRecordByIdUseCase.execute(id: recordId)
+                try Task.checkCancellation()
                 
                 if let record = record {
                     contentText = record.contentText ?? ""
@@ -54,20 +58,33 @@ class EditRecordViewModel: ObservableObject {
                     if let photoPath = record.photoPath {
                         if let data = try? Data(contentsOf: URL(fileURLWithPath: photoPath)),
                            let image = UIImage(data: data) {
+                            try Task.checkCancellation()
                             selectedImage = image
                         }
                     }
                     
                     // 설정 로드
                     let settings = try await getSettingsUseCase.executeOnce()
+                    try Task.checkCancellation()
                     isLocationEnabled = settings.enableLocation
                 }
             } catch {
-                errorMessage = (error as? TodayOneCutError)?.userMessage ?? "기록을 불러올 수 없습니다"
+                if !Task.isCancelled {
+                    errorMessage = (error as? TodayOneCutError)?.userMessage ?? "기록을 불러올 수 없습니다"
+                }
             }
             
-            isLoading = false
+            if !Task.isCancelled {
+                isLoading = false
+            }
         }
+    }
+    
+    deinit {
+        loadTask?.cancel()
+        // 이미지 메모리 해제
+        selectedImage = nil
+        imageData = nil
     }
     
     /// 이미지 선택

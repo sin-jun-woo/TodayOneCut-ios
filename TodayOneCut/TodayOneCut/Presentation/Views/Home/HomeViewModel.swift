@@ -18,6 +18,7 @@ class HomeViewModel: ObservableObject {
     private let recordRepository: RecordRepository
     private let settingsRepository: SettingsRepository
     private var cancellables = Set<AnyCancellable>()
+    private var loadTask: Task<Void, Never>?
     
     init(
         getTodayRecordUseCase: GetTodayRecordUseCase,
@@ -35,26 +36,40 @@ class HomeViewModel: ObservableObject {
     
     /// 화면 로드
     func loadTodayRecord() {
-        Task {
+        // 이전 Task 취소
+        loadTask?.cancel()
+        
+        loadTask = Task {
             uiState.isLoading = true
             uiState.errorMessage = nil
             
             do {
                 let exists = try await checkTodayRecordExistsUseCase.execute()
+                try Task.checkCancellation()
                 uiState.hasTodayRecord = exists
                 
                 if exists {
                     let record = try await getTodayRecordUseCase.execute()
+                    try Task.checkCancellation()
                     uiState.todayRecord = record
                 } else {
                     uiState.todayRecord = nil
                 }
             } catch {
-                uiState.errorMessage = (error as? TodayOneCutError)?.userMessage ?? "오류가 발생했습니다"
+                if !Task.isCancelled {
+                    uiState.errorMessage = (error as? TodayOneCutError)?.userMessage ?? "오류가 발생했습니다"
+                }
             }
             
-            uiState.isLoading = false
+            if !Task.isCancelled {
+                uiState.isLoading = false
+            }
         }
+    }
+    
+    deinit {
+        loadTask?.cancel()
+        cancellables.removeAll()
     }
     
     /// 총 기록 개수 관찰

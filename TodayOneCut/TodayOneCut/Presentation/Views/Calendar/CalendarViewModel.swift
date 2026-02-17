@@ -22,6 +22,8 @@ class CalendarViewModel: ObservableObject {
     private let getRecordDatesUseCase: GetRecordDatesUseCase
     private let getRecordByDateUseCase: GetTodayRecordUseCase
     private let recordRepository: RecordRepository
+    private var loadMonthTask: Task<Void, Never>?
+    private var loadDateTask: Task<Void, Never>?
     
     init(
         getMonthRecordsUseCase: GetMonthRecordsUseCase,
@@ -37,18 +39,26 @@ class CalendarViewModel: ObservableObject {
     
     /// 월 변경 시 기록 로드
     func loadRecordsForMonth(_ date: Date) {
-        Task {
+        loadMonthTask?.cancel()
+        
+        loadMonthTask = Task {
             isLoading = true
             errorMessage = nil
             
             do {
                 records = try await getMonthRecordsUseCase.execute(date: date)
+                try Task.checkCancellation()
                 recordDates = try await getRecordDatesUseCase.execute(date: date)
+                try Task.checkCancellation()
             } catch {
-                errorMessage = (error as? TodayOneCutError)?.userMessage ?? "기록을 불러올 수 없습니다"
+                if !Task.isCancelled {
+                    errorMessage = (error as? TodayOneCutError)?.userMessage ?? "기록을 불러올 수 없습니다"
+                }
             }
             
-            isLoading = false
+            if !Task.isCancelled {
+                isLoading = false
+            }
         }
     }
     
@@ -60,13 +70,23 @@ class CalendarViewModel: ObservableObject {
     
     /// 특정 날짜의 기록 로드
     private func loadRecordForDate(_ date: Date) {
-        Task {
+        loadDateTask?.cancel()
+        
+        loadDateTask = Task {
             do {
                 selectedDateRecord = try await recordRepository.getRecordByDate(date)
+                try Task.checkCancellation()
             } catch {
-                selectedDateRecord = nil
+                if !Task.isCancelled {
+                    selectedDateRecord = nil
+                }
             }
         }
+    }
+    
+    deinit {
+        loadMonthTask?.cancel()
+        loadDateTask?.cancel()
     }
     
     /// 날짜에 기록이 있는지 확인

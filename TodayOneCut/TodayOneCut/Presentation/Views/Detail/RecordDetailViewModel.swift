@@ -19,6 +19,7 @@ class RecordDetailViewModel: ObservableObject {
     private let getRecordByIdUseCase: GetRecordByIdUseCase
     private let deleteRecordUseCase: DeleteRecordUseCase
     private let recordId: Int64
+    private var loadTask: Task<Void, Never>?
     
     init(
         recordId: Int64,
@@ -32,20 +33,31 @@ class RecordDetailViewModel: ObservableObject {
     
     /// 기록 로드
     func loadRecord() {
-        Task {
+        loadTask?.cancel()
+        
+        loadTask = Task {
             isLoading = true
             errorMessage = nil
             
             do {
                 record = try await getRecordByIdUseCase.execute(id: recordId)
+                try Task.checkCancellation()
             } catch {
-                let message = (error as? TodayOneCutError)?.userMessage ?? "기록을 불러올 수 없습니다"
-                errorMessage = message
-                toastMessage = message
+                if !Task.isCancelled {
+                    let message = (error as? TodayOneCutError)?.userMessage ?? "기록을 불러올 수 없습니다"
+                    errorMessage = message
+                    toastMessage = message
+                }
             }
             
-            isLoading = false
+            if !Task.isCancelled {
+                isLoading = false
+            }
         }
+    }
+    
+    deinit {
+        loadTask?.cancel()
     }
     
     /// 기록 삭제

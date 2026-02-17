@@ -20,6 +20,7 @@ class RecordListViewModel: ObservableObject {
     private let getAllRecordsUseCase: GetAllRecordsUseCase
     private let searchRecordsUseCase: SearchRecordsUseCase
     private var cancellables = Set<AnyCancellable>()
+    private var searchTask: Task<Void, Never>?
     
     init(
         getAllRecordsUseCase: GetAllRecordsUseCase,
@@ -59,15 +60,19 @@ class RecordListViewModel: ObservableObject {
             return
         }
         
+        // 이전 검색 Task 취소
+        searchTask?.cancel()
+        
         // 검색 모드로 전환하고 즉시 빈 배열로 초기화
         isSearching = true
         isLoading = true
         errorMessage = nil
         records = [] // 검색 시작 전에 즉시 빈 배열로 설정
         
-        Task {
+        searchTask = Task {
             do {
                 let searchResults = try await searchRecordsUseCase.execute(keyword: trimmedKeyword)
+                try Task.checkCancellation()
                 await MainActor.run {
                     // 검색어가 여전히 같고 검색 중인지 확인
                     if self.searchText.trimmingCharacters(in: .whitespaces) == trimmedKeyword && self.isSearching {
@@ -77,18 +82,25 @@ class RecordListViewModel: ObservableObject {
                     }
                 }
             } catch {
-                await MainActor.run {
-                    // 검색어가 여전히 같고 검색 중인지 확인
-                    if self.searchText.trimmingCharacters(in: .whitespaces) == trimmedKeyword && self.isSearching {
-                        self.errorMessage = (error as? TodayOneCutError)?.userMessage ?? "검색에 실패했습니다"
-                        self.isLoading = false
-                        self.isSearching = false
-                        // 에러 발생 시에도 빈 배열로 표시
-                        self.records = []
+                if !Task.isCancelled {
+                    await MainActor.run {
+                        // 검색어가 여전히 같고 검색 중인지 확인
+                        if self.searchText.trimmingCharacters(in: .whitespaces) == trimmedKeyword && self.isSearching {
+                            self.errorMessage = (error as? TodayOneCutError)?.userMessage ?? "검색에 실패했습니다"
+                            self.isLoading = false
+                            self.isSearching = false
+                            // 에러 발생 시에도 빈 배열로 표시
+                            self.records = []
+                        }
                     }
                 }
             }
         }
+    }
+    
+    deinit {
+        searchTask?.cancel()
+        cancellables.removeAll()
     }
     
     /// 검색 취소
