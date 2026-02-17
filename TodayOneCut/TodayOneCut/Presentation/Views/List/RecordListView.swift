@@ -28,11 +28,14 @@ struct RecordListView: View {
                             viewModel.performSearch()
                         }
                         .onChange(of: viewModel.searchText) { newValue in
-                            if newValue.isEmpty {
+                            let trimmedNew = newValue.trimmingCharacters(in: .whitespaces)
+                            
+                            if trimmedNew.isEmpty {
+                                // 검색어가 비어있으면 검색 모드 해제하고 전체 목록 로드
                                 viewModel.isSearching = false
                                 viewModel.loadRecords()
                             } else {
-                                // 검색어가 있으면 자동으로 검색 실행
+                                // 검색어가 있으면 검색 모드로 전환하고 검색 실행
                                 viewModel.performSearch()
                             }
                         }

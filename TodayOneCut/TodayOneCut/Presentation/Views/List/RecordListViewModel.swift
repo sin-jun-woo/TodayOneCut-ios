@@ -45,23 +45,32 @@ class RecordListViewModel: ObservableObject {
     
     /// 검색 실행
     func performSearch() {
-        guard !searchText.trimmingCharacters(in: .whitespaces).isEmpty else {
+        let trimmedKeyword = searchText.trimmingCharacters(in: .whitespaces)
+        
+        guard !trimmedKeyword.isEmpty else {
+            isSearching = false
             loadRecords()
             return
         }
         
         isSearching = true
         isLoading = true
+        errorMessage = nil
         
         Task {
             do {
-                records = try await searchRecordsUseCase.execute(keyword: searchText)
-                isLoading = false
-                isSearching = false
+                let searchResults = try await searchRecordsUseCase.execute(keyword: trimmedKeyword)
+                await MainActor.run {
+                    self.records = searchResults
+                    self.isLoading = false
+                    self.isSearching = false
+                }
             } catch {
-                errorMessage = (error as? TodayOneCutError)?.userMessage ?? "검색에 실패했습니다"
-                isLoading = false
-                isSearching = false
+                await MainActor.run {
+                    self.errorMessage = (error as? TodayOneCutError)?.userMessage ?? "검색에 실패했습니다"
+                    self.isLoading = false
+                    self.isSearching = false
+                }
             }
         }
     }

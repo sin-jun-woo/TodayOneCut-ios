@@ -219,12 +219,23 @@ class RecordRepositoryImpl: RecordRepository {
         }
         
         let fetchRequest: NSFetchRequest<RecordEntity> = RecordEntity.fetchRequest()
-        // contentText가 nil이 아니고 검색어를 포함하는 경우만 검색
-        fetchRequest.predicate = NSPredicate(format: "contentText != nil AND contentText CONTAINS[cd] %@", trimmedKeyword)
+        // contentText가 nil이 아니고 빈 문자열이 아니며 검색어를 포함하는 경우만 검색
+        fetchRequest.predicate = NSPredicate(format: "contentText != nil AND contentText != '' AND contentText CONTAINS[cd] %@", trimmedKeyword)
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: "createdAt", ascending: false)]
         
         let entities = try context.fetch(fetchRequest)
-        return entities.map(recordMapper.toDomain)
+        let records = entities.map(recordMapper.toDomain)
+        
+        // 디버깅: 검색 결과 확인
+        #if DEBUG
+        print("🔍 검색어: '\(trimmedKeyword)'")
+        print("🔍 검색 결과 개수: \(records.count)")
+        for record in records {
+            print("  - ID: \(record.id), contentText: '\(record.contentText ?? "nil")'")
+        }
+        #endif
+        
+        return records
     }
     
     // MARK: - Calendar
