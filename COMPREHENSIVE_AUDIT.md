@@ -32,28 +32,29 @@
 - ✅ 모든 ViewModel의 deinit 수정 완료
 - ✅ 빌드 에러 없음 확인
 
-### TODO 주석 정리
-- [ ] `SettingsView.swift:103` - 백업 화면 TODO
-- [ ] `FileRepositoryImpl.swift:107, 112` - Phase 5 TODO (이미 완료된 기능)
-- [ ] `AppContainer.swift` - Swinject 관련 TODO (선택사항)
+### TODO 주석 정리 ✅
+- [x] `SettingsView.swift:103` - TODO 주석 정리 완료 ✅
+- [x] `FileRepositoryImpl.swift:107, 112` - TODO 주석 정리 완료 ✅
+- [ ] `AppContainer.swift` - Swinject 관련 TODO (선택사항, DI 라이브러리 미사용)
 
-### Debug Print 문
-- [ ] `PhotoLibraryPicker.swift` - DEBUG print 제거 또는 `#if DEBUG` 처리
-- [ ] `RecordRepositoryImpl.swift` - 검색 디버그 로그 `#if DEBUG` 처리 완료
-- [ ] `CreateRecordView.swift` - 이미지 선택 print 제거 또는 `#if DEBUG` 처리
-- [ ] `NotificationScheduler.swift` - print 문 `#if DEBUG` 처리
-- [ ] `NotificationManager.swift` - print 문 `#if DEBUG` 처리
-- [ ] `CreateRecordUseCase.swift` - print 문 `#if DEBUG` 처리
-- [ ] `CoreDataStack.swift` - print 문 `#if DEBUG` 처리
+### Debug Print 문 ✅
+- [x] `PhotoLibraryPicker.swift` - `#if DEBUG` 처리 완료 ✅
+- [x] `RecordRepositoryImpl.swift` - 검색 디버그 로그 `#if DEBUG` 처리 완료 ✅
+- [x] `CreateRecordView.swift` - 이미지 선택 print `#if DEBUG` 처리 완료 ✅
+- [x] `NotificationScheduler.swift` - print 문 `#if DEBUG` 처리 완료 ✅
+- [x] `NotificationManager.swift` - print 문 `#if DEBUG` 처리 완료 ✅
+- [x] `CreateRecordUseCase.swift` - print 문 `#if DEBUG` 처리 완료 ✅
+- [x] `CoreDataStack.swift` - print 문 `#if DEBUG` 처리 완료 ✅
 
 ---
 
 ## ✅ 3. Force Unwrap 및 안전성 검사
 
-### Force Unwrap 확인 필요
-- [ ] 모든 `!` 사용 확인
-- [ ] `try!` 사용 확인
-- [ ] 안전한 옵셔널 처리 확인
+### Force Unwrap 확인 완료 ✅
+- ✅ `fatalError` 사용: Core Data 초기화 실패 시만 사용 (치명적 에러, 적절함)
+- ✅ `try?` 사용: 안전한 옵셔널 처리 확인
+- ✅ `guard let`, `if let` 사용: 안전한 옵셔널 바인딩 확인
+- ✅ Force unwrap 없음 확인
 
 ---
 
