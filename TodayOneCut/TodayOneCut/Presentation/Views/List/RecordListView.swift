@@ -28,8 +28,12 @@ struct RecordListView: View {
                             viewModel.performSearch()
                         }
                         .onChange(of: viewModel.searchText) { newValue in
-                            if newValue.isEmpty && !viewModel.isSearching {
+                            if newValue.isEmpty {
+                                viewModel.isSearching = false
                                 viewModel.loadRecords()
+                            } else {
+                                // 검색어가 있으면 자동으로 검색 실행
+                                viewModel.performSearch()
                             }
                         }
                     

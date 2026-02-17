@@ -212,8 +212,15 @@ class RecordRepositoryImpl: RecordRepository {
     func searchRecords(keyword: String) async throws -> [Record] {
         let context = coreDataStack.viewContext
         
+        // 검색어가 비어있으면 빈 배열 반환
+        let trimmedKeyword = keyword.trimmingCharacters(in: .whitespaces)
+        guard !trimmedKeyword.isEmpty else {
+            return []
+        }
+        
         let fetchRequest: NSFetchRequest<RecordEntity> = RecordEntity.fetchRequest()
-        fetchRequest.predicate = NSPredicate(format: "contentText CONTAINS[cd] %@", keyword)
+        // contentText가 nil이 아니고 검색어를 포함하는 경우만 검색
+        fetchRequest.predicate = NSPredicate(format: "contentText != nil AND contentText CONTAINS[cd] %@", trimmedKeyword)
         fetchRequest.sortDescriptors = [NSSortDescriptor(key: "createdAt", ascending: false)]
         
         let entities = try context.fetch(fetchRequest)
