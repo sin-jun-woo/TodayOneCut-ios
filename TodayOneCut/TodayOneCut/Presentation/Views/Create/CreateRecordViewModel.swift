@@ -153,11 +153,6 @@ class CreateRecordViewModel: ObservableObject {
     deinit {
         loadTask?.cancel()
         locationTask?.cancel()
-        // 이미지 메모리 해제 (Main actor에서 실행)
-        Task { @MainActor in
-            selectedImage = nil
-            imageData = nil
-        }
     }
 }
 

@@ -82,11 +82,6 @@ class EditRecordViewModel: ObservableObject {
     
     deinit {
         loadTask?.cancel()
-        // 이미지 메모리 해제 (Main actor에서 실행)
-        Task { @MainActor in
-            selectedImage = nil
-            imageData = nil
-        }
     }
     
     /// 이미지 선택
@@ -117,12 +112,35 @@ class EditRecordViewModel: ObservableObject {
         errorMessage = nil
         
         do {
+            // 기존/새 사진 상태 계산
+            let hasExistingPhoto = record.photoPath != nil
+            let hasNewPhoto = imageData != nil
+            let isPhotoRemoved = hasExistingPhoto && !hasNewPhoto && selectedImage == nil
+            
+            // 최종 타입 결정:
+            // - 새 사진 선택 또는 기존 사진 유지: .photo
+            // - 사진 제거 또는 원래부터 사진 없음: .text
+            let finalType: RecordType = {
+                if isPhotoRemoved {
+                    return .text
+                } else if hasExistingPhoto || hasNewPhoto {
+                    return .photo
+                } else {
+                    return .text
+                }
+            }()
+            
+            // 최종 사진 경로:
+            // - 사진 제거 시에는 nil
+            // - 기존/새 사진 유지 시에는 기존 경로 (새 사진은 UseCase에서 경로 갱신)
+            let finalPhotoPath: String? = isPhotoRemoved ? nil : record.photoPath
+            
             let updatedRecord = Record(
                 id: record.id,
                 date: record.date,
-                type: imageData != nil ? .photo : .text,
+                type: finalType,
                 contentText: contentText.isEmpty ? nil : contentText,
-                photoPath: record.photoPath, // 기존 경로 유지 (새 사진이 없으면)
+                photoPath: finalPhotoPath, // 기존 경로 유지 또는 제거 여부 반영
                 location: record.location,
                 createdAt: record.createdAt,
                 updatedAt: Date(),
