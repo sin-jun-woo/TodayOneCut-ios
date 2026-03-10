@@ -18,20 +18,22 @@
 
 ---
 
-## 2. App Privacy – 수집 데이터 선언
+## 2. App Privacy – 수집 데이터 선언 (5.1.2(i) 필수)
 
 **위치**: App Store Connect → My Apps → TodayOneCut → **App Privacy**
 
+⚠️ **추적(Tracking) 반드시 "아니오"**: 사진·위치를 "추적에 사용"으로 설정하면 심사 거절됩니다. 본 앱은 ATT(App Tracking Transparency)를 사용하지 않으므로, **모든 데이터 유형에서 "이 데이터를 사용하여 사용자를 추적하나요?" = 아니오** 로 설정해야 합니다.
+
 "앱이 수집하는 데이터"에서 **다음 데이터 유형을 추가**하고, 아래와 같이 설정:
 
-| 데이터 유형 | 목적 | 사용자 연결 | 추적 |
-|------------|------|-------------|------|
-| **사진 또는 비디오** (Photos or Videos) | 앱 기능 (기록 저장) | 연결 안 함 | 아니오 |
-| **위치** (Location) | 앱 기능 (기록에 위치 표시, 선택 사항) | 연결 안 함 | 아니오 |
-| **사용자 콘텐츠** (User Content) | 앱 기능 (텍스트 메모) | 연결 안 함 | 아니오 |
+| 데이터 유형 | 목적 | 사용자 연결 | **추적 (Used for Tracking)** |
+|------------|------|-------------|-------------------------------|
+| **사진 또는 비디오** (Photos or Videos) | 앱 기능 (기록 저장) | 연결 안 함 | **반드시 아니오** |
+| **위치** (Location) – 정확한 위치 | 앱 기능 (기록에 장소 표시, 선택 사항) | 연결 안 함 | **반드시 아니오** |
+| **사용자 콘텐츠** (User Content) | 앱 기능 (텍스트 메모) | 연결 안 함 | **반드시 아니오** |
 
 - **데이터를 수집하는지**: "예, 수집합니다" 선택 후 위 항목 추가
-- 각 항목: **"이 데이터를 사용하여 사용자를 추적하나요?"** → **아니오**
+- **각 항목에서 "이 데이터를 사용하여 사용자를 추적하나요?" (Used for Tracking)** → **반드시 "아니오" (No)** 선택. "예"로 되어 있으면 5.1.2(i) 위반으로 거절됩니다.
 - **데이터 연결**: "사용자에게 연결되지 않음" (기기 내 저장만 하므로)
 
 ---
@@ -46,12 +48,16 @@
 
 ---
 
-## 4. 재제출 시 확인
+## 4. 재제출 시 확인 (5.1.2(i) 거절 시)
 
-1. 새 빌드(1.5.1 (6)) Archive 후 Upload
-2. App Privacy 에서 위 URL + 데이터 유형 설정 저장
-3. Copyright 저장
-4. **Submit for Review** 시 "심사 노트"에 아래 한 줄 추가 (선택):
+**"앱이 추적을 위해 데이터를 수집한다"고 표시되어 거절된 경우:**
+
+1. App Store Connect → **App Privacy** 이동
+2. **각 데이터 유형**(사진/비디오, 위치, 사용자 콘텐츠)을 열어서  
+   **"이 데이터를 사용하여 사용자를 추적하나요?" (Used for Tracking)** 가 **"아니오"** 인지 확인. **"예"로 되어 있으면 반드시 "아니오"로 변경 후 저장**
+3. 새 빌드(카메라/사진/위치 권한 문구 수정 반영) Archive → Upload
+4. 새 빌드를 버전에 연결 후 **Submit for Review**
+5. **심사 노트**에 아래 추가 (선택):
    ```
-   Privacy: All data is stored only on device. No server transmission or third-party sharing. See PRIVACY_POLICY.md.
+   Privacy: This app does not track users. All data is stored only on device. No ATT required. App Privacy labels: "Used for Tracking" = No for all data types.
    ```

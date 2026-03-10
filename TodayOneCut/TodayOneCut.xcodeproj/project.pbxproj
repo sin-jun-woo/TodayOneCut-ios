@@ -252,15 +252,16 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 6;
+				CURRENT_PROJECT_VERSION = 7;
 				DEVELOPMENT_TEAM = 8P5NHWS9CS;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = "오늘의 한 컷";
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
-				INFOPLIST_KEY_NSCameraUsageDescription = "사진을 촬영하기 위해 카메라 권한이 필요합니다.";
-				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "오늘의 장면에 위치 정보를 저장하기 위해 위치 권한이 필요합니다.";
-				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "사진을 선택하기 위해 사진 라이브러리 접근 권한이 필요합니다.";
+				INFOPLIST_KEY_NSCameraUsageDescription = "오늘의 한 컷은 '오늘의 장면' 기록을 남기기 위해 카메라로 사진을 촬영할 때 사용합니다. 촬영한 사진은 사용자 기기 내에만 저장되며, 광고·추적·제3자 전달에 사용되지 않습니다.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "사용자가 설정에서 켠 경우, '오늘의 장면' 기록에 장소 정보를 붙일 때만 사용합니다. 위치는 사용자 기기에만 저장되며, 추적·광고에 사용되지 않습니다.";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "갤러리에서 선택한 사진을 '오늘의 한 컷' 기록으로 저장할 때 사용합니다. 선택한 사진은 사용자 기기에만 저장되며, 외부 전송 또는 추적에 사용되지 않습니다.";
 				INFOPLIST_KEY_UIAppFonts = "GowunBatang-Bold.ttf KyoboHandwriting2024psw.ttf MaruBuri-Bold.ttf";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -272,7 +273,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.5.1;
+				MARKETING_VERSION = 1.5.2;
 				PRODUCT_BUNDLE_IDENTIFIER = haruhana.TodayOneCut;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
@@ -292,16 +293,17 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 6;
+				CURRENT_PROJECT_VERSION = 7;
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = 8P5NHWS9CS;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = "오늘의 한 컷";
+				INFOPLIST_KEY_ITSAppUsesNonExemptEncryption = NO;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.lifestyle";
-				INFOPLIST_KEY_NSCameraUsageDescription = "사진을 촬영하기 위해 카메라 권한이 필요합니다.";
-				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "오늘의 장면에 위치 정보를 저장하기 위해 위치 권한이 필요합니다.";
-				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "사진을 선택하기 위해 사진 라이브러리 접근 권한이 필요합니다.";
+				INFOPLIST_KEY_NSCameraUsageDescription = "오늘의 한 컷은 '오늘의 장면' 기록을 남기기 위해 카메라로 사진을 촬영할 때 사용합니다. 촬영한 사진은 사용자 기기 내에만 저장되며, 광고·추적·제3자 전달에 사용되지 않습니다.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "사용자가 설정에서 켠 경우, '오늘의 장면' 기록에 장소 정보를 붙일 때만 사용합니다. 위치는 사용자 기기에만 저장되며, 추적·광고에 사용되지 않습니다.";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "갤러리에서 선택한 사진을 '오늘의 한 컷' 기록으로 저장할 때 사용합니다. 선택한 사진은 사용자 기기에만 저장되며, 외부 전송 또는 추적에 사용되지 않습니다.";
 				INFOPLIST_KEY_UIAppFonts = "GowunBatang-Bold.ttf KyoboHandwriting2024psw.ttf MaruBuri-Bold.ttf";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -313,7 +315,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.5.1;
+				MARKETING_VERSION = 1.5.2;
 				PRODUCT_BUNDLE_IDENTIFIER = haruhana.TodayOneCut;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
